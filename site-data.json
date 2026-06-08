@@ -1,0 +1,1136 @@
+{
+  "logoText": "ADI KAILASH TIRATH",
+  "companyName": "ADI KAILASH TIRATH",
+  "tagline": "The Spiritual Yatra Pioneer",
+  "activeSeason": "Yatra Season 2026 Active",
+  "phones": [
+    "+917017535116",
+    "+91 9760651947"
+  ],
+  "email": "info@adikailashtirath.com",
+  "regNumber": "UT-NT-2026-904",
+  "nocNumber": "UT-NOC-SHIVA-9092",
+  "socialLinks": {
+    "facebook": "https://www.facebook.com/profile.php?id=61590356113251",
+    "instagram": "https://www.instagram.com/adikailashtirath/",
+    "linkedin": "https://linkedin.com",
+    "youtube": "https://www.youtube.com/@AdiKailash_Tirath",
+    "pinterest": "https://pinterest.com",
+    "reddit": "https://www.reddit.com/user/Empty-Bread-8529/",
+    "twitter": "https://x.com/Adi_kailash_"
+  },
+  "bannerTickerText": [
+    "🕉️ Experience the Divine Adi Kailash & Om Parvat Yatra 2026 - Bookings Open!",
+    "📞 Contact our High Altitude Specialists at +91 9101211949 or +91 9631651910",
+    "💼 Registered with Uttarakhand Tourism Board (Reg ID: NT-2026)",
+    "✈️ Mount Kailash Aerial Darshan Flight (Lucknow Base) - No Chinese Visa/Passport Required!",
+    "🏔️ Outer Line Permits & medical forms handled seamlessly by Adi Kailash Tirath team."
+  ],
+  "heroSlides": [
+    {
+      "title": "Travel Where Spirit Meets The Himalaya",
+      "subtitle": "Kailash Mansarovar Yatra",
+      "desc": "Adi Kailash Tirath curates spiritually meaningful journeys with clear planning, trusted stays, permit guidance, and dedicated mountain-ground support from departure to return.",
+      "img": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200",
+      "pill": "Vyas Valley & Himalayas 2026",
+      "stat": "海拔 5,640m (Over 18,000 ft)"
+    },
+    {
+      "title": "Experience the Divine Mystery of Snow Symbolism",
+      "subtitle": "Adi Kailash & Om Parvat",
+      "desc": "Watch the holy self-formed divine Om symbol appear naturally in pristine white snow. Explore Parvati Kund, Gauri Kund, and the source of Vyas valley spirituality accompanied by seasoned native sherpas.",
+      "img": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=1200",
+      "pill": "Border Region Authorized Tour Partner",
+      "stat": "100% Permit Success Rate"
+    },
+    {
+      "title": "The Ultimate Four Abodes of the Deities",
+      "subtitle": "Classics of Chardham",
+      "desc": "An all-inclusive, divine expedition covering Yamunotri, Gangotri, Kedarnath, and Badrinath. Relax in pre-vetted warm riverside cottages with healthy pure organic vegetarian cuisine.",
+      "img": "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=1200",
+      "pill": "Complete Kedarnath-Badrinath Ring",
+      "stat": "500+ Devotees Guided Yearly"
+    }
+  ],
+  "circularDestinations": [
+    {
+      "title": "Adi Kailash Parvat",
+      "categoryRef": "adi_kailash",
+      "img": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
+      "description": "Sacred trek to Adi Kailash, Gauri Kund, Parvati Kund and Om Parvat."
+    },
+    {
+      "title": "Complete Chardham",
+      "categoryRef": "chardham",
+      "img": "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=200",
+      "description": "Divine yatra of Yamunotri, Gangotri, Kedarnath, and Badrinath shrines."
+    },
+    {
+      "title": "Babaji Cave Dunagiri",
+      "categoryRef": "adi_kailash",
+      "img": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=200",
+      "description": "Spiritual meditation at Mahavatar Babaji's Cave in Ranikhet hills."
+    },
+    {
+      "title": "Amarnath Helicopter",
+      "categoryRef": "amarnath",
+      "img": "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=200",
+      "description": "Hassle-free 1-day helicopter transfers from Baltal to pure icy Cave shrines."
+    },
+    {
+      "title": "Amarnath & Vaishno Devi",
+      "categoryRef": "amarnath",
+      "img": "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=200",
+      "description": "Divine combination yatra crossing Katra Bhavan & Srinagar heli routes."
+    },
+    {
+      "title": "Amarnath Tours",
+      "categoryRef": "amarnath",
+      "img": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
+      "description": "Rigorous classic trekking groups via Pahalgam under certified medical guidelines."
+    },
+    {
+      "title": "Om Parvat Frontier",
+      "categoryRef": "om_parvat",
+      "img": "https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=200",
+      "description": "Witness the natural sacred snow symbols forming eternal Om patterns."
+    },
+    {
+      "title": "Munsyari Hills",
+      "categoryRef": "munsyari",
+      "img": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=200",
+      "description": "Amazing hill vistas, snow peaks, and Birthi waterfalls walks."
+    },
+    {
+      "title": "Kainchi Dham Ashram",
+      "categoryRef": "kainchi_dham",
+      "img": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
+      "description": "Peaceful ashram valleys of Baba Neem Karoli near the Kumaon lakes."
+    },
+    {
+      "title": "Maa Purnagiri Shrine",
+      "categoryRef": "maa_purnagiri",
+      "img": "https://images.unsplash.com/photo-1626621341517-bbf3d926b12d?q=80&w=200",
+      "description": "Revered mountain top Shaktipith overlooking the gushing Sharda River."
+    },
+    {
+      "title": "Panchachuli Ranges",
+      "categoryRef": "panchachuli",
+      "img": "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=200",
+      "description": "Expeditions near the base camp of the magnificent five snow pinnacles."
+    },
+    {
+      "title": "Darma Valley",
+      "categoryRef": "darma_valley",
+      "img": "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=200",
+      "description": "Hidden glacial frontier valleys on the Indo-Tibetan trade rim."
+    },
+    {
+      "title": "Chirkilla Reservoir",
+      "categoryRef": "chirkilla_dam",
+      "img": "https://images.unsplash.com/photo-1509024644558-2f56ce76c090?q=80&w=200",
+      "description": "Scenic dam lake on Kali river valley with boating and eco tours."
+    },
+    {
+      "title": "Narayan Ashram Retreat",
+      "categoryRef": "narayan_ashram",
+      "img": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=200",
+      "description": "Vedic meditation and peace library at 9000 feet near Tawaghat borders."
+    }
+  ],
+  "packages": [
+    {
+      "id": "adi-kailash-standard",
+      "category": "adi_kailash",
+      "title": "Adi Kailash, Om Parvat & Mahavatar Babaji Cave Private Tour",
+      "badge": "Popular Yatra",
+      "duration": "7 Nights / 8 Days",
+      "price": "₹42,000",
+      "numericPrice": 42000,
+      "fromRoute": "Haldwani / Pithoragarh Setup",
+      "overview": "A deeply spiritual yatra to Adi Kailash and Om Parvat, including the holy darsans of Parvati Kund, Gauri Kund, Gunji, and Pandav Fort. Accompanied by experienced mountain guides and comfortable ground transport.",
+      "difficulty": "Moderate",
+      "highlights": [
+        "Darshan of the sacred self-formed Om symbol on Om Parvat",
+        "Holy dip in the pristine waters of Parvati Kund & Gauri Kund",
+        "Private excursion to Mahavatar Babaji's Cave in Dunagiri",
+        "Stay in clean, premium homestays & local mountain resorts",
+        "All Inner Line Permits & border registration cleared by us"
+      ],
+      "inclusion": [
+        "Accommodation in deluxe stays & high-altitude clean homestays",
+        "All pure vegetarian meals (Breakfast, Lunch, Dinner)",
+        "4x4 SUV (Bolero/Camper) for rugged terrain transit",
+        "Govt Inner Line Permit, processing fees, and environmental charges",
+        "Oxygen cylinder support inside vehicles & highly trained tour managers"
+      ],
+      "exclusion": [
+        "Personal porter / pony service charges",
+        "Any helicopter charters (unless upgraded)",
+        "Tips, laundry, or personal phone bill expenses"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Haldwani to Kathgodam and scenic drive to Pithoragarh",
+          "details": "Assemble at Kathgodam railway station. Embark on a breathtaking mountain drive to Pithoragarh. Check-in at the hotel, attend a detailed yatra briefing, and receive your high-altitude medical fitness checks."
+        },
+        {
+          "day": 2,
+          "title": "Pithoragarh to Dharchula - Document Verification",
+          "details": "Drive alongside the roaring Kali River to Dharchula. The afternoon is dedicated to biometric physical biometric clearances and verification with administrative officials."
+        },
+        {
+          "day": 3,
+          "title": "Dharchula to Gunji/Nabi - The High Himalayan Rim",
+          "details": "Board our specially prepped high-clearance 4x4 vehicles. Traverse stunning waterfalls and border outposts to arrive in Gunji (10,500 ft). Welcome ceremony by locals."
+        },
+        {
+          "day": 4,
+          "title": "Sacred Om Parvat Darshan - Nabhidhang Excursion",
+          "details": "Early morning drive to Nabhidhang. Stand in awe of Om Parvat, where snow naturally outlines the sacred 'Om' symbol. Perform peaceful prayers and return to Nabi village."
+        },
+        {
+          "day": 5,
+          "title": "Adi Kailash Summit - Parvati Kund & Gauri Kund",
+          "details": "Reach the base of Adi Kailash. Visit Jotling (Lord Shiva temple) and Gauri Kund. Perform sacred rituals. Trek to the pristine, reflective waters of Parvati Kund."
+        },
+        {
+          "day": 6,
+          "title": "Gunji to Dharchula - Journey Downwards",
+          "details": "Bid farewell to Vyas Valley. Return to Dharchula. Celebrate successful high-altitude completion with a cozy cultural dinner."
+        },
+        {
+          "day": 7,
+          "title": "Excursion to Mahavatar Babaji Cave in Dunagiri",
+          "details": "Drive towards Ranikhet/Dunagiri hills. Hike to Mahavatar Babaji's historic cave—the source of Kriya Yoga. Meditate in the legendary silence."
+        },
+        {
+          "day": 8,
+          "title": "Return Drive to Kathgodam for Departure",
+          "details": "Morning meditation, followed by departure drive back to Kathgodam station to wrap up this unforgettable journey."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
+    },
+    {
+      "id": "adi-kailash-vip",
+      "category": "adi_kailash",
+      "title": "Adi Kailash & Om Parvat VIP Helicopter Luxury Package",
+      "badge": "Elite Experience",
+      "duration": "4 Nights / 5 Days",
+      "price": "₹85,000",
+      "numericPrice": 85000,
+      "fromRoute": "Dehradun / Pithoragarh Helicopter base",
+      "overview": "Skip long mountain roads. Arrive on elite chopper transfers directly at Gunji. This exclusive package features premium stay layouts, custom logistics clearance, and private luxury guides.",
+      "difficulty": "Easy",
+      "highlights": [
+        "Helicopter round-trips from Pithoragarh base Directly to Gunji",
+        "Top-tier deluxe stays with continuous heating & hot water setups",
+        "Expedited administrative queue clearances",
+        "Personal high-altitude oxygen medical technician throughout",
+        "Special prayers led by main temple priests"
+      ],
+      "inclusion": [
+        "Round-trip helicopter flights",
+        "Luxury resorts & high-end modern military homestays",
+        "Private SUV exclusively for you and your family",
+        "Preloaded personal medical and backup kits",
+        "Special prasadam, Puja items, and guide fees"
+      ],
+      "exclusion": [
+        "Excess baggage (strictly 5kg allowed on helicopter)",
+        "Any unexpected emergency evacuation costs"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival in Pithoragarh and Luxury Dinner Briefing",
+          "details": "Arrive at Pithoragarh. Private luxury transfer to the estate hotel. Evening orientation session and personal physician checks."
+        },
+        {
+          "day": 2,
+          "title": "VIP Helicopter Flight to Gunji Heli-base",
+          "details": "Fly high over snowy ridges. Land at Gunji within 30 minutes. Settle into the luxury warm cottage camp."
+        },
+        {
+          "day": 3,
+          "title": "Exclusive Om Parvat Darshan & Puja",
+          "details": "Drive with dedicated security escort to the Om Parvat viewpoint. Sacred Havan ceremonies overlooking the peak."
+        },
+        {
+          "day": 4,
+          "title": "Helicopter back to Pithoragarh & Dunagiri Hermitage",
+          "details": "Direct morning heli-hop to Pithoragarh, transfer via private Innova Crysta to Ranikhet estate resort."
+        },
+        {
+          "day": 5,
+          "title": "Ranikhet to Kathgodam Farewell",
+          "details": "Enjoy luxurious breakfast, and travel smoothly to Kathgodam with direct boarding assists."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=800"
+    },
+    {
+      "id": "kailash-aerial-darshan",
+      "category": "kailash_mansarovar",
+      "title": "Mount Kailash Aerial Darshan by Flight (No Visa Needed)",
+      "badge": "Best Seller",
+      "duration": "3 Nights / 4 Days",
+      "price": "₹1,53,000",
+      "numericPrice": 153000,
+      "fromRoute": "Lucknow / Nepalgunj Direct Charter",
+      "overview": "Observe the mighty Mount Kailash and Holy Mansarovar Lake from close quarters from a customized pressurized mountain flight. Fully avoids the strict China Visa, biometric rules, and hard high-altitude trekking.",
+      "difficulty": "Easy",
+      "highlights": [
+        "Cruising at 21,000 ft in chartered aircraft for close-up aerial darsan",
+        "Witness Mount Kailash, Mansarovar Lake, and Mount Gurla Mandhata",
+        "Completely hassle-free: No chin-visa, passport physical stamps or age constraints",
+        "Includes premium 5-Star stay in Lucknow and Nepalgunj",
+        "Accompanied by Vedic scholars chanting stotras during the flight"
+      ],
+      "inclusion": [
+        "IndiGo/Charter flight tickets exclusively mapped to window views",
+        "3 Nights 5-Star accommodations",
+        "All land premium transfers in AC coaches",
+        "Vedic scholars, customized group puja, and yatra kits",
+        "Complete travel insurance and airport porterage"
+      ],
+      "exclusion": [
+        "Any personal extra flights from home-city to Lucknow",
+        "Personal expenses such as laundry or souvenir buying"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Arrival in Lucknow - Luxurious Welcome Setup",
+          "details": "Warm traditional tikka welcome at Lucknow 5-star hotel. Evening Ganga Aarti style session and spiritual briefing."
+        },
+        {
+          "day": 2,
+          "title": "Transfer to Nepalgunj Border Town - Sacred Sankalpa Puja",
+          "details": "Deluxe road transit to Nepalgunj. Group gathers for the sacred Kailash Sankalpa Puja led by spiritual teachers."
+        },
+        {
+          "day": 3,
+          "title": "The Holy Charter Flight - Darshan of Mt Kailash & Lake",
+          "details": "Board the specialized flight. Within 40 minutes, behold the majestic south and west faces of Mount Kailash and the dazzling blue waters of Mansarovar. Chanting and interactive meditations in the skies."
+        },
+        {
+          "day": 4,
+          "title": "Return to Lucknow and Departure",
+          "details": "Morning feedback sharing, transfer back to Lucknow airport/station with divine Prasadam distribution."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=800"
+    },
+    {
+      "id": "kailash-overland-lhasa",
+      "category": "kailash_mansarovar",
+      "title": "Kailash Mansarovar Overland Tour via Lhasa Direct",
+      "badge": "Bucket List Yatra",
+      "duration": "13 Nights / 14 Days",
+      "price": "Price on Request",
+      "numericPrice": 0,
+      "fromRoute": "Kathmandu / Lhasa / Saga Highway",
+      "overview": "The ultimate overland pilgrimage traversing the ancient cities of Lhasa, Shigatse, Saga to the base of Holy Mt Kailash. Includes 3 days of rigorous Parikrama (Kora) around Mt. Kailash.",
+      "difficulty": "Extreme Trekking",
+      "highlights": [
+        "3-Day continuous Parikrama of Mount Kailash (Kora)",
+        "Explore Potala Palace & Jokhang Temple in the sacred city of Lhasa",
+        "Perform holy rituals on the shores of Lake Mansarovar",
+        "Top-tier high-altitude oxygen backup trucks accompanying the group",
+        "Experienced Nepali Sherpas & Tibetan guides managing all stops"
+      ],
+      "inclusion": [
+        "Tibet Group Visa and special military route permits",
+        "Lhasa inbound flight tickets",
+        "Stay in deluxe hotels and basic high-altitude mud-cottage guest-houses",
+        "All meals cooked by our specialized kitchen group accompanying the caravan",
+        "Full oxygen cylinders, hyperbaric chambers, and medical team support"
+      ],
+      "exclusion": [
+        "China/Tibet Visa individual consulate fees",
+        "Horse / Porter charges during the 3-day trek"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Kathmandu Arrival & Documentation setup",
+          "details": "Arrive in Kathmandu, rest at the hotel, submit passports for Tibet Group Visa."
+        },
+        {
+          "day": 2,
+          "title": "Sacred Kathmandu Temples Tour",
+          "details": "Visit Pashupatinath Temple and Budhanilkantha (Sleeping Vishnu)."
+        },
+        {
+          "day": 3,
+          "title": "Scenic Flight to Lhasa (3650m)",
+          "details": "Fly over Everest region into Lhasa. Quiet rest day for vital altitude acclimatization."
+        },
+        {
+          "day": 4,
+          "title": "Explore Lhasa: Potala Palace & Barkhor Street",
+          "details": "Full guided tour of historical palaces, spiritual monasteries, and markets."
+        },
+        {
+          "day": 5,
+          "title": "Drive to Shigatse via Lake Yamdrok",
+          "details": "Witness the brilliant turquoise waters of Lake Yamdrok."
+        },
+        {
+          "day": 6,
+          "title": "Shigatse to Saga - Himalayan Highway",
+          "details": "Drive alongside the Yarlung Tsangpo (Brahmaputra) River."
+        },
+        {
+          "day": 7,
+          "title": "Saga to Lake Mansarovar - Epic First Darshan",
+          "details": "Reach the holy waters of Lake Mansarovar (15,000 ft). Perform sacred bath and evening prayers."
+        },
+        {
+          "day": 8,
+          "title": "Sufferance Pooja at Mansarovar and Drive to Darchen",
+          "details": "Sankalpa Havan at Mansarovar shore under the giant shadow of Mt. Kailash. Short drive to Darchen base camp."
+        },
+        {
+          "day": 9,
+          "title": "Kailash Parikrama - Day 1: Darchen to Dirapuk",
+          "details": "Begin the holy trek (12 km). Walk past Yama Dwar to stand directly in front of the golden North Face of Mount Kailash."
+        },
+        {
+          "day": 10,
+          "title": "Kailash Parikrama - Day 2: Dirapuk to Dolma La Pass to Zuthulpuk",
+          "details": "The toughest day (22 km). Ascend to the highest point Dolma La Pass (18,600 ft). Touch the holy Gauri Kund ice structures, descend to Zuthulpuk."
+        },
+        {
+          "day": 11,
+          "title": "Kailash Parikrama - Day 3: Zuthulpuk to Saga",
+          "details": "Complete the Kora (8 km), board SUVs, and head back to Saga."
+        },
+        {
+          "day": 12,
+          "title": "Saga to Shigatse Journey Back",
+          "details": "Comfort-focused return drive discussing stories and yatra learnings."
+        },
+        {
+          "day": 13,
+          "title": "Shigatse to Lhasa Airport and Kathmandu",
+          "details": "Flight returns to Kathmandu for celebration dinner."
+        },
+        {
+          "day": 14,
+          "title": "Final Departures from Kathmandu",
+          "details": "Airport drop for homeward journey with soul-stirring memories."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1626621341517-bbf3d926b12d?q=80&w=800"
+    },
+    {
+      "id": "chardham-classic",
+      "category": "chardham",
+      "title": "Classic Uttarakhand Chardham Yatra (All Inclusive)",
+      "badge": "Divine Himalayan Ring",
+      "duration": "10 Nights / 11 Days",
+      "price": "₹34,500",
+      "numericPrice": 34500,
+      "fromRoute": "Haridwar or Rishikesh pickup",
+      "overview": "Visit the legendary four abodes of gods: Yamunotri, Gangotri, Kedarnath, and Badrinath. Standard premium rooms, dedicated tour coordinators, and pure veg meals.",
+      "difficulty": "Challenging",
+      "highlights": [
+        "Drive to holy rivers originations at Yamunotri and Gangotri",
+        "16km divine trek to high Kedarnath shrine inside beautiful valleys",
+        "Special fast-track entry passes for Badrinath temple prayers",
+        "Stay in comfortable riverside hotels",
+        "Travel inside AC Force Travelers with veteran mountain drivers"
+      ],
+      "inclusion": [
+        "AC transport from Rishikesh to Rishikesh",
+        "Pre-booked neat accommodations with hot water",
+        "Morning tea, breakfast, and dinner included",
+        "Biometric enrollment and online registration processing",
+        "Support guides and physical assistance details"
+      ],
+      "exclusion": [
+        "Kedarnath Helicopter ticketing (booking assists provided)",
+        "Pony or pithu (basket carrier) hiring costs"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Rishikesh to Barkot (Yamunotri base)",
+          "details": "Drive through Mussoorie, Kempty Falls to arrive at scenic Barkot."
+        },
+        {
+          "day": 2,
+          "title": "Trek to Yamunotri Temple & Return",
+          "details": "6km walk to the temple of Goddess Yamuna. Cook rice in Surya Kund warm streams."
+        },
+        {
+          "day": 3,
+          "title": "Barkot to Uttarkashi (Ganges zone)",
+          "details": "Drive via Chamba to Uttarkashi. Visit Kashi Vishwanath temple."
+        },
+        {
+          "day": 4,
+          "title": "Excursion to Gangotri Temple",
+          "details": "Scenic drive through Harsil valley. Perform rituals on the banks of Bhagirathi (Ganga)."
+        },
+        {
+          "day": 5,
+          "title": "Uttarkashi to Guptkashi / Phata",
+          "details": "Long mountain drive along Mandakini River to Kedarnath base town."
+        },
+        {
+          "day": 6,
+          "title": "Kedarnath Temple Ascent",
+          "details": "Hike or fly up to Lord Shiva's high altitude shrine. Attend soul-stirring evening prayer."
+        },
+        {
+          "day": 7,
+          "title": "Descend to Base and rest at Pipalkoti",
+          "details": "Walk down from Kedarnath. Drive to beautiful quiet hotel in Pipalkoti."
+        },
+        {
+          "day": 8,
+          "title": "Pipalkoti to Badrinath Shrine",
+          "details": "Reach Badrinath. Dip in Tapt Kund warm pool and attend evening Darshan."
+        },
+        {
+          "day": 9,
+          "title": "Mana Village tour & Drive to Srinagar Garhwal",
+          "details": "Explore 'First Indian Village' Mana, then descend back to Srinagar."
+        },
+        {
+          "day": 10,
+          "title": "Srinagar to Rishikesh via Devprayag",
+          "details": "See the divine confluence of Alaknanda and Bhagirathi rivers at Devprayag. Arrive in Rishikesh."
+        },
+        {
+          "day": 11,
+          "title": "Departures from Rishikesh",
+          "details": "Final departures after peaceful morning Ganga bath."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=800"
+    },
+    {
+      "id": "amarnath-helicopter",
+      "category": "amarnath",
+      "title": "Amarnath Yatra Premium Helicopter Package (via Baltal)",
+      "badge": "High Altitude Shiva Yatra",
+      "duration": "3 Nights / 4 Days",
+      "price": "₹24,500",
+      "numericPrice": 24500,
+      "fromRoute": "Srinagar Airport & Baltal Heli links",
+      "overview": "Sip serene Kashmir valleys. Fly to Panchtarni via helicopter to complete your holy cave darsan of the self-formed Ice Lingam with maximum speed and ease.",
+      "difficulty": "Moderate",
+      "highlights": [
+        "Guaranteed priority helicopter tickets from Baltal/Neelgrath to Panchtarni",
+        "Short 6km trek/walk from Panchtarni to the Holy cave",
+        "Acclimatize in deluxe lakeside Houseboats in Srinagar",
+        "Comprehensive medical forms assistance",
+        "Srinagar local Mughul gardens tour included"
+      ],
+      "inclusion": [
+        "Helicopter flight ticket (Neelgrath-Panchtarni-Neelgrath)",
+        "Premium houseboat and neat swiss-luxury camps at Baltal",
+        "All meals (pure veg bhandara styled / buffet)",
+        "Sedan airport pickup and drop transfers",
+        "Yantra insurance coverage parameters"
+      ],
+      "exclusion": [
+        "Horse / Palki charges from Panchtarni helipad to cave (can be hired locally)",
+        "Extraneous emergency delays due to weather halts"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Srinagar Airport Pickup & Premium Houseboat stay",
+          "details": "Step onto Shikara boat transfers. Relax in carved wooden houseboats. Enjoy warm saffron Kahwa tea."
+        },
+        {
+          "day": 2,
+          "title": "Srinagar to Baltal camp via Sonmarg Valley",
+          "details": "Immerse in Sonmarg 'Meadow of Gold'. Settle in customized weather-proof alpine base camps at Baltal."
+        },
+        {
+          "day": 3,
+          "title": "The Holy Flight and Cave Darshan",
+          "details": "Fly up to Panchtarni. Perform the short trek to the Holy Cave. Pray before the grand Ice Stalagmite of Lord Shiva. Fly back to Baltal / Srinagar."
+        },
+        {
+          "day": 4,
+          "title": "Standard Departure with Dal Lake Sightseeing",
+          "details": "Check out after breakfast. Wrap up with souvenirs, and transfer directly to Srinagar Airport."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
+    },
+    {
+      "id": "om-parvat-special",
+      "category": "om_parvat",
+      "title": "Divine Om Parvat & Nabhidhang Spiritual Darshan",
+      "badge": "Sacred Symbol",
+      "duration": "5 Nights / 6 Days",
+      "price": "₹32,000",
+      "numericPrice": 32000,
+      "fromRoute": "Dharchula Base Camp",
+      "overview": "A dedicated journey focused on witnessing the eternal, self-formed Om symbol on the peak of Om Parvat. Includes stays in spiritual villages and meditations with local sages.",
+      "difficulty": "Moderate",
+      "highlights": [
+        "Detailed morning Darshan at Nabhidhang viewpoint",
+        "Guided group chanting of the Shiva Mahimna Stotra",
+        "Acclimatize in the scenic border village of Nabi"
+      ],
+      "inclusion": [
+        "All special border clearances & registration fees (Reg ID: NT-2026)",
+        "Warm homestays with direct view of snowy peaks",
+        "4x4 rugged border transit (Bolero)",
+        "Continuous oxygen cylinder equipment support"
+      ],
+      "exclusion": [
+        "Personal pony rides or high terrain porters",
+        "Helicopter transfers from Dharchula"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Assembling at Dharchula and medical clearing",
+          "details": "We compile your biometric records and carry out brief clinical checkups."
+        },
+        {
+          "day": 2,
+          "title": "4x4 Climb to Gunji via roaring Kali river",
+          "details": "We pass marvelous Chirkilla Dam cascades and military posts."
+        },
+        {
+          "day": 3,
+          "title": "Excursion to Nabhidhang for Om Parvat Darshan",
+          "details": "Early morning drive to the spiritual frontier to stand in prayer before Om Parvat."
+        },
+        {
+          "day": 4,
+          "title": "Acclimatized local walking in Vyas Valley",
+          "details": "Listen to the folklore of Sage Ved Vyas and return to Dharchula."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=800"
+    },
+    {
+      "id": "munsyari-glorious",
+      "category": "munsyari",
+      "title": "Munsyari, Khalia Top & Birthi Falls Retreat",
+      "badge": "Himalayan Swiss",
+      "duration": "4 Nights / 5 Days",
+      "price": "₹18,500",
+      "numericPrice": 18500,
+      "fromRoute": "Kathgodam / Haldwani Station",
+      "overview": "Uncover the pristine town of Munsyari, standing at 2200m elevation. Marvel at the dramatic, close-up panoramic sight of the five Panchachuli peaks.",
+      "difficulty": "Easy",
+      "highlights": [
+        "Adventurous trek to the snowy Khalia Top ridge",
+        "Spectacular view of the 400ft high Birthi Waterfalls",
+        "Traditional Kumaoni heritage culinary workshop"
+      ],
+      "inclusion": [
+        "AC SUV transport for all sightseeing routes",
+        "Pre-booked deluxe rooms in premium wooden chalets",
+        "Local nature expert guide",
+        "Special permission clearances for reserve walks"
+      ],
+      "exclusion": [
+        "Trek equipment rentals",
+        "Tips or specialized personal bills"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Kathgodam to Almora to Munsyari scenic drive",
+          "details": "Drive through the spiritual heart of Kumaon."
+        },
+        {
+          "day": 2,
+          "title": "Exploration of Birthi falls and local handloom mastershops",
+          "details": "See the majestic high water torrent and tribal rugs."
+        },
+        {
+          "day": 3,
+          "title": "Hike to the mighty Khalia Top viewpoint",
+          "details": "Walk through rhododendron forests to reach the summit for 360 degree peak vistas."
+        },
+        {
+          "day": 4,
+          "title": "Visit Nanda Devi temple and Return Transit",
+          "details": "Traditional prayers and checkouts towards Kathgodam."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=800"
+    },
+    {
+      "id": "kainchi-dham-bliss",
+      "category": "kainchi_dham",
+      "title": "Neem Karoli Baba Ashram & Lake District Spiritual Tour",
+      "badge": "Most Tranquil",
+      "duration": "3 Nights / 4 Days",
+      "price": "₹12,500",
+      "numericPrice": 12500,
+      "fromRoute": "Kathgodam / Haldwani Airport links",
+      "overview": "Meditate inside the quiet valley of Kainchi Dham, established by the world-famous mystic Neem Karoli Baba. Includes tranquil lakes of Nainital, Bhimtal, and Sattal.",
+      "difficulty": "Easy",
+      "highlights": [
+        "Full day spent inside Kainchi Dham ashram praying",
+        "Special morning meditation and Hanuman Chalisa chanting",
+        "Shikara boat ride on the sacred Naini Lake"
+      ],
+      "inclusion": [
+        "Neat luxury hotel stays",
+        "Traditional organic satvik breakfast & dinner meals",
+        "AC private cab with dedicated driver-companion"
+      ],
+      "exclusion": [
+        "Personal temple donation or Pooja materials",
+        "Boat ticketing fees"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Kathgodam arrival and drive to Nainital hotel",
+          "details": "Check-in, evening lake walk, and sunset viewing."
+        },
+        {
+          "day": 2,
+          "title": "Full day excursion to holy Kainchi Dham Ashram",
+          "details": "Spend the day meditating, attending prasad distributions, and soaking in the divine energy."
+        },
+        {
+          "day": 3,
+          "title": "Nainital Lake temple circuits and spiritual walks",
+          "details": "Visit Naina Devi shrine and Hanumangarhi temple."
+        },
+        {
+          "day": 4,
+          "title": "Departure back to Kathgodam railway link",
+          "details": "Finish with heartwarming memories of Neem Karoli Baba."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
+    },
+    {
+      "id": "purnagiri-shaktipith",
+      "category": "maa_purnagiri",
+      "title": "Sacred Maa Purnagiri Shaktipith Darshan Yatra",
+      "badge": "Devi Shaktipith",
+      "duration": "2 Nights / 3 Days",
+      "price": "₹8,500",
+      "numericPrice": 8500,
+      "fromRoute": "Tanakpur Railway Station pickup",
+      "overview": "Perform divine prayers at one of the 108 revered Shaktipeeths of Goddess Sati. Situated at 3000 ft on the green hills of Tanakpur overlooking the roaring Sharda River.",
+      "difficulty": "Moderate",
+      "highlights": [
+        "Holy trek to the mountain top temple of Maa Purnagiri",
+        "Attend the majestic evening Sharda River Maha Aarti",
+        "Explore the ancient Siddha Narsingh Temple"
+      ],
+      "inclusion": [
+        "Private taxi transfers throughout the trip",
+        "Dharamsala or premium guestrooms close to the temple path",
+        "Continuous guide support during the trek"
+      ],
+      "exclusion": [
+        "Pony/Doli services for elderly yatris",
+        "Fast track queue tickets"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Tanakpur arrival and transfer to Purnagiri baseline",
+          "details": "Evening orientation briefing and attend Sharda River Aarti."
+        },
+        {
+          "day": 2,
+          "title": "Morning sacred trek to Maa Purnagiri temple top",
+          "details": "Climb the steps to the high hill shrine, perform Pujas, and receive holy thread blessings."
+        },
+        {
+          "day": 3,
+          "title": "Koteshwar Mahadev and Tanakpur departure",
+          "details": "Depart Tanakpur with the divine protection of Goddess Purnagiri."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1626621341517-bbf3d926b12d?q=80&w=800"
+    },
+    {
+      "id": "panchachuli-majestic",
+      "category": "panchachuli",
+      "title": "Panchachuli Base Camp Trek & Darma River Safari",
+      "badge": "Peak Expedition",
+      "duration": "8 Nights / 9 Days",
+      "price": "₹29,500",
+      "numericPrice": 29505,
+      "fromRoute": "Dharchula / Haldwani Base",
+      "overview": "A spectacular expedition taking you near the base of the five magnificent high snow peaks of the Panchachuli Range, rising over 6000 meters into local skies.",
+      "difficulty": "Challenging",
+      "highlights": [
+        "Camp under the grand shadows of Panchachuli Peaks",
+        "Walk through historic Tibetan-Darma border trading routes",
+        "Immerse in local Rang folk dance and bonfire music at night"
+      ],
+      "inclusion": [
+        "Alpine dome tents, sleeping bags, and mattress kits",
+        "Highly trained certified mountain trek managers & cooks",
+        "Inner Line Forest department permissions",
+        "Hot organic high calorie nutritional meals"
+      ],
+      "exclusion": [
+        "Personal emergency trekking evacuation insurance",
+        "Thermal base layers (rentals available)"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Assembling at Sobla village and base preparations",
+          "details": "Gear verification, safety checklist validation, and medical briefings."
+        },
+        {
+          "day": 2,
+          "title": "Trek through wild bamboo and pine woods to Urthing",
+          "details": "Scenic 12 km walk alongside the gorgeous, gushing Darma river."
+        },
+        {
+          "day": 3,
+          "title": "Urthing to Nagling via high rocky trails",
+          "details": "Acclimatize in this incredibly silent high elevation settlement."
+        },
+        {
+          "day": 4,
+          "title": "Summit day: Reach Panchachuli Base camp & viewpoint",
+          "details": "Stand in complete awe of the five giant snow-capped pillars towering above you."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=800"
+    },
+    {
+      "id": "darma-valley-mystic",
+      "category": "darma_valley",
+      "title": "Darma Valley Glacial Trails Exploration Yatra",
+      "badge": "Unexplored Border",
+      "duration": "6 Nights / 7 Days",
+      "price": "₹26,000",
+      "numericPrice": 26000,
+      "fromRoute": "Dharchula Border Pickup",
+      "overview": "Venture deep inside the Darma Valley, a hidden Himalayan gem situated close to the Indo-Tibetan border. Home to ancient glaciers, beautiful wildflowers, and pure local cultures.",
+      "difficulty": "Challenging",
+      "highlights": [
+        "Travel through the rugged, beautiful gorges of River Darma",
+        "Stay in historical wooden homestays in Tidang & Sela",
+        "Witness majestic hanging glaciers and high altitude waterfalls"
+      ],
+      "inclusion": [
+        "4x4 SUV special mountain Boleros",
+        "Warm traditional homestays operated by native families",
+        "All border defense permits",
+        "Pure satvik organic local food"
+      ],
+      "exclusion": [
+        "Personal expenses",
+        "Tips for local border drivers"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Dharchula arrival & document clearing",
+          "details": "Secure military clearances and prepare high terrain vehicles."
+        },
+        {
+          "day": 2,
+          "title": "Drive from Dharchula to Sela village",
+          "details": "Enter Darma valley and sleep in traditional mud-stone cottages."
+        },
+        {
+          "day": 3,
+          "title": "Sela to Tidang village exploration",
+          "details": "Breathtaking route of rocky slides, dense pine forests, and border bridges."
+        },
+        {
+          "day": 4,
+          "title": "Glacial views at Marchha & Return Journey",
+          "details": "Walk near high mountain glaciers before descending to baseline."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=800"
+    },
+    {
+      "id": "chirkilla-dam-gateways",
+      "category": "chirkilla_dam",
+      "title": "Chirkilla Dam & Kali River Eco Tourism Valley Ride",
+      "badge": "Eco Adventure",
+      "duration": "3 Nights / 4 Days",
+      "price": "₹14,500",
+      "numericPrice": 14500,
+      "fromRoute": "Pithoragarh / Haldwani Pickup",
+      "overview": "See the spectacular engineering marvel of the Chirkilla Dam on the roaring Kali River. Surrounded by lush, green valleys and majestic cliffs.",
+      "difficulty": "Easy",
+      "highlights": [
+        "Slight boat cruise on the tranquil high-altitude reservoir",
+        "Walk down into the lush tea gardens nearby Pithoragarh",
+        "See beautiful mountain birds and photography hotspots"
+      ],
+      "inclusion": [
+        "AC private sedan transport",
+        "Prefree pre-booked tidy hotels with views",
+        "Entrance passes and boat tickets included",
+        "Guided tour of the power station borders"
+      ],
+      "exclusion": [
+        "Snack purchases or personal shopping",
+        "Laundry or phone charges"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Drive through scenic steps to Dharchula baseline",
+          "details": "Assemble, register, and rest in the riverside hotel."
+        },
+        {
+          "day": 2,
+          "title": "Full day tour of Chirkilla Hydroelectric Dam",
+          "details": "Understand electricity generations, see the river control channels, and snap scenic valley memories."
+        },
+        {
+          "day": 3,
+          "title": "Visit Jauljibi confluence where Kali meets Gori river",
+          "details": "Behold the majestic, high-volume confluence of the two mighty rivers."
+        },
+        {
+          "day": 4,
+          "title": "Return journey to Pithoragarh / Haldwani",
+          "details": "Transfer back to transit points for homeward flight."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1509024644558-2f56ce76c090?q=80&w=800"
+    },
+    {
+      "id": "narayan-ashram-peace",
+      "category": "narayan_ashram",
+      "title": "Spiritual Meditation Retreat at Narayan Ashram",
+      "badge": "Absolute Peace",
+      "duration": "4 Nights / 5 Days",
+      "price": "₹15,000",
+      "numericPrice": 15000,
+      "fromRoute": "Pithoragarh Base Camp",
+      "overview": "Unwind inside the peaceful premises of Narayan Ashram, situated at a height of 9,000 ft near Tawaghat. Established by Shri Narayan Swami in 1936 as a spiritual center.",
+      "difficulty": "Moderate",
+      "highlights": [
+        "Stay inside peaceful, meditative ashram cells",
+        "Daily yoga, Vedic chanting, and silent introspection hours",
+        "Stunning botanical gardens and spiritual text library access"
+      ],
+      "inclusion": [
+        "All clean, hygienic ashram stays and organic satvik meals",
+        "Guided trek around the scenic high altitude wild valleys",
+        "Private taxi from Pithoragarh and back"
+      ],
+      "exclusion": [
+        "Pooja dakshina (voluntary)",
+        "Personal porter support"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Pithoragarh to Tawaghat and uphill climb to the Ashram",
+          "details": "Scenic travel through step farms and high oak trees."
+        },
+        {
+          "day": 2,
+          "title": "Ashram morning bell prayers and meditation",
+          "details": "Participate in early morning chanting, explore ashram historical details, and sit in silent meditation."
+        },
+        {
+          "day": 3,
+          "title": "Trek to nearby high altitude viewpoint and local villages",
+          "details": "Interact with deep mountain communities and enjoy tea sessions."
+        },
+        {
+          "day": 4,
+          "title": "Spiritual session with ashram elders and Return",
+          "details": "Closing meditation, blessings from Swamiji, and return drive."
+        }
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800"
+    }
+  ],
+  "travelStories": [
+    {
+      "id": "story-1",
+      "name": "Dr. Rajesh K. Sharma",
+      "location": "New Delhi, India",
+      "trip": "Adi Kailash Om Parvat Yatra",
+      "quote": "Standing before the giant natural Om on the peak at Nabhidhang was the most emotional second of my lifetime. Adi Kailash Tirath's coordination was fantastic. Stays were warm and clean despite freezing climates.",
+      "coverImage": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=400",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-cold-mountain-stream-under-a-bridge-34440-large.mp4",
+      "duration": "0:45"
+    },
+    {
+      "id": "story-2",
+      "name": "Mrs. Revathi Subramanian",
+      "location": "Chennai, Tamil Nadu",
+      "trip": "Kailash Aerial Darshan Flight",
+      "quote": "As elderly yatris, my husband and I had lost hope of seeing Mount Kailash due to medical trek restrictions. Adi Kailash Tirath's Aerial flight yatra let us see Shiva's Lordly peak elegantly. Har Har Mahadev!",
+      "coverImage": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=400",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-snow-on-mountain-peaks-in-the-sunset-34341-large.mp4",
+      "duration": "1:15"
+    },
+    {
+      "id": "story-3",
+      "name": "Amit & Priya Deshmukh",
+      "location": "Mumbai, Maharashtra",
+      "trip": "Chardham Yatra Epic Garhwal",
+      "quote": "With helicopter blockages in Kedarnath, our guide managed immediate local pony resources and luxury homestays for us. Pure vegetarian organic food was cooked fresh every day. Absolute five stars!",
+      "coverImage": "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=400",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-sunlight-on-snowy-mountain-peaks-34288-large.mp4",
+      "duration": "0:58"
+    },
+    {
+      "id": "story-4",
+      "name": "Shri Mahendra Pratap Singh",
+      "location": "Varanasi, Uttar Pradesh",
+      "trip": "Adi Kailash Om Parvat Yatra",
+      "quote": "Being a senior citizen, I was worried about physical fatigue at high altitudes. The local guides treated me like family and helped me reach Parvati Kund with total convenience.",
+      "coverImage": "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=400",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-coniferous-forest-on-snowy-mountain-slopes-34433-large.mp4",
+      "duration": "1:02"
+    },
+    {
+      "id": "story-5",
+      "name": "Dr. Anjali Deshpande",
+      "location": "Pune, Maharashtra",
+      "trip": "Kailash Aerial Darshan Flight",
+      "quote": "Breathtakingly simple! Seeing holy Mount Kailash without Chinese visa delay or biometric stress was a spiritual boom. Strongly recommend Adi Kailash Tirath.",
+      "coverImage": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=400",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-snow-capped-mountains-under-the-clouds-40291-large.mp4",
+      "duration": "0:55"
+    },
+    {
+      "id": "story-6",
+      "name": "Vikram & Shreya Patel",
+      "location": "Ahmedabad, Gujarat",
+      "trip": "Chardham Helicopters Exclusive",
+      "quote": "A perfectly organized yatra with five-star hospitality in remote valleys. Helicopter slots, VIP Darshans, and premium stays were completely top-notch.",
+      "coverImage": "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=400",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-hazy-view-of-forest-and-mountains-34431-large.mp4",
+      "duration": "1:10"
+    }
+  ],
+  "yatriFeedbacks": [
+    {
+      "id": "fb-1",
+      "name": "Shri Srinivasan Iyer",
+      "location": "Chennai, Tamil Nadu",
+      "trip": "Adi Kailash Road Route (8 Days)",
+      "rating": 5,
+      "quote": "The tour organization was flawless. Going to an altitude of 14,000 feet requires great logistic care, and the team provided continuous medical oxygen backup and outstanding homestays."
+    },
+    {
+      "id": "fb-2",
+      "name": "Smt. Meenakshi Dhoundiyal",
+      "location": "Dehradun, Uttarakhand",
+      "trip": "Chardham Classic Yatra",
+      "rating": 5,
+      "quote": "Our entire family completed the holy Chardham Yatra safely. The food was 100% pure organic vegetarian, cooked fresh every day with hygienic guidelines. Incredible experience!"
+    },
+    {
+      "id": "fb-3",
+      "name": "Ravi Teja Yadav",
+      "location": "Hyderabad, Telangana",
+      "trip": "Kailash Aerial Darshan Flight",
+      "rating": 5,
+      "quote": "Due to health constraints, standard high-altitude walking was impossible for me. The Aerial flight gave such stunningly close window viewings of Kailash & Mansarovar. Truly divine!"
+    },
+    {
+      "id": "fb-4",
+      "name": "Shri Naresh Chandra Sen",
+      "location": "Kolkata, West Bengal",
+      "trip": "Adi Kailash Road Route (8 Days)",
+      "rating": 5,
+      "quote": "Every single day was blessed. The driver had incredible skills on Himalayan curves, and the spiritual satsangs organized in Dharchula warmed our souls."
+    },
+    {
+      "id": "fb-5",
+      "name": "Smt. Sharda Devadiga",
+      "location": "Bangalore, Karnataka",
+      "trip": "Chardham Classic Yatra",
+      "rating": 5,
+      "quote": "Pristine arrangements. From wheelchair accessibility to timely medical check-ups under local administration directions. Har Har Gange and Kedar!"
+    },
+    {
+      "id": "fb-6",
+      "name": "Vijay & Sarita Malhotra",
+      "location": "Ludhiana, Punjab",
+      "trip": "Kailash Aerial Darshan Flight",
+      "rating": 5,
+      "quote": "Absolute comfort for seniors. Witnessing Kailash and Lake Manasarovar side-by-side on our window seat is an image burned into our minds for eternity."
+    }
+  ],
+  "blogs": [
+    {
+      "id": "blog-1",
+      "title": "Comprehensive Preparation Guide for Adi Kailash & Om Parvat Yatra",
+      "excerpt": "Preparing your body, lungs, and packing lists for high altitude treks over 12,000 feet. Best medical tips and permit requirements analyzed.",
+      "date": "12 May 2026",
+      "author": "Shri Ajay Basera",
+      "readTime": "6 Min Read",
+      "imageUrl": "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=500",
+      "content": "The Adi Kailash Yatra is a dream spiritual journey for millions of Shiva devotees. However, rising to Jotling and Parvati Kund (above 12,000 ft) requires deep preparation. First, spend 30 days prior working on cardiovascular breathing exercises (Anulom Vilom and walking 5 km with weights). Second, pack layered thermal woolens as temperatures in Vyas valley drop drastically near 0°C at night. Finally, always carry a small packet of camphor tabs; inhaling its aroma helps open constricted airways under low oxygen levels."
+    },
+    {
+      "id": "blog-2",
+      "title": "Why Mount Kailash Aerial Flight Darshan has Changed Sacred Tourism",
+      "excerpt": "Understand how pressurized high-flying flights now offer window viewings of Mount Kailash without China passport struggles or physical fatigue.",
+      "date": "28 April 2026",
+      "author": "Dr. K. Dwivedi",
+      "readTime": "4 Min Read",
+      "imageUrl": "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=500",
+      "content": "For decades, spiritual pilgrims had to undergo complex Chinese consulate biometrics, visa waitlists, and extremely thin Himalayan air to catch a glimpse of the holy abode of Shiva. Adi Kailash Tirath pioneered the customized mountain aviation flights. Cruising stably at high altitudes, yatris get large-window views of Kailash, Mansarovar Lake, and Mount Gurla Mandhata. It is fully accessible to children, senior citizens, and physically challenged yatris, marking a golden era in yatra accessibility."
+    },
+    {
+      "id": "blog-3",
+      "title": "Acclimatization Hacks for High Altitude Yatris: The Golden Rules",
+      "excerpt": "The vital health rules that every yatri crossing Dharchula and rising into Gunji must follow to avoid Acute Mountain Sickness (AMS).",
+      "date": "15 Jan 2026",
+      "author": "Adi Kailash Tirath Medical Board Advisories",
+      "readTime": "8 Min Read",
+      "imageUrl": "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=500",
+      "content": "High Altitude sickness is completely preventable if rules are followed. Rule 1: Never ascend more than 1,000 meters in a single day once you cross 8,000 feet. That is why our itineraries feature 2 rest nights in Pithoragarh & Dharchula standard. Rule 2: Force hydrate! Drink 4-5 liters of lukewarm water daily. Rule 3: Avoid caffeine, alcohol, and heavy sleep medicines, which slow breathing rates. Listen to your guide, and check oxygen levels on oximeters twice daily."
+    }
+  ],
+  "accreditations": [
+    {
+      "name": "Uttarakhand Tourism board Authorized",
+      "id": "a1",
+      "detail": "Uttarakhand Govt. Registered Operator"
+    },
+    {
+      "name": "MSME Certified Operator",
+      "id": "a2",
+      "detail": "Ministry of MSME Govt. of India"
+    },
+    {
+      "name": "NIDHI Portal Verified ID",
+      "id": "a3",
+      "detail": "National Database of Hospitality Industry"
+    },
+    {
+      "name": "TripAdvisor Excellence Award",
+      "id": "a4",
+      "detail": "Rated 4.9+ Stars by 500+ Yatris"
+    },
+    {
+      "name": "GST Fully Verified Operator",
+      "id": "a5",
+      "detail": "Registered Active GST Payer entity"
+    }
+  ],
+  "whatsapp": "https://wa.me/+917017535116"
+}

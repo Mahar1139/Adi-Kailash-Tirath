@@ -1,0 +1,8 @@
+{
+  "name": "Adi Kailash Tirath",
+  "description": "Premium spiritual travel portal specializing in high-altitude yatras, including Mount Kailash, Adi Kailash, Chardham Yatra, and custom spiritual journeys.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

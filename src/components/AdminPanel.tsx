@@ -1,0 +1,2192 @@
+import React, { useState, useEffect } from "react";
+import { 
+  Key, ShieldCheck, Mail, Phone, Edit2, Trash2, Plus, ArrowLeft, Save,
+  CheckCircle, Layers, FileText, MapPin, Image, Star, Eye, Calendar,
+  Sliders, Globe, Award, ShieldAlert, Users, List, RefreshCw, Video
+} from "lucide-react";
+
+interface AdminPanelProps {
+  onClose: () => void;
+  initialSiteData: any;
+  onRefreshSiteData: () => void;
+}
+
+export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData }: AdminPanelProps) {
+  const [secretKey, setSecretKey] = useState("");
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [authError, setAuthError] = useState("");
+  
+  const [activeTab, setActiveTab] = useState<"bookings" | "global" | "slides" | "packages" | "gallery" | "reviews" | "blogs" | "accreditations" | "reels">("bookings");
+  const [siteData, setSiteData] = useState<any>(null);
+  
+  // Real-time Booking Enquiries
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookingLoading, setBookingLoading] = useState(false);
+  
+  // Forms states
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [formMode, setFormMode] = useState<"edit" | "create">("edit");
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
+  const [saveMessage, setSaveMessage] = useState("");
+
+  // Sub-item drafts
+  const [packageDraft, setPackageDraft] = useState<any>(null);
+  const [slideDraft, setSlideDraft] = useState<any>(null);
+  const [storyDraft, setStoryDraft] = useState<any>(null);
+  const [feedbackDraft, setFeedbackDraft] = useState<any>(null);
+  const [blogDraft, setBlogDraft] = useState<any>(null);
+  const [destDraft, setDestDraft] = useState<any>(null);
+  const [accredDraft, setAccredDraft] = useState<any>(null);
+
+  // Initialize
+  useEffect(() => {
+    if (initialSiteData) {
+      setSiteData(JSON.parse(JSON.stringify(initialSiteData))); // deep copy
+    }
+  }, [initialSiteData]);
+
+  const loadBookings = async () => {
+    setBookingLoading(true);
+    try {
+      const res = await fetch("/api/planners");
+      if (res.ok) {
+        const data = await res.json();
+        setBookings(data);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setBookingLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthorized) {
+      loadBookings();
+    }
+  }, [isAuthorized]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (secretKey === "@12321@##") {
+      setIsAuthorized(true);
+      setAuthError("");
+    } else {
+      setAuthError("Invalid administrative secret key. Please try again.");
+    }
+  };
+
+  const saveToBackend = async (updatedData: any) => {
+    setSaveStatus("saving");
+    setSaveMessage("Publishing updates to site database...");
+    try {
+      const res = await fetch("/api/site-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ secretKey, data: updatedData })
+      });
+      if (res.ok) {
+        setSaveStatus("success");
+        setSaveMessage("Changes saved & published successfully!");
+        setSiteData(updatedData);
+        onRefreshSiteData();
+        setTimeout(() => setSaveStatus("idle"), 3000);
+      } else {
+        const err = await res.json();
+        setSaveStatus("error");
+        setSaveMessage(err.error || "Failed to update configuration.");
+      }
+    } catch (e: any) {
+      setSaveStatus("error");
+      setSaveMessage(e.message || "Network Error.");
+    }
+  };
+
+  const updateBookingStatus = async (id: number, newStatus: string) => {
+    try {
+      const res = await fetch("/api/planners/status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ secretKey, id, status: newStatus })
+      });
+      if (res.ok) {
+        loadBookings();
+      } else {
+        alert("Failed to update status.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const deleteBooking = async (id: number) => {
+    if (!window.confirm("Are you sure you want to delete this yatra booking lead?")) return;
+    try {
+      const res = await fetch("/api/planners/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ secretKey, id })
+      });
+      if (res.ok) {
+        loadBookings();
+      } else {
+        alert("Failed to delete booking.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Generalized structural updates helper
+  const handleSaveGlobalField = (field: string, value: any) => {
+    const updated = { ...siteData, [field]: value };
+    saveToBackend(updated);
+  };
+
+  const handleSaveGlobalMultiFields = (fields: { [key: string]: any }) => {
+    const updated = { ...siteData, ...fields };
+    saveToBackend(updated);
+  };
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col justify-center items-center px-4 select-none">
+        <div className="absolute top-6 left-6">
+          <button 
+            onClick={onClose}
+            className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to Sanctuary
+          </button>
+        </div>
+
+        <div className="w-full max-w-md bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-8 rounded-2xl shadow-2xl relative">
+          <div className="absolute -top-10 left-12 w-fit rounded-full border border-orange-500/30 overflow-hidden bg-slate-50 dark:bg-zinc-950">
+            <img 
+              src="/logo.jpg" 
+              alt="Logo" 
+              className="w-16 h-16 object-contain bg-white dark:bg-zinc-950" 
+              referrerPolicy="no-referrer"
+            />
+          </div>
+
+          <div className="mt-4 mb-6">
+            <h2 className="font-serif text-2xl font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wide">
+              ADMINISTRATIVE LOGON
+            </h2>
+            <p className="text-slate-600 dark:text-zinc-400 text-xs mt-1 leading-relaxed">
+              Authenticate using your master spiritual secret key to modify the Adi Kailash Tirath website content dynamically.
+            </p>
+          </div>
+
+          {authError && (
+            <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-lg flex items-start gap-2 text-red-400 text-xs mb-5 font-mono">
+              <ShieldAlert className="h-4.5 w-4.5 shrink-0" />
+              <span>{authError}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="flex flex-col gap-1.5 text-left">
+              <label className="text-slate-500 dark:text-zinc-450 text-[10.5px] font-mono uppercase tracking-wider">
+                Enter Master Secret Key
+              </label>
+              <div className="relative">
+                <input
+                  required
+                  type="password"
+                  placeholder="Secret access key..."
+                  value={secretKey}
+                  onChange={(e) => setSecretKey(e.target.value)}
+                  className="w-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-orange-500/50"
+                />
+                <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400 dark:text-zinc-500" />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-orange-650 to-orange-500 hover:from-orange-600 hover:to-orange-400 text-white font-mono text-xs font-bold py-3.5 rounded-lg border border-orange-500/30 tracking-widest cursor-pointer shadow-lg shadow-orange-600/10 mt-4"
+            >
+              UNLOCK PORTAL
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-slate-700 dark:text-zinc-300 font-sans select-none flex flex-col md:flex-row">
+      
+      {/* Sidebar Controls */}
+      <aside className="w-full md:w-64 bg-slate-100 dark:bg-zinc-900 border-r border-slate-200/80 dark:border-zinc-800/80 flex flex-col justify-between shrink-0">
+        <div>
+          {/* Brand/Header */}
+          <div className="p-5 border-b border-slate-200 dark:border-zinc-800 flex justify-between items-center bg-white dark:bg-zinc-950">
+            <div className="flex flex-col">
+              <span className="font-serif text-base font-extrabold text-slate-900 dark:text-zinc-100 tracking-wide">
+                ADI KAILASH <span className="text-orange-500">ADMIN</span>
+              </span>
+              <span className="text-[9px] font-mono text-slate-500 dark:text-zinc-450 uppercase tracking-widest mt-0.5">
+                Dynamic Site Architect
+              </span>
+            </div>
+            <button 
+              onClick={onClose}
+              className="text-xs font-mono uppercase text-orange-400 hover:text-orange-355 transition bg-orange-500/10 px-2 py-1 rounded"
+            >
+              EXIT
+            </button>
+          </div>
+
+          {/* Navigation Controls */}
+          <nav className="p-3 space-y-1 text-left">
+            <p className="text-[9px] font-mono text-slate-500 dark:text-zinc-450 tracking-wider uppercase px-3 py-2">
+              REAL-TIME LEADS
+            </p>
+            <button
+              onClick={() => { setActiveTab("bookings"); setEditingIndex(null); }}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "bookings" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <Layers className="h-4 w-4" />
+                Yatra Enquiries
+              </span>
+              {bookings.length > 0 && (
+                <span className="bg-red-500 text-white text-[9px] font-sans font-bold px-1.5 py-0.5 rounded-full">
+                  {bookings.length}
+                </span>
+              )}
+            </button>
+
+            <p className="text-[9px] font-mono text-slate-500 dark:text-zinc-450 tracking-wider uppercase px-3 py-2 pt-4">
+              EDITORIAL MANAGER
+            </p>
+
+            <button
+              onClick={() => { setActiveTab("global"); setEditingIndex(null); }}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs font-mono transition border ${
+                activeTab === "global" 
+                  ? "bg-orange-500/15 text-orange-400 font-bold border-orange-500/30" 
+                  : "text-slate-700 dark:text-zinc-300 border-transparent hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-orange-500" />
+                Manage & Live Edit (लाइव चेंज)
+              </span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("slides"); setEditingIndex(null); }}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs font-mono transition border ${
+                activeTab === "slides" 
+                  ? "bg-orange-500/15 text-orange-400 font-bold border-orange-500/30" 
+                  : "text-slate-700 dark:text-zinc-300 border-transparent hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <Sliders className="h-4 w-4 text-orange-500" />
+                Top Slider Slides (होम पेज स्लाइडर बदलें)
+              </span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("packages"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "packages" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <List className="h-4 w-4" /> Yatra Packages ({siteData?.packages?.length || 0})
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("gallery"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "gallery" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Image className="h-4 w-4" /> Sub-Destinations
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("reviews"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "reviews" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Star className="h-4 w-4" /> Yatri Feedbacks ✍️ (लिखित फीडबैक)
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("reels"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "reels" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Video className="h-4 w-4" /> Pilgrim Video Reels 📹 (वीडियो रील्स)
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("blogs"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "blogs" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <FileText className="h-4 w-4" /> News & Blogs
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("accreditations"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "accreditations" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Award className="h-4 w-4" /> Accreditations
+            </button>
+          </nav>
+        </div>
+
+        {/* Global Action Feed */}
+        <div className="p-4 bg-white dark:bg-zinc-950 border-t border-slate-200 dark:border-zinc-800 text-left">
+          <p className="text-[9px] font-mono text-slate-500 dark:text-zinc-450 uppercase tracking-widest block mb-2">
+            DATABASE STATUS
+          </p>
+          <div className="flex items-center gap-2 text-xs font-mono text-green-400">
+            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <span>Site Sync Live</span>
+          </div>
+
+          {saveStatus !== "idle" && (
+            <div className={`mt-3 p-2 rounded text-[11px] font-mono ${
+              saveStatus === "saving" ? "bg-orange-500/10 text-orange-400" :
+              saveStatus === "success" ? "bg-green-500/10 text-green-400 border border-green-550/20" :
+              "bg-red-500/10 text-red-400"
+            }`}>
+              {saveMessage}
+            </div>
+          )}
+        </div>
+      </aside>
+
+      {/* Primary Workspace Panel */}
+      <main className="flex-1 bg-white dark:bg-zinc-950 p-6 md:p-8 overflow-y-auto text-left">
+        {!siteData ? (
+          <div className="h-64 flex flex-col items-center justify-center gap-3">
+            <RefreshCw className="h-7 w-7 text-slate-400 dark:text-zinc-500 animate-spin" />
+            <p className="text-xs font-mono text-slate-500 dark:text-zinc-450">Initializing Database Connection...</p>
+          </div>
+        ) : (
+          <div>
+            
+            {/* TAB CONTENT: BOOKINGS */}
+            {activeTab === "bookings" && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Yatra Bookings Lead Console</h2>
+                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Manage planning logs registered in real time by pilgrims using the website form.</p>
+                  </div>
+                  <button 
+                    onClick={loadBookings}
+                    className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 p-2 rounded transition cursor-pointer text-xs font-mono flex items-center gap-1 text-orange-400"
+                  >
+                    <RefreshCw className={`h-3 w-3 ${bookingLoading ? "animate-spin" : ""}`} /> Refresh Leads
+                  </button>
+                </div>
+
+                {bookings.length === 0 ? (
+                  <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-12 rounded-xl text-center">
+                    <p className="text-sm font-serif text-slate-600 dark:text-zinc-400">No active planning requests found in memory.</p>
+                    <p className="text-xs font-mono text-slate-400 dark:text-zinc-500 mt-1">Submit names through the Quick Planner block to populate records instantly.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {bookings.map((booking) => (
+                      <div key={booking.id} className="bg-zinc-90 w-full border border-slate-200 dark:border-zinc-800 p-5 rounded-xl hover:border-slate-200 dark:border-zinc-800 transition relative flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+                        <div className="space-y-2 text-left">
+                          <div className="flex flex-wrap items-center gap-2.5">
+                            <span className="text-orange-450 font-bold font-mono text-xs">{booking.reference}</span>
+                            <span className="text-slate-400 dark:text-zinc-500 font-mono text-xs">|</span>
+                            <span className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100">{booking.name}</span>
+                            <span className="text-slate-400 dark:text-zinc-500 font-mono text-xs sm:inline">|</span>
+                            <span className="inline-flex items-center gap-1 text-[11px] font-mono text-orange-400 bg-orange-500/5 px-2 py-0.5 rounded border border-orange-500/10">
+                              {booking.destination}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-1.5 gap-x-6 text-xs font-mono text-slate-500 dark:text-zinc-450 pt-1">
+                            <div className="flex items-center gap-1.5">
+                              <Phone className="h-3 w-3 text-orange-500" />
+                              <a href={`tel:${booking.phone}`} className="hover:text-slate-900 dark:text-zinc-100 transition">{booking.phone}</a>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Mail className="h-3 w-3 text-orange-500" />
+                              <span>{booking.email}</span>
+                            </div>
+                            <div>
+                              <span>👫 Travelers: </span>
+                              <span className="text-slate-700 dark:text-zinc-300 font-bold">{booking.travelers} Yatri(s)</span>
+                            </div>
+                          </div>
+
+                          <p className="text-xs leading-relaxed text-slate-600 dark:text-zinc-400 bg-white dark:bg-zinc-950 p-3 rounded border border-slate-300 dark:border-zinc-700 mt-2">
+                            <span className="text-[10px] uppercase font-mono block text-amber-500/80 mb-0.5">Special Dietary & Health Backups request:</span>
+                            {booking.message}
+                          </p>
+
+                          <div className="text-[10px] font-mono text-slate-500 dark:text-zinc-450 flex items-center gap-1 mt-1">
+                            <span>Requested date: </span>
+                            <span className="text-slate-600 dark:text-zinc-400">{booking.date}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0 md:items-end">
+                          <div className="flex items-center gap-1.5">
+                            <label className="text-[10px] font-mono text-slate-500 dark:text-zinc-450 uppercase">Status:</label>
+                            <select
+                              value={booking.status}
+                              onChange={(e) => updateBookingStatus(booking.id, e.target.value)}
+                              className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 px-2 py-1 text-xs font-mono text-amber-400 rounded focus:border-orange-500/50 cursor-pointer"
+                            >
+                              <option value="Consultant Assigned">Consultant Assigned</option>
+                              <option value="Documents Under Verification">Docs Under Verification</option>
+                              <option value="Permit Applied">Permit Applied</option>
+                              <option value="Booking Approved / Deposited">Approved / Deposited</option>
+                              <option value="Yatra Fully Completed">Fully Completed</option>
+                              <option value="Lead Cancelled">Lead Cancelled</option>
+                            </select>
+                          </div>
+
+                          <button
+                            onClick={() => deleteBooking(booking.id)}
+                            className="bg-red-500/10 border border-red-500/15 hover:bg-red-500 hover:text-white p-2 rounded transition cursor-pointer text-xs font-mono flex items-center justify-center gap-1.5 text-red-400 mt-1"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" /> Delete Enquiry
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: GLOBAL SETTINGS */}
+            {activeTab === "global" && (
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider flex items-center gap-2">
+                  <span className="text-orange-500">⚙️</span> Manage & Edit Live (लाइव चेंज और मैनेज करें)
+                </h2>
+                <p className="text-slate-500 dark:text-zinc-450 text-xs mb-6">
+                  शीर्ष बैनर टिकर (Top Ticker), फ़ोन नंबर, ईमेल, सोशल मीडिया लिंक्स और उत्तराखंड टूरिज्म रजिस्ट्रेशन क्रेडेंशियल्स को यहाँ से तुरंत लाइव बदलें।
+                </p>
+
+                <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl space-y-6">
+                  {/* Banner Notices list (TOP RE-ORDERED MODULE) */}
+                  <div className="flex flex-col gap-3 pb-6 border-b border-slate-200 dark:border-zinc-800">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-orange-450 text-xs font-mono uppercase tracking-wider font-bold">
+                        📢 Top Banner Ticker Announcements (शीर्ष बैनर घूमतें हुए संदेश)
+                      </span>
+                      <p className="text-[11px] text-slate-500 dark:text-zinc-450 leading-relaxed">
+                        इन्हें बदलें और यह तुरंत मुख्य पृष्ठ के शीर्ष पर घूमते हुए दिखाई देगा। बदलाव करने के बाद बाहर क्लिक (blur) करें।
+                      </p>
+                    </div>
+                    <div className="space-y-2 mt-1">
+                      {siteData.bannerTickerText.map((notice: string, nIdx: number) => (
+                        <div key={nIdx} className="flex gap-2 items-center">
+                          <span className="text-xs font-mono font-bold text-slate-400 dark:text-zinc-500">{nIdx + 1}.</span>
+                          <input
+                            type="text"
+                            defaultValue={notice}
+                            onBlur={(e) => {
+                              const nt = [...siteData.bannerTickerText];
+                              nt[nIdx] = e.target.value;
+                              handleSaveGlobalField("bannerTickerText", nt);
+                            }}
+                            className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:border-zinc-700 focus:border-orange-500/60 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 focus:outline-none transition-all font-sans"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const nt = [...siteData.bannerTickerText];
+                              nt.splice(nIdx, 1);
+                              handleSaveGlobalField("bannerTickerText", nt);
+                            }}
+                            className="p-2 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-red-400 rounded text-slate-500 dark:text-zinc-450 cursor-pointer transition-colors"
+                            title="Delete Announcement Line"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nt = [...siteData.bannerTickerText, "🕉️ Enter your brand new sacred announcement ticker detail here..."];
+                        handleSaveGlobalField("bannerTickerText", nt);
+                      }}
+                      className="mt-2 w-fit bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 hover:border-orange-500/50 hover:text-orange-400 text-slate-600 dark:text-zinc-400 font-mono text-xs px-4 py-2 rounded inline-flex items-center gap-1.5 cursor-pointer transition"
+                    >
+                      <Plus className="h-3.5 w-3.5" /> Add New Notice Line (नया संदेश जोड़ें)
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono uppercase tracking-wider">Navbar Logo Primary Text</label>
+                      <input
+                        type="text"
+                        defaultValue={siteData.logoText}
+                        onBlur={(e) => handleSaveGlobalField("logoText", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider">Full Company / Brand Name</label>
+                      <input
+                        type="text"
+                        defaultValue={siteData.companyName}
+                        onBlur={(e) => handleSaveGlobalField("companyName", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono uppercase tracking-wider">Motto / Sub-tagline</label>
+                      <input
+                        type="text"
+                        defaultValue={siteData.tagline}
+                        onBlur={(e) => handleSaveGlobalField("tagline", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider">Active Season Pill Text</label>
+                      <input
+                        type="text"
+                        defaultValue={siteData.activeSeason}
+                        onBlur={(e) => handleSaveGlobalField("activeSeason", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-span-full bg-zinc-955/80 border border-orange-500/35 p-6 rounded-xl space-y-6 shadow-2xl my-2">
+                    <div className="flex items-start gap-2.5 pb-3 border-b border-slate-200/70 dark:border-zinc-800/70">
+                      <Phone className="h-5 w-5 text-orange-500 mt-0.5 animate-pulse" />
+                      <div>
+                        <span className="text-orange-400 text-xs font-mono uppercase tracking-widest font-bold block">
+                          📞 Phone & Support Contacts (हेल्पलाइन फ़ोन नंबर और व्हाट्सएप सेटिंग)
+                        </span>
+                        <p className="text-[11.5px] text-slate-600 dark:text-zinc-400 mt-1 leading-relaxed">
+                          यहाँ आप जो दोनों फ़ोन नंबर डालेंगे, वे मुख्य ऊपर पट्टी (Navbar Header) और घूमते टीकर (Announcement Ticker) में तुरंत लाइव अपडेट हो जायेंगे।
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-orange-300 text-[10.5px] font-mono uppercase tracking-wider font-bold">
+                          ☎️ Toll-Free Phone 1 (पहला मुख्य हेल्पलाइन फ़ोन नंबर)
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={siteData.phones?.[0] || ""}
+                          placeholder="+91 XXXXXXXXXX"
+                          onBlur={(e) => {
+                            const ph = siteData.phones ? [...siteData.phones] : [];
+                            ph[0] = e.target.value;
+                            handleSaveGlobalField("phones", ph);
+                          }}
+                          className="bg-zinc-90 w-full bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-orange-500 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-orange-300 text-[10.5px] font-mono uppercase tracking-wider font-bold">
+                          ☎️ Toll-Free Phone 2 (दूसरा मुख्य हेल्पलाइन फ़ोन नंबर)
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={siteData.phones?.[1] || ""}
+                          placeholder="+91 XXXXXXXXXX"
+                          onBlur={(e) => {
+                            const ph = siteData.phones ? [...siteData.phones] : [];
+                            if (ph.length < 2) {
+                              ph.push("");
+                            }
+                            ph[1] = e.target.value;
+                            handleSaveGlobalField("phones", ph);
+                          }}
+                          className="bg-zinc-90 w-full bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-orange-500 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider font-bold">
+                          WhatsApp Link-Phone (व्हाट्सएप डायरेक्ट लिंक - e.g. https://wa.me/917017535116)
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={siteData.whatsapp || "https://wa.me/917017535116"}
+                          onBlur={(e) => handleSaveGlobalField("whatsapp", e.target.value)}
+                          className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider font-bold">
+                          Primary Email Address (ईमेल पता)
+                        </label>
+                        <input
+                          type="email"
+                          defaultValue={siteData.email || "info@adikailashtirath.com"}
+                          onBlur={(e) => handleSaveGlobalField("email", e.target.value)}
+                          className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono uppercase tracking-wider">Uttarakhand Tourism Registration ID</label>
+                      <input
+                        type="text"
+                        defaultValue={siteData.regNumber}
+                        onBlur={(e) => handleSaveGlobalField("regNumber", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider">Official Inner Line NOC Certification</label>
+                      <input
+                        type="text"
+                        defaultValue={siteData.nocNumber}
+                        onBlur={(e) => handleSaveGlobalField("nocNumber", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Configurable Divine Social Media Links */}
+                  <div className="flex flex-col gap-4 pt-4 border-t border-slate-200 dark:border-zinc-800">
+                    <span className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono uppercase tracking-wider block">Social Media Platform Redirection Links</span>
+                    <p className="text-[11px] text-slate-500 dark:text-zinc-450">Paste the complete destination URLs (https://...) for your social channels. Fields commit automatically when you click away.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {/* Facebook */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Facebook URL</label>
+                        <input
+                          type="text"
+                          placeholder="https://facebook.com/your-page"
+                          defaultValue={siteData.socialLinks?.facebook || ""}
+                          onBlur={(e) => {
+                            const updated = {
+                              ...(siteData.socialLinks || {}),
+                              facebook: e.target.value
+                            };
+                            handleSaveGlobalField("socialLinks", updated);
+                          }}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+                      {/* Instagram */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Instagram URL</label>
+                        <input
+                          type="text"
+                          placeholder="https://instagram.com/your-username"
+                          defaultValue={siteData.socialLinks?.instagram || ""}
+                          onBlur={(e) => {
+                            const updated = {
+                              ...(siteData.socialLinks || {}),
+                              instagram: e.target.value
+                            };
+                            handleSaveGlobalField("socialLinks", updated);
+                          }}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+                      {/* LinkedIn */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">LinkedIn URL</label>
+                        <input
+                          type="text"
+                          placeholder="https://linkedin.com/company/your-brand"
+                          defaultValue={siteData.socialLinks?.linkedin || ""}
+                          onBlur={(e) => {
+                            const updated = {
+                              ...(siteData.socialLinks || {}),
+                              linkedin: e.target.value
+                            };
+                            handleSaveGlobalField("socialLinks", updated);
+                          }}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+                      {/* YouTube */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">YouTube Channel URL</label>
+                        <input
+                          type="text"
+                          placeholder="https://youtube.com/c/your-channel"
+                          defaultValue={siteData.socialLinks?.youtube || ""}
+                          onBlur={(e) => {
+                            const updated = {
+                              ...(siteData.socialLinks || {}),
+                              youtube: e.target.value
+                            };
+                            handleSaveGlobalField("socialLinks", updated);
+                          }}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+                      {/* Pinterest */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Pinterest URL</label>
+                        <input
+                          type="text"
+                          placeholder="https://pinterest.com/your-profile"
+                          defaultValue={siteData.socialLinks?.pinterest || ""}
+                          onBlur={(e) => {
+                            const updated = {
+                              ...(siteData.socialLinks || {}),
+                              pinterest: e.target.value
+                            };
+                            handleSaveGlobalField("socialLinks", updated);
+                          }}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+                      {/* Reddit */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Reddit URL</label>
+                        <input
+                          type="text"
+                          placeholder="https://reddit.com/r/your-community"
+                          defaultValue={siteData.socialLinks?.reddit || ""}
+                          onBlur={(e) => {
+                            const updated = {
+                              ...(siteData.socialLinks || {}),
+                              reddit: e.target.value
+                            };
+                            handleSaveGlobalField("socialLinks", updated);
+                          }}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+                      {/* Twitter / X */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Twitter / X URL</label>
+                        <input
+                          type="text"
+                          placeholder="https://x.com/your-handle"
+                          defaultValue={siteData.socialLinks?.twitter || ""}
+                          onBlur={(e) => {
+                            const updated = {
+                              ...(siteData.socialLinks || {}),
+                              twitter: e.target.value
+                            };
+                            handleSaveGlobalField("socialLinks", updated);
+                          }}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT: HERO SLIDER SIDES */}
+            {activeTab === "slides" && (
+              <div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                  <div>
+                    <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider flex items-center gap-2">
+                      <span className="text-orange-500">🌅</span> Top Slider Slides (होम पेज का मुख्य स्लाइडर)
+                    </h2>
+                    <p className="text-slate-500 dark:text-zinc-450 text-xs">
+                      मुख्य पृष्ठ (Home Page) के सबसे ऊपर दिखने वाली सुंदर तस्वीरों, मुख्य शीर्षकों (Titles) और विवरणों (Descriptions) को यहाँ से तुरंत बदलें या नई तस्वीरें जोड़ें।
+                    </p>
+                  </div>
+                  {editingIndex === null && (
+                    <button
+                      onClick={() => {
+                        setFormMode("create");
+                        setEditingIndex(-1);
+                        setSlideDraft({
+                          pill: "EXPEDITION",
+                          stat: "5,100 M",
+                          title: "Shree Adi Kailash Tour",
+                          subtitle: "Sacred Pilgrimage Adventure",
+                          desc: "A spiritual odyssey to the high-altitude holy peaks of Uttarakhand. Join our expert-guided trek.",
+                          img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
+                        });
+                      }}
+                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-4 py-2.5 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold transition-all shrink-0 shadow-lg"
+                    >
+                      <Plus className="h-4 w-4" /> Add New Slide (नई स्लाइड जोड़े)
+                    </button>
+                  )}
+                </div>
+
+                {editingIndex === null ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {siteData.heroSlides && siteData.heroSlides.map((slide: any, sIdx: number) => (
+                      <div key={sIdx} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between">
+                        <div className="relative h-32 bg-white dark:bg-zinc-950">
+                          <img 
+                            src={slide.img} 
+                            alt={slide.subtitle} 
+                            className="w-full h-full object-cover opacity-60"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-100 to-transparent" />
+                          <span className="absolute top-3 left-3 bg-orange-600/90 text-[10px] font-mono font-bold uppercase tracking-wider text-white px-2 py-0.5 rounded border border-orange-500/20">
+                            {slide.pill}
+                          </span>
+                        </div>
+
+                        <div className="p-4 flex-1 text-left">
+                          <span className="text-[10px] font-mono text-amber-500 uppercase block mb-0.5">{slide.subtitle}</span>
+                          <h4 className="font-serif text-base font-bold text-slate-900 dark:text-zinc-100 leading-tight mb-2">{slide.title}</h4>
+                          <p className="text-slate-500 dark:text-zinc-450 text-xs line-clamp-3 leading-relaxed mb-4">{slide.desc}</p>
+                          <div className="text-[10px] font-mono text-slate-500 dark:text-zinc-450 border-t border-slate-200 dark:border-zinc-800 pt-2.5">
+                            <span>Altitude parameter: </span>
+                            <span className="text-slate-700 dark:text-zinc-300">{slide.stat}</span>
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-white dark:bg-zinc-950 border-t border-slate-200/80 dark:border-zinc-800/80 flex gap-2">
+                          <button
+                            onClick={() => {
+                              setFormMode("edit");
+                              setEditingIndex(sIdx);
+                              setSlideDraft({ ...slide });
+                            }}
+                            className="flex-1 bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-orange-400 font-mono text-xs py-2 rounded text-center border border-slate-200 dark:border-zinc-800 transition cursor-pointer inline-flex items-center justify-center gap-1.5"
+                          >
+                            <Edit2 className="h-3 w-3" /> Edit Slide Details
+                          </button>
+                          {siteData.heroSlides.length > 1 && (
+                            <button
+                              onClick={() => {
+                                const updatedSlides = siteData.heroSlides.filter((_: any, idx: number) => idx !== sIdx);
+                                handleSaveGlobalField("heroSlides", updatedSlides);
+                              }}
+                              className="p-2 border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 text-slate-500 dark:text-zinc-450 hover:text-red-405 rounded cursor-pointer transition-colors"
+                              title="Delete Slide (स्लाइड हटाएं)"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl text-left">
+                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
+                      <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">
+                        {formMode === "create" ? "Add New Slide (नई स्लाइड जोड़ें)" : `Modify Slide (स्लाइड बदलें) #${editingIndex + 1}`}
+                      </h3>
+                      <button 
+                        onClick={() => setEditingIndex(null)}
+                        className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer text-xs font-mono"
+                      >
+                        Cancel (रद्द करें)
+                      </button>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Top Pill Category/Tag (ऊपर छोटा पीला टैग - e.g. EXPEDITION)</label>
+                          <input
+                            type="text"
+                            value={slideDraft.pill}
+                            onChange={(e) => setSlideDraft({ ...slideDraft, pill: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2.5 outline-none focus:border-orange-500/50"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Altitude Badge/Stat (दाहिनी ओर ऊंचाई मीटर - e.g. 5,100 M)</label>
+                          <input
+                            type="text"
+                            value={slideDraft.stat}
+                            onChange={(e) => setSlideDraft({ ...slideDraft, stat: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2.5 outline-none focus:border-orange-500/50"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Slide Main Display Title (मुख्य बड़ी हेडिंग/शीर्षक)</label>
+                        <input
+                          type="text"
+                          value={slideDraft.title}
+                          onChange={(e) => setSlideDraft({ ...slideDraft, title: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2.5 outline-none focus:border-orange-500/50"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Slide Colored Subtitle (उप-शीर्षक / जैसे: Adi Kailash Yatra)</label>
+                        <input
+                          type="text"
+                          value={slideDraft.subtitle}
+                          onChange={(e) => setSlideDraft({ ...slideDraft, subtitle: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2.5 outline-none focus:border-orange-500/50"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Descriptive Copy Text (स्लाइड की जानकारी/विवरण)</label>
+                        <textarea
+                          rows={3}
+                          value={slideDraft.desc}
+                          onChange={(e) => setSlideDraft({ ...slideDraft, desc: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 outline-none focus:border-orange-500/50 font-sans"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Slide Cover Background Image URL (फोटो का लिंक/गूगल ड्राइव या इमेज यूआरएल)</label>
+                        <input
+                          type="text"
+                          value={slideDraft.img}
+                          onChange={(e) => setSlideDraft({ ...slideDraft, img: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 outline-none focus:border-orange-500/50 font-mono"
+                        />
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
+                        <button
+                          onClick={() => {
+                            const updatedSlides = [...siteData.heroSlides];
+                            if (formMode === "create") {
+                              updatedSlides.push(slideDraft);
+                            } else {
+                              updatedSlides[editingIndex] = slideDraft;
+                            }
+                            handleSaveGlobalField("heroSlides", updatedSlides);
+                            setEditingIndex(null);
+                          }}
+                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-3 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold transition-all"
+                        >
+                          <Save className="h-4 w-4" /> {formMode === "create" ? "Create Slide (स्लाइड जोड़ें)" : "Save Slide Changes (स्लाइड सेव करें)"}
+                        </button>
+                        <button
+                          onClick={() => setEditingIndex(null)}
+                          className="bg-white dark:bg-zinc-950 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 font-mono text-xs px-4 py-3 rounded cursor-pointer"
+                        >
+                          Disregard (बंद करें)
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: YATRA PACKAGES */}
+            {activeTab === "packages" && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Yatra Packages Catalog</h2>
+                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Define pricing details, inclusions, exclusions, highlights list, and day-wise itineraries directly.</p>
+                  </div>
+                  {editingIndex === null && (
+                    <button
+                      onClick={() => {
+                        setFormMode("create");
+                        setEditingIndex(-1); // special flag for new
+                        setPackageDraft({
+                          id: "yatra-package-" + Date.now(),
+                          category: "adi_kailash",
+                          title: "New Pilgrimage Expedition Tour",
+                          badge: "Dynamic Journey",
+                          duration: "5 Nights / 6 Days",
+                          price: "₹35,000",
+                          numericPrice: 35000,
+                          fromRoute: "Haldwani Base Pickup",
+                          overview: "This is a brief general overview describing the holy peaks, stays, and route approvals included in this newly established yatra package.",
+                          difficulty: "Moderate",
+                          highlights: [
+                            "Sacred Darshan with local guiding technicians",
+                            "All Outer and Inner line permits managed dynamically"
+                          ],
+                          inclusion: [
+                            "Comfortable warm local homestay and pure vegetarian cuisine",
+                            "Backup oxygen cylinders and support staff guides"
+                          ],
+                          exclusion: [
+                            "Personal porter and pony expenses"
+                          ],
+                          itinerary: [
+                            { "day": 1, "title": "Assembling at base station and detailed orientation", "details": "Meet coordinators, submit medical checklist papers, and prepare transit permits." }
+                          ],
+                          imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
+                        });
+                      }}
+                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-4 py-2.5 rounded font-bold uppercase tracking-wider cursor-pointer inline-flex items-center gap-1.5"
+                    >
+                      <Plus className="h-4 w-4" /> Create New Yatra Package
+                    </button>
+                  )}
+                </div>
+
+                {editingIndex === null ? (
+                  <div className="space-y-4">
+                    {siteData.packages.map((pkg: any, pIdx: number) => (
+                      <div key={pkg.id} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 text-left">
+                          <img 
+                            src={pkg.imageUrl} 
+                            alt={pkg.title} 
+                            className="h-16 w-20 object-cover rounded border border-slate-200 dark:border-zinc-800 shrink-0"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-[10px] font-mono uppercase bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 px-2 py-0.5 rounded border border-slate-300 dark:border-zinc-700">{pkg.category}</span>
+                              <span className="text-[10px] font-mono uppercase bg-orange-550/15 text-orange-400 px-2 py-0.5 rounded border border-orange-500/10 font-bold">{pkg.badge}</span>
+                              <span className="text-xs text-slate-500 dark:text-zinc-450 font-mono">{pkg.duration}</span>
+                            </div>
+                            <h4 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100 mt-1 leading-snug">{pkg.title}</h4>
+                            <div className="flex items-center gap-4 text-xs font-mono text-slate-500 dark:text-zinc-450 mt-1">
+                              <span>From: <strong className="text-slate-700 dark:text-zinc-300 font-normal">{pkg.fromRoute}</strong></span>
+                              <span>•</span>
+                              <span>Price: <strong className="text-orange-400 font-bold">{pkg.price}</strong></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2 shrink-0 justify-end">
+                          <button
+                            onClick={() => {
+                              setFormMode("edit");
+                              setEditingIndex(pIdx);
+                              setPackageDraft(JSON.parse(JSON.stringify(pkg))); // deep local draft setup
+                            }}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-orange-400 font-mono text-xs px-3.5 py-2 rounded inline-flex items-center gap-1 cursor-pointer transition"
+                          >
+                            <Edit2 className="h-3 w-3" /> Edit Package Content
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (!window.confirm(`Are you absolutely sure you want to delete "${pkg.title}" package permanently from catalog?`)) return;
+                              const updatedPackages = [...siteData.packages];
+                              updatedPackages.splice(pIdx, 1);
+                              handleSaveGlobalField("packages", updatedPackages);
+                            }}
+                            className="bg-red-500/5 hover:bg-red-500/20 text-red-400 p-2 border border-slate-200 dark:border-zinc-800 rounded cursor-pointer transition"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl text-left">
+                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
+                      <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">
+                        {formMode === "create" ? "Establish New Pilgrimage Package" : `Modify Package: ${packageDraft.title}`}
+                      </h3>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer">Cancel</button>
+                    </div>
+
+                    <div className="space-y-6">
+                      {/* Section A: Essential parameters */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Category Filter ID Tag</label>
+                          <select
+                            value={packageDraft.category}
+                            onChange={(e) => setPackageDraft({ ...packageDraft, category: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 cursor-pointer outline-none font-mono"
+                          >
+                            <option value="adi_kailash">Adi Kailash Packages</option>
+                            <option value="kailash_mansarovar">Kailash Mansarovar</option>
+                            <option value="chardham">Chardham Yatra</option>
+                            <option value="amarnath">Amarnath Yatra</option>
+                            <option value="om_parvat">Om Parvat Yatra</option>
+                            <option value="munsyari">Munsyari Tour</option>
+                            <option value="kainchi_dham">Kainchi Dham Yatra</option>
+                            <option value="maa_purnagiri">Maa Purnagiri Yatra</option>
+                            <option value="panchachuli">Panchachuli Range</option>
+                            <option value="darma_valley">Darma Valley</option>
+                            <option value="chirkilla_dam">Chirkilla Dam</option>
+                            <option value="narayan_ashram">Narayan Ashram</option>
+                          </select>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Package Special Badge</label>
+                          <input
+                            type="text"
+                            value={packageDraft.badge}
+                            onChange={(e) => setPackageDraft({ ...packageDraft, badge: e.target.value })}
+                            placeholder="e.g., Best Seller / Elite Experience"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Difficulty Rating</label>
+                          <select
+                            value={packageDraft.difficulty}
+                            onChange={(e) => setPackageDraft({ ...packageDraft, difficulty: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 cursor-pointer outline-none"
+                          >
+                            <option value="Easy">Easy</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Challenging">Challenging</option>
+                            <option value="Extreme Trekking">Extreme Trekking</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Itinerary Duration Label</label>
+                          <input
+                            type="text"
+                            value={packageDraft.duration}
+                            onChange={(e) => setPackageDraft({ ...packageDraft, duration: e.target.value })}
+                            placeholder="e.g., 7 Nights / 8 Days"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Cost Pricing Label</label>
+                          <input
+                            type="text"
+                            value={packageDraft.price}
+                            onChange={(e) => setPackageDraft({ ...packageDraft, price: e.target.value })}
+                            placeholder="e.g., ₹42,000"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Numeric Pricing Value (for calculations)</label>
+                          <input
+                            type="number"
+                            value={packageDraft.numericPrice || 0}
+                            onChange={(e) => setPackageDraft({ ...packageDraft, numericPrice: Number(e.target.value) })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Travel Title Header</label>
+                        <input
+                          type="text"
+                          value={packageDraft.title}
+                          onChange={(e) => setPackageDraft({ ...packageDraft, title: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Route / Pickup Base Location</label>
+                          <input
+                            type="text"
+                            value={packageDraft.fromRoute}
+                            onChange={(e) => setPackageDraft({ ...packageDraft, fromRoute: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Card Poster Image URL Link</label>
+                          <input
+                            type="text"
+                            value={packageDraft.imageUrl}
+                            onChange={(e) => setPackageDraft({ ...packageDraft, imageUrl: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2.5 focus:border-orange-500/50 outline-none font-mono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Introduction & Overview</label>
+                        <textarea
+                          rows={3}
+                          value={packageDraft.overview}
+                          onChange={(e) => setPackageDraft({ ...packageDraft, overview: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2.5 focus:border-orange-500/50 outline-none font-sans"
+                        />
+                      </div>
+
+                      {/* Lists of Highlights, Inclusions, Exclusions */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200 dark:border-zinc-800">
+                        {/* Highlights */}
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-orange-400 block font-bold">🎯 Package Highlights</span>
+                          {packageDraft.highlights.map((hlt: string, hIdx: number) => (
+                            <div key={hIdx} className="flex gap-1.5 items-center">
+                              <input
+                                type="text"
+                                value={hlt}
+                                onChange={(e) => {
+                                  const temp = [...packageDraft.highlights];
+                                  temp[hIdx] = e.target.value;
+                                  setPackageDraft({ ...packageDraft, highlights: temp });
+                                }}
+                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-2 py-1.5"
+                              />
+                              <button
+                                onClick={() => {
+                                  const temp = [...packageDraft.highlights];
+                                  temp.splice(hIdx, 1);
+                                  setPackageDraft({ ...packageDraft, highlights: temp });
+                                }}
+                                className="text-red-500 text-xs font-bold"
+                              >
+                                X
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => setPackageDraft({ ...packageDraft, highlights: [...packageDraft.highlights, "New amazing highlight"] })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-600 dark:text-zinc-400 px-2 py-1 rounded"
+                          >
+                            + Highlight
+                          </button>
+                        </div>
+
+                        {/* Inclusions */}
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-green-400 block font-bold">🟢 Inclusions</span>
+                          {packageDraft.inclusion.map((inc: string, iIdx: number) => (
+                            <div key={iIdx} className="flex gap-1.5 items-center">
+                              <input
+                                type="text"
+                                value={inc}
+                                onChange={(e) => {
+                                  const temp = [...packageDraft.inclusion];
+                                  temp[iIdx] = e.target.value;
+                                  setPackageDraft({ ...packageDraft, inclusion: temp });
+                                }}
+                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-2 py-1.5"
+                              />
+                              <button
+                                onClick={() => {
+                                  const temp = [...packageDraft.inclusion];
+                                  temp.splice(iIdx, 1);
+                                  setPackageDraft({ ...packageDraft, inclusion: temp });
+                                }}
+                                className="text-red-500 text-xs font-bold"
+                              >
+                                X
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => setPackageDraft({ ...packageDraft, inclusion: [...packageDraft.inclusion, "New dynamic inclusion"] })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-600 dark:text-zinc-400 px-2 py-1 rounded"
+                          >
+                            + Inclusion
+                          </button>
+                        </div>
+
+                        {/* Exclusions */}
+                        <div className="space-y-2">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-rose-400 block font-bold">🔴 Exclusions</span>
+                          {packageDraft.exclusion.map((exc: string, eIdx: number) => (
+                            <div key={eIdx} className="flex gap-1.5 items-center">
+                              <input
+                                type="text"
+                                value={exc}
+                                onChange={(e) => {
+                                  const temp = [...packageDraft.exclusion];
+                                  temp[eIdx] = e.target.value;
+                                  setPackageDraft({ ...packageDraft, exclusion: temp });
+                                }}
+                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-2 py-1.5"
+                              />
+                              <button
+                                onClick={() => {
+                                  const temp = [...packageDraft.exclusion];
+                                  temp.splice(eIdx, 1);
+                                  setPackageDraft({ ...packageDraft, exclusion: temp });
+                                }}
+                                className="text-red-500 text-xs font-bold"
+                              >
+                                X
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => setPackageDraft({ ...packageDraft, exclusion: [...packageDraft.exclusion, "New general exclusion"] })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-600 dark:text-zinc-400 px-2 py-1 rounded"
+                          >
+                            + Exclusion
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Day wise itineraries! */}
+                      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 space-y-4">
+                        <span className="text-[11px] font-mono uppercase tracking-wider text-amber-500 block font-bold">📅 Day-by-Day Historical Tour Itinerary Details</span>
+                        {packageDraft.itinerary.map((itn: any, idx: number) => (
+                          <div key={idx} className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 p-4 rounded-lg space-y-3">
+                            <div className="flex justify-between items-center bg-slate-100 dark:bg-zinc-900 px-3 py-1.5 rounded">
+                              <span className="text-xs font-mono font-bold text-orange-400">DAY {itn.day || (idx + 1)}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const temp = [...packageDraft.itinerary];
+                                  temp.splice(idx, 1);
+                                  // Re-align day numbers
+                                  const aligned = temp.map((val, i) => ({ ...val, day: i + 1 }));
+                                  setPackageDraft({ ...packageDraft, itinerary: aligned });
+                                }}
+                                className="text-red-400 hover:text-red-300 text-xs font-mono"
+                              >
+                                Remove day
+                              </button>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-mono uppercase text-slate-500 dark:text-zinc-450">Day Header title</label>
+                              <input
+                                type="text"
+                                value={itn.title}
+                                onChange={(e) => {
+                                  const temp = [...packageDraft.itinerary];
+                                  temp[idx].title = e.target.value;
+                                  setPackageDraft({ ...packageDraft, itinerary: temp });
+                                }}
+                                className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 outline-none focus:border-orange-500/50"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-mono uppercase text-slate-500 dark:text-zinc-450">Full detailed Day explanation narrative</label>
+                              <textarea
+                                rows={2}
+                                value={itn.details}
+                                onChange={(e) => {
+                                  const temp = [...packageDraft.itinerary];
+                                  temp[idx].details = e.target.value;
+                                  setPackageDraft({ ...packageDraft, itinerary: temp });
+                                }}
+                                className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 text-xs rounded px-3 py-2 outline-none focus:border-orange-500/50 font-sans"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newDayNum = packageDraft.itinerary.length + 1;
+                            const newDay = { day: newDayNum, title: "Unveiled Spiritual Destination", details: "Enter detailed explanations about local transit halts, acclimatization practices, and holy visits here." };
+                            setPackageDraft({ ...packageDraft, itinerary: [...packageDraft.itinerary, newDay] });
+                          }}
+                          className="w-full py-2.5 border border-dashed border-slate-200 dark:border-zinc-800 hover:border-orange-500/30 text-slate-600 dark:text-zinc-400 hover:text-orange-400 font-mono text-xs rounded text-center transition"
+                        >
+                          + Add Next Travel Day Segment
+                        </button>
+                      </div>
+
+                      {/* Core bottom save buttons */}
+                      <div className="pt-6 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
+                        <button
+                          onClick={() => {
+                            let updated = [...siteData.packages];
+                            if (formMode === "create") {
+                              updated.push(packageDraft);
+                            } else {
+                              updated[editingIndex] = packageDraft;
+                            }
+                            handleSaveGlobalField("packages", updated);
+                            setEditingIndex(null);
+                          }}
+                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-3.5 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold"
+                        >
+                          <Save className="h-4 w-4" /> Save Package Details
+                        </button>
+                        <button
+                          onClick={() => setEditingIndex(null)}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 font-mono text-xs px-4 py-3.5 rounded cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: GALLERY / CIRCULAR SUB-DESTINATIONS */}
+            {activeTab === "gallery" && (
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider">Sub-Destinations Grid & Category References</h2>
+                <p className="text-slate-500 dark:text-zinc-450 text-xs mb-6">Modify circular navigation circles displayed inside individual packages detail boxes.</p>
+
+                {editingIndex === null ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {siteData.circularDestinations.map((dest: any, dIdx: number) => (
+                      <div key={dIdx} className="bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 hover:border-slate-200 dark:border-zinc-800 transition p-4 rounded-xl flex items-center gap-3.5">
+                        <img 
+                          src={dest.img} 
+                          alt={dest.title} 
+                          className="h-14 w-14 rounded-full object-cover border border-orange-500/25 shrink-0" 
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="flex-1 text-left">
+                          <span className="text-[9px] font-mono uppercase text-slate-500 dark:text-zinc-450 block">{dest.categoryRef}</span>
+                          <h4 className="font-serif text-sm font-bold text-slate-800 dark:text-zinc-200">{dest.title}</h4>
+                          <p className="text-slate-500 dark:text-zinc-450 text-[11px] line-clamp-2 leading-tight">{dest.description}</p>
+                          <div className="mt-2.5 flex gap-2">
+                            <button
+                              onClick={() => {
+                                setEditingIndex(dIdx);
+                                setDestDraft({ ...dest });
+                              }}
+                              className="text-[10px] font-mono text-orange-400 flex items-center gap-0.5"
+                            >
+                              Edit details
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-700 p-6 rounded-xl text-left">
+                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
+                      <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Edit Sub-Destination Details</h3>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5 font-mono">
+                          <label className="text-[10px] uppercase text-slate-500 dark:text-zinc-450 tracking-wider">Related Category Reference ID</label>
+                          <input
+                            type="text"
+                            value={destDraft.categoryRef}
+                            onChange={(e) => setDestDraft({ ...destDraft, categoryRef: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] uppercase text-slate-500 dark:text-zinc-450 tracking-wider">Sub-Destination Header Title</label>
+                          <input
+                            type="text"
+                            value={destDraft.title}
+                            onChange={(e) => setDestDraft({ ...destDraft, title: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase text-slate-600 dark:text-zinc-400 tracking-wider">Summary Narrative</label>
+                        <textarea
+                          rows={2}
+                          value={destDraft.description}
+                          onChange={(e) => setDestDraft({ ...destDraft, description: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none font-sans"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase text-slate-600 dark:text-zinc-400 tracking-wider">Circular Image URL Link</label>
+                        <input
+                          type="text"
+                          value={destDraft.img}
+                          onChange={(e) => setDestDraft({ ...destDraft, img: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 focus:border-orange-500/50 font-mono outline-none"
+                        />
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
+                        <button
+                          onClick={() => {
+                            const updated = [...siteData.circularDestinations];
+                            updated[editingIndex] = destDraft;
+                            handleSaveGlobalField("circularDestinations", updated);
+                            setEditingIndex(null);
+                          }}
+                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                        >
+                          Save Changes
+                        </button>
+                        <button
+                          onClick={() => setEditingIndex(null)}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: WRITTEN FEEDBACKS */}
+            {activeTab === "reviews" && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Yatri Feedbacks ✍️ (लिखित फीडबैक)</h2>
+                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Manage written customer reviews, star ratings, and personal yatra testimonials.</p>
+                  </div>
+                  {editingIndex === null && (
+                    <button
+                      onClick={() => {
+                        setFormMode("create");
+                        setEditingIndex(-1);
+                        setFeedbackDraft({
+                          id: "fb-" + Date.now(),
+                          name: "Shri Devotee Pilgrim",
+                          location: "Mumbai, Maharashtra",
+                          trip: "Adi Kailash Om Parvat Yatra",
+                          rating: 5,
+                          quote: "A truly blissful, deeply divine and well-organized pilgrimage experience. The hospitality, guidance, and meals were outstanding."
+                        });
+                      }}
+                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
+                    >
+                      <Plus className="h-4.5 w-4.5" /> Add New Yatri Feedback
+                    </button>
+                  )}
+                </div>
+
+                {editingIndex === null ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+                    {(siteData.yatriFeedbacks || []).map((fb: any, idx: number) => (
+                      <div key={fb.id} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow flex flex-col justify-between">
+                        <div className="p-4 flex-1">
+                          <div className="flex justify-between items-start mb-2">
+                            <span className="text-[10px] font-mono text-orange-400 block uppercase font-bold">{fb.trip}</span>
+                            <div className="flex items-center gap-0.5">
+                              {Array.from({ length: 5 }).map((_, r_idx) => (
+                                <Star key={r_idx} className={`h-3 w-3 ${r_idx < (fb.rating || 5) ? "fill-amber-450 text-amber-450 font-bold" : "text-slate-400 dark:text-zinc-500"}`} />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-xs italic leading-relaxed text-slate-700 dark:text-zinc-300">"{fb.quote}"</p>
+                          <div className="mt-4 flex items-center gap-2.5 pt-3 border-t border-slate-200 dark:border-zinc-800">
+                            <span className="h-9 w-9 text-slate-600 dark:text-zinc-400 rounded-full border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex items-center justify-center font-serif text-sm font-bold text-orange-400">
+                              {fb.name ? fb.name.charAt(0) : "Y"}
+                            </span>
+                            <div>
+                              <h5 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100">{fb.name}</h5>
+                              <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-450">{fb.location}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-white dark:bg-zinc-950 border-t border-slate-200/85 dark:border-zinc-800/85 flex justify-between gap-2.5">
+                          <button
+                            onClick={() => {
+                              setFormMode("edit");
+                              setEditingIndex(idx);
+                              setFeedbackDraft({ ...fb });
+                            }}
+                            className="bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-orange-400 border border-slate-200 dark:border-zinc-800 hover:border-orange-500/20 text-xs font-mono px-3 py-1.5 rounded cursor-pointer flex items-center gap-1"
+                          >
+                            <Edit2 className="h-3 w-3" /> Edit Feedback
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (!window.confirm("Delete this feedback review?")) return;
+                              const temp = [...(siteData.yatriFeedbacks || [])];
+                              temp.splice(idx, 1);
+                              handleSaveGlobalField("yatriFeedbacks", temp);
+                            }}
+                            className="text-red-400 hover:text-red-300 text-xs font-mono p-1"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl text-left">
+                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
+                      <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Establish/Edit Yatri Feedback Review</h3>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Yatri Pilgrim Name</label>
+                          <input
+                            type="text"
+                            value={feedbackDraft?.name || ""}
+                            onChange={(e) => setFeedbackDraft({ ...feedbackDraft, name: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Home City / Location</label>
+                          <input
+                            type="text"
+                            value={feedbackDraft?.location || ""}
+                            onChange={(e) => setFeedbackDraft({ ...feedbackDraft, location: e.target.value })}
+                            placeholder="e.g., Bangalore, Karnataka"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Pilgrimage Undertaken</label>
+                          <input
+                            type="text"
+                            value={feedbackDraft?.trip || ""}
+                            onChange={(e) => setFeedbackDraft({ ...feedbackDraft, trip: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Star Rating (1 to 5)</label>
+                          <select
+                            value={feedbackDraft?.rating || 5}
+                            onChange={(e) => setFeedbackDraft({ ...feedbackDraft, rating: Number(e.target.value) })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                          >
+                            <option value={5}>5 Stars (Excellent)</option>
+                            <option value={4}>4 Stars (Very Good)</option>
+                            <option value={3}>3 Stars (Average)</option>
+                            <option value={2}>2 Stars (Below Average)</option>
+                            <option value={1}>1 Star (Poor)</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Testimonial Feedback Quote</label>
+                        <textarea
+                          rows={4}
+                          value={feedbackDraft?.quote || ""}
+                          onChange={(e) => setFeedbackDraft({ ...feedbackDraft, quote: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 font-sans"
+                        />
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
+                        <button
+                          onClick={() => {
+                            let temp = siteData.yatriFeedbacks ? [...siteData.yatriFeedbacks] : [];
+                            if (formMode === "create") {
+                              temp.push(feedbackDraft);
+                            } else {
+                              temp[editingIndex!] = feedbackDraft;
+                            }
+                            handleSaveGlobalField("yatriFeedbacks", temp);
+                            setEditingIndex(null);
+                          }}
+                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                        >
+                          Save Changes
+                        </button>
+                        <button
+                          onClick={() => setEditingIndex(null)}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: TRAVELER VIDEO REELS */}
+            {activeTab === "reels" && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Pilgrim Video Reels 📹 (वीडियो रील्स)</h2>
+                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Control mobile-friendly video clips, Instagram reels, and YouTube shorts backgrounds.</p>
+                  </div>
+                  {editingIndex === null && (
+                    <button
+                      onClick={() => {
+                        setFormMode("create");
+                        setEditingIndex(-1);
+                        setStoryDraft({
+                          id: "story-" + Date.now(),
+                          name: "Yatri Pilgrim",
+                          location: "Varanasi, UP",
+                          trip: "Adi Kailash Om Parvat Yatra",
+                          quote: "Absolutely beautiful and blissful. The local guides were highly helpful and made sure everything went perfectly.",
+                          coverImage: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=400",
+                          videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-cold-mountain-stream-under-a-bridge-34440-large.mp4",
+                          duration: "0:45"
+                        });
+                      }}
+                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
+                    >
+                      <Plus className="h-4.5 w-4.5" /> Add New Video Reel
+                    </button>
+                  )}
+                </div>
+
+                {editingIndex === null ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+                    {(siteData.travelStories || []).map((story: any, idx: number) => (
+                      <div key={story.id} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow flex flex-col justify-between">
+                        <div className="p-4 flex-1">
+                          <span className="text-[10px] font-mono text-orange-400 block mb-1 uppercase font-bold">{story.trip}</span>
+                          <p className="text-xs italic leading-relaxed text-slate-700 dark:text-zinc-300">"{story.quote}"</p>
+                          <div className="mt-2 text-[10px] text-slate-500 dark:text-zinc-450 font-mono truncate">
+                            Video Link: <span className="text-orange-300">{story.videoUrl || "None"}</span>
+                          </div>
+                          <div className="mt-4 flex items-center gap-2.5 pt-3 border-t border-slate-200 dark:border-zinc-800">
+                            <img 
+                              src={story.coverImage} 
+                              alt={story.name} 
+                              className="h-9 w-9 rounded-full object-cover border border-slate-200 dark:border-zinc-800" 
+                              referrerPolicy="no-referrer"
+                            />
+                            <div>
+                              <h5 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100">{story.name}</h5>
+                              <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-450">{story.location} ({story.duration})</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-white dark:bg-zinc-950 border-t border-slate-200/85 dark:border-zinc-800/85 flex justify-between gap-2.5">
+                          <button
+                            onClick={() => {
+                              setFormMode("edit");
+                              setEditingIndex(idx);
+                              setStoryDraft({ ...story });
+                            }}
+                            className="bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-orange-400 border border-slate-200 dark:border-zinc-800 hover:border-orange-500/20 text-xs font-mono px-3 py-1.5 rounded cursor-pointer flex items-center gap-1"
+                          >
+                            <Edit2 className="h-3 w-3" /> Edit Reel
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (!window.confirm("Delete this pilgrim video reel?")) return;
+                              const temp = [...(siteData.travelStories || [])];
+                              temp.splice(idx, 1);
+                              handleSaveGlobalField("travelStories", temp);
+                            }}
+                            className="text-red-400 hover:text-red-300 text-xs font-mono p-1"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl text-left">
+                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
+                      <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Establish/Edit Pilgrim Video Reel</h3>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Yatri Pilgrim Name</label>
+                          <input
+                            type="text"
+                            value={storyDraft?.name || ""}
+                            onChange={(e) => setStoryDraft({ ...storyDraft, name: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Home City / Location</label>
+                          <input
+                            type="text"
+                            value={storyDraft?.location || ""}
+                            onChange={(e) => setStoryDraft({ ...storyDraft, location: e.target.value })}
+                            placeholder="e.g., Mumbai, Maharashtra"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Pilgrimage Undertaken</label>
+                          <input
+                            type="text"
+                            value={storyDraft?.trip || ""}
+                            onChange={(e) => setStoryDraft({ ...storyDraft, trip: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Video duration label</label>
+                          <input
+                            type="text"
+                            value={storyDraft?.duration || ""}
+                            onChange={(e) => setStoryDraft({ ...storyDraft, duration: e.target.value })}
+                            placeholder="e.g., 0:45"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Brief Testimonial Quote</label>
+                        <textarea
+                          rows={3}
+                          value={storyDraft?.quote || ""}
+                          onChange={(e) => setStoryDraft({ ...storyDraft, quote: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 font-sans"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Poster Cover Image URL Link</label>
+                          <input
+                            type="text"
+                            value={storyDraft?.coverImage || ""}
+                            onChange={(e) => setStoryDraft({ ...storyDraft, coverImage: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 font-mono"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Reel Video Link / URL (Supports Instagram Reels & YouTube Shorts/Videos & MP4)</label>
+                          <input
+                            type="text"
+                            value={storyDraft?.videoUrl || ""}
+                            onChange={(e) => setStoryDraft({ ...storyDraft, videoUrl: e.target.value })}
+                            placeholder="e.g., https://www.instagram.com/reel/C8q8qUfS_R9/ or https://youtu.be/..."
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 font-mono"
+                          />
+                          <span className="text-[10px] text-slate-500 dark:text-zinc-450 font-mono">You can paste standard .mp4 video links, YouTube video/shorts links, or public Instagram Reels links. We will auto-embed them perfectly.</span>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
+                        <button
+                          onClick={() => {
+                            let temp = [...(siteData.travelStories || [])];
+                            if (formMode === "create") {
+                              temp.push(storyDraft);
+                            } else {
+                              temp[editingIndex!] = storyDraft;
+                            }
+                            handleSaveGlobalField("travelStories", temp);
+                            setEditingIndex(null);
+                          }}
+                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                        >
+                          Save Changes
+                        </button>
+                        <button
+                          onClick={() => setEditingIndex(null)}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: BLOGS */}
+            {activeTab === "blogs" && (
+              <div>
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Dynamic Blog Posts & Advisories</h2>
+                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Edit detailed guide instructions, reading times, write-ups and poster image assets.</p>
+                  </div>
+                  {editingIndex === null && (
+                    <button
+                      onClick={() => {
+                        setFormMode("create");
+                        setEditingIndex(-1);
+                        setBlogDraft({
+                          id: "blog-" + Date.now(),
+                          title: "New Spiritual Advancements Yatra Blog",
+                          excerpt: "Brief summary describing high-level details of this incredible new guide post info.",
+                          date: "05 Jun 2026",
+                          author: "Adi Kailash Tirath Guides Team",
+                          readTime: "5 Min Read",
+                          imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=500",
+                          content: "This is the full detailed informational body of your blog post. Share helpful advice about permissions registries, packing checklist items, breathing systems exercises and itinerary maps."
+                        });
+                      }}
+                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
+                    >
+                      <Plus className="h-4.5 w-4.5" /> Compose New Blog
+                    </button>
+                  )}
+                </div>
+
+                {editingIndex === null ? (
+                  <div className="space-y-4">
+                    {siteData.blogs.map((blog: any, bIdx: number) => (
+                      <div key={blog.id} className="bg-zinc-90 w-full border border-slate-200 dark:border-zinc-800 p-4 rounded-xl flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-4 text-left">
+                          <img 
+                            src={blog.imageUrl} 
+                            alt={blog.title} 
+                            className="h-14 w-14 object-cover rounded border border-slate-200 dark:border-zinc-800 shrink-0" 
+                            referrerPolicy="no-referrer"
+                          />
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-450">{blog.date}</span>
+                              <span className="text-[10px] text-slate-300 dark:text-zinc-600 font-mono">|</span>
+                              <span className="text-[10px] font-mono text-orange-400 bg-orange-500/5 px-2 py-0.5 border border-orange-500/10 rounded">{blog.readTime}</span>
+                            </div>
+                            <h4 className="font-serif text-sm font-bold text-slate-800 dark:text-zinc-200 mt-1 leading-tight">{blog.title}</h4>
+                            <p className="text-slate-500 dark:text-zinc-450 text-xs line-clamp-1">{blog.excerpt}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              setFormMode("edit");
+                              setEditingIndex(bIdx);
+                              setBlogDraft({ ...blog });
+                            }}
+                            className="text-xs font-mono text-orange-450 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 px-3 py-2 rounded cursor-pointer"
+                          >
+                            Modify
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (!window.confirm("Delete this blog post?")) return;
+                              const temp = [...siteData.blogs];
+                              temp.splice(bIdx, 1);
+                              handleSaveGlobalField("blogs", temp);
+                            }}
+                            className="text-red-400 hover:text-red-300 text-xs font-mono p-1"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-700 p-6 rounded-xl text-left">
+                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
+                      <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Compose/Edit Blog Post Content</h3>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Date Published</label>
+                          <input
+                            type="text"
+                            value={blogDraft.date}
+                            onChange={(e) => setBlogDraft({ ...blogDraft, date: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 outline-none"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Author Name</label>
+                          <input
+                            type="text"
+                            value={blogDraft.author}
+                            onChange={(e) => setBlogDraft({ ...blogDraft, author: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 outline-none"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Read Time duration</label>
+                          <input
+                            type="text"
+                            value={blogDraft.readTime}
+                            onChange={(e) => setBlogDraft({ ...blogDraft, readTime: e.target.value })}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-600 dark:text-zinc-400">Blog Header Title</label>
+                        <input
+                          type="text"
+                          value={blogDraft.title}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, title: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 outline-none font-medium"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-600 dark:text-zinc-400">Introductory Summary Excerpt</label>
+                        <textarea
+                          rows={2}
+                          value={blogDraft.excerpt}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, excerpt: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 outline-none font-sans"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-600 dark:text-zinc-400">Main Poster Image URL Link</label>
+                        <input
+                          type="text"
+                          value={blogDraft.imageUrl}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, imageUrl: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 outline-none font-mono"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-600 dark:text-zinc-400 font-bold">Detailed Write-Up / Blog Body Content</label>
+                        <textarea
+                          rows={8}
+                          value={blogDraft.content}
+                          onChange={(e) => setBlogDraft({ ...blogDraft, content: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 outline-none font-sans leading-relaxed"
+                        />
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
+                        <button
+                          onClick={() => {
+                            let temp = [...siteData.blogs];
+                            if (formMode === "create") {
+                              temp.push(blogDraft);
+                            } else {
+                              temp[editingIndex] = blogDraft;
+                            }
+                            handleSaveGlobalField("blogs", temp);
+                            setEditingIndex(null);
+                          }}
+                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                        >
+                          Save Blog
+                        </button>
+                        <button
+                          onClick={() => setEditingIndex(null)}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: ACCREDITATIONS */}
+            {activeTab === "accreditations" && (
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider">Accreditations & Badges of Honor</h2>
+                <p className="text-slate-500 dark:text-zinc-450 text-xs mb-6">Modify official registration tags shown in footer and security blocks list.</p>
+
+                {editingIndex === null ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {siteData.accreditations.map((accred: any, idx: number) => (
+                      <div key={accred.id} className="bg-zinc-90 w-full border border-slate-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col justify-between text-left">
+                        <div>
+                          <span className="text-[10px] font-mono text-orange-400 block mb-1 font-bold uppercase">{accred.id}</span>
+                          <h4 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100">{accred.name}</h4>
+                          <p className="text-slate-500 dark:text-zinc-450 text-xs mt-1 leading-normal">{accred.detail}</p>
+                        </div>
+                        <div className="pt-4 mt-3 border-t border-slate-200/80 dark:border-zinc-800/80 flex gap-2 justify-end">
+                          <button
+                            onClick={() => {
+                              setEditingIndex(idx);
+                              setAccredDraft({ ...accred });
+                            }}
+                            className="text-xs font-mono text-orange-450 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 px-3 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl text-left">
+                    <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
+                      <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Modify Accreditation Certification Details</h3>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Badge Title</label>
+                        <input
+                          type="text"
+                          value={accredDraft.name}
+                          onChange={(e) => setAccredDraft({ ...accredDraft, name: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Badge Detail Sub-explanation</label>
+                        <input
+                          type="text"
+                          value={accredDraft.detail}
+                          onChange={(e) => setAccredDraft({ ...accredDraft, detail: e.target.value })}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                        />
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
+                        <button
+                          onClick={() => {
+                            const updated = [...siteData.accreditations];
+                            updated[editingIndex] = accredDraft;
+                            handleSaveGlobalField("accreditations", updated);
+                            setEditingIndex(null);
+                          }}
+                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                        >
+                          Save Changes
+                        </button>
+                        <button
+                          onClick={() => setEditingIndex(null)}
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+          </div>
+        )}
+      </main>
+
+    </div>
+  );
+}
