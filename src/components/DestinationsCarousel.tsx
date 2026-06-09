@@ -81,7 +81,7 @@ export default function DestinationsCarousel({
       {/* Left Navigation Arrow */}
       <button
         onClick={() => scroll("left")}
-        className="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-orange-500/30 text-orange-500 hover:text-white hover:bg-orange-600 hover:border-orange-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
+        className="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
         aria-label="Scroll Left"
       >
         <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
@@ -116,21 +116,21 @@ export default function DestinationsCarousel({
             className="flex-shrink-0 w-[140px] md:w-[160px] flex flex-col items-center gap-3.5 group/card cursor-pointer"
           >
             {/* Circular visual wrapper */}
-            <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-b from-slate-100 to-slate-100 group-hover/card:from-orange-500/60 group-hover/card:to-orange-600 shadow-2xl transition duration-500 shrink-0">
+            <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-b from-slate-100 to-slate-100 group-hover/card:from-sky-500/60 group-hover/card:to-sky-600 shadow-2xl transition duration-500 shrink-0">
               <img
                 src={dest.img}
                 alt={dest.title}
                 className="w-full h-full object-cover rounded-full filter brightness-90 group-hover/card:brightness-75 transition-all duration-500"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 rounded-full bg-orange-600/10 opacity-0 group-hover/card:opacity-100 transition duration-500 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full bg-sky-600/10 opacity-0 group-hover/card:opacity-100 transition duration-500 flex items-center justify-center">
                 <Compass className="h-6 w-6 text-slate-900 dark:text-zinc-100 animate-spin-slow" />
               </div>
             </div>
             
             {/* Labels */}
             <div className="text-center w-full px-1">
-              <h4 className="font-serif text-xs font-bold text-slate-900 dark:text-zinc-100 group-hover/card:text-orange-400 transition-colors duration-300 leading-snug truncate">
+              <h4 className="font-serif text-xs font-bold text-slate-900 dark:text-zinc-100 group-hover/card:text-sky-400 transition-colors duration-300 leading-snug truncate">
                 {(() => {
                   if (dest.categoryRef === "adi_kailash") return t("adiKailashRef", currentLanguage);
                   if (dest.categoryRef === "kailash_mansarovar") return t("kailashMansarovarRef", currentLanguage);
@@ -147,7 +147,7 @@ export default function DestinationsCarousel({
                   return dest.title;
                 })()}
               </h4>
-              <p className="text-[10px] text-slate-500 dark:text-zinc-450 mt-1 line-clamp-2 leading-tight">
+              <p className="text-[10px] text-slate-900 dark:text-zinc-100 mt-1 line-clamp-2 leading-tight">
                 {dest.description}
               </p>
             </div>
@@ -158,7 +158,7 @@ export default function DestinationsCarousel({
       {/* Right Navigation Arrow */}
       <button
         onClick={() => scroll("right")}
-        className="absolute -right-4 md:-right-8 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-orange-500/30 text-orange-500 hover:text-white hover:bg-orange-600 hover:border-orange-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
+        className="absolute -right-4 md:-right-8 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
         aria-label="Scroll Right"
       >
         <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />

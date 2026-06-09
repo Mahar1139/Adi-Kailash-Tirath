@@ -94,14 +94,14 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
       <div className="max-w-7xl mx-auto">
         
         <div className="text-center flex flex-col items-center gap-2 mb-8">
-          <span className="text-orange-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
+          <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
             {t("yatriFeedbacks", currentLanguage)}
           </span>
           <h2 className="font-serif text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
             {t("yatriSub", currentLanguage)}
           </h2>
-          <div className="h-0.5 w-16 bg-gradient-to-r from-orange-600 to-amber-500 rounded" />
-          <p className="text-slate-600 dark:text-zinc-400 text-sm max-w-xl mt-1 leading-relaxed">
+          <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded" />
+          <p className="text-slate-900 dark:text-zinc-100 text-sm max-w-xl mt-1 leading-relaxed">
             {activeTab === "reels" 
               ? "Authentic moments, spiritual clips, and video reels captured directly by pilgrims whom we accompanied through high-altitude passages."
               : "Read heartfelt feedbacks, blessings, and reviews shared by sacred yatris regarding our local coordination, transport, food, and guides."
@@ -115,8 +115,8 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
             onClick={() => setActiveTab("reels")}
             className={`px-4 py-2 rounded-full font-mono text-xs font-bold transition-all duration-300 border cursor-pointer flex items-center gap-1.5 ${
               activeTab === "reels"
-                ? "bg-orange-650 hover:bg-orange-600 text-white border-orange-500/50 shadow-lg shadow-orange-950/20"
-                : "bg-white dark:bg-zinc-950 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 border-slate-300 dark:border-zinc-700"
+                ? "bg-sky-650 hover:bg-sky-600 text-white border-sky-500/50 shadow-lg shadow-sky-950/20"
+                : "bg-white dark:bg-zinc-950 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 border-slate-300 dark:border-zinc-700"
             }`}
           >
             <Play className="h-3 w-3 fill-current" />
@@ -126,8 +126,8 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
             onClick={() => setActiveTab("feedbacks")}
             className={`px-4 py-2 rounded-full font-mono text-xs font-bold transition-all duration-300 border cursor-pointer flex items-center gap-1.5 ${
               activeTab === "feedbacks"
-                ? "bg-orange-650 hover:bg-orange-600 text-white border-orange-500/50 shadow-lg shadow-orange-950/20"
-                : "bg-white dark:bg-zinc-950 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 border-slate-300 dark:border-zinc-700"
+                ? "bg-sky-650 hover:bg-sky-600 text-white border-sky-500/50 shadow-lg shadow-sky-950/20"
+                : "bg-white dark:bg-zinc-950 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 border-slate-300 dark:border-zinc-700"
             }`}
           >
             <Star className="h-3 w-3 fill-current" />
@@ -141,7 +141,7 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
             {/* Custom Left Arrow Button */}
             <button
               onClick={handlePrev}
-              className="absolute left-[-16px] md:left-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300 hover:border-orange-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
+              className="absolute left-[-16px] md:left-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
               title="Previous Story"
             >
               <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
@@ -150,7 +150,7 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
             {/* Custom Right Arrow Button */}
             <button
               onClick={handleNext}
-              className="absolute right-[-16px] md:right-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300 hover:border-orange-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
+              className="absolute right-[-16px] md:right-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
               title="Next Story"
             >
               <ChevronRight className="h-6 w-6 stroke-[2.5]" />
@@ -166,7 +166,7 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
                 <div
                   key={story.id}
                   onClick={() => setSelectedStory(story)}
-                  className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[310px] snap-start relative aspect-[9/16] rounded-2xl overflow-hidden border border-slate-200 dark:border-zinc-800 hover:border-orange-500/40 shadow-2xl group cursor-pointer hover:scale-[1.01] transition-all duration-300 bg-white dark:bg-zinc-950"
+                  className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[310px] snap-start relative aspect-[9/16] rounded-2xl overflow-hidden border border-slate-200 dark:border-zinc-800 hover:border-sky-500/40 shadow-2xl group cursor-pointer hover:scale-[1.01] transition-all duration-300 bg-white dark:bg-zinc-950"
                 >
                   {/* Backing Cover image */}
                   <img
@@ -178,35 +178,35 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
 
                   {/* Central Play Indicator Icon */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-14 w-14 rounded-full bg-orange-600/90 text-white flex items-center justify-center shadow-lg border border-orange-500/30 group-hover:scale-110 group-hover:bg-orange-500 transition-all duration-300">
+                    <div className="h-14 w-14 rounded-full bg-sky-600/90 text-white flex items-center justify-center shadow-lg border border-sky-500/30 group-hover:scale-110 group-hover:bg-sky-500 transition-all duration-300">
                       <Play className="h-6 w-6 fill-white ml-0.5" />
                     </div>
                   </div>
 
                   {/* Top overlay pills */}
                   <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-15">
-                    <span className="bg-slate-50/40 dark:bg-zinc-950/40 text-[10px] font-mono text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded backdrop-blur-xs flex items-center gap-1 font-bold animate-pulse">
-                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                    <span className="bg-slate-50/40 dark:bg-zinc-950/40 text-[10px] font-mono text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded backdrop-blur-xs flex items-center gap-1 font-bold animate-pulse">
+                      <Star className="h-3 w-3 fill-blue-400 text-blue-400" />
                       YATRI REEL
                     </span>
-                    <span className="bg-slate-50/50 dark:bg-zinc-950/50 text-[10px] font-mono text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded backdrop-blur-xs">
+                    <span className="bg-slate-50/50 dark:bg-zinc-950/50 text-[10px] font-mono text-slate-900 dark:text-zinc-100 px-2 py-0.5 rounded backdrop-blur-xs">
                       {story.duration}
                     </span>
                   </div>
 
                   {/* Bottom text overlays */}
                   <div className="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-white via-slate-50/70 to-transparent flex flex-col gap-1.5 text-left z-15 whitespace-normal">
-                    <div className="flex items-center gap-1.5 text-slate-600 dark:text-zinc-400 font-mono text-[10.5px]">
-                      <MapPin className="h-3.5 w-3.5 text-orange-500" />
+                    <div className="flex items-center gap-1.5 text-slate-900 dark:text-zinc-100 font-mono text-[10.5px]">
+                      <MapPin className="h-3.5 w-3.5 text-sky-500" />
                       <span>{story.location}</span>
                     </div>
                     <h4 className="font-serif text-base sm:text-lg font-bold text-slate-900 dark:text-zinc-100 tracking-tight leading-tight">
                       {story.name}
                     </h4>
-                    <p className="text-orange-455 font-semibold font-mono text-[11px] sm:text-xs">
+                    <p className="text-sky-455 font-semibold font-mono text-[11px] sm:text-xs">
                       {story.trip}
                     </p>
-                    <p className="text-slate-700 dark:text-zinc-300 text-xs italic leading-normal line-clamp-2 mt-1">
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs italic leading-normal line-clamp-2 mt-1">
                       "{story.quote}"
                     </p>
                   </div>
@@ -222,7 +222,7 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
             {/* Custom Left Arrow Button */}
             <button
               onClick={handlePrev}
-              className="absolute left-[-16px] md:left-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300 hover:border-orange-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
+              className="absolute left-[-16px] md:left-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
               title="Previous Feedback"
             >
               <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
@@ -231,7 +231,7 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
             {/* Custom Right Arrow Button */}
             <button
               onClick={handleNext}
-              className="absolute right-[-16px] md:right-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-700 dark:text-zinc-300 hover:border-orange-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
+              className="absolute right-[-16px] md:right-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
               title="Next Feedback"
             >
               <ChevronRight className="h-6 w-6 stroke-[2.5]" />
@@ -246,36 +246,36 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
               {feedbacks.map((fb: any) => (
                 <div 
                   key={fb.id} 
-                  className="flex-shrink-0 w-[260px] sm:w-[320px] md:w-[340px] snap-start bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 p-5 sm:p-6 rounded-2xl flex flex-col justify-between shadow-xl transition-all duration-300 hover:border-orange-500/25 whitespace-normal"
+                  className="flex-shrink-0 w-[260px] sm:w-[320px] md:w-[340px] snap-start bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 p-5 sm:p-6 rounded-2xl flex flex-col justify-between shadow-xl transition-all duration-300 hover:border-sky-500/25 whitespace-normal"
                 >
                   <div>
                     <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-300 dark:border-zinc-700">
-                      <span className="text-[10px] font-semibold font-mono text-orange-400 uppercase tracking-wide truncate max-w-[140px] sm:max-w-[180px]" title={fb.trip}>
+                      <span className="text-[10px] font-semibold font-mono text-sky-400 uppercase tracking-wide truncate max-w-[140px] sm:max-w-[180px]" title={fb.trip}>
                         {fb.trip}
                       </span>
                       <div className="flex items-center gap-0.5 flex-shrink-0">
                         {Array.from({ length: 5 }).map((_, r_idx) => (
                           <Star 
                             key={r_idx} 
-                            className={`h-3 w-3 ${r_idx < (fb.rating || 5) ? "fill-amber-400 text-amber-400" : "text-slate-300 dark:text-zinc-600"}`} 
+                            className={`h-3 w-3 ${r_idx < (fb.rating || 5) ? "fill-blue-400 text-blue-400" : "text-slate-900 dark:text-zinc-100"}`} 
                           />
                         ))}
                       </div>
                     </div>
                     
-                    <p className="text-slate-700 dark:text-zinc-300 text-xs sm:text-sm italic leading-relaxed mb-6 font-sans line-clamp-4">
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs sm:text-sm italic leading-relaxed mb-6 font-sans line-clamp-4">
                       "{fb.quote}"
                     </p>
                   </div>
 
                   <div className="flex items-center gap-3 pt-3 border-t border-slate-300/60 dark:border-zinc-700/60 text-left">
-                    <div className="h-9 w-9 sm:h-10 sm:w-10 text-orange-400 rounded-full border border-slate-200/80 dark:border-zinc-800/80 bg-slate-100 dark:bg-zinc-900 flex items-center justify-center font-serif text-sm sm:text-base font-bold flex-shrink-0 select-none">
+                    <div className="h-9 w-9 sm:h-10 sm:w-10 text-sky-400 rounded-full border border-slate-200/80 dark:border-zinc-800/80 bg-slate-100 dark:bg-zinc-900 flex items-center justify-center font-serif text-sm sm:text-base font-bold flex-shrink-0 select-none">
                       {fb.name ? fb.name.charAt(0) : "Y"}
                     </div>
                     <div className="min-w-0">
                       <h5 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100 truncate">{fb.name}</h5>
-                      <div className="flex items-center gap-1 text-[10px] sm:text-[10.5px] font-mono text-slate-500 dark:text-zinc-450 mt-0.5 truncate">
-                        <MapPin className="h-3 w-3 text-orange-500 flex-shrink-0" />
+                      <div className="flex items-center gap-1 text-[10px] sm:text-[10.5px] font-mono text-slate-900 dark:text-zinc-100 mt-0.5 truncate">
+                        <MapPin className="h-3 w-3 text-sky-500 flex-shrink-0" />
                         <span className="truncate">{fb.location}</span>
                       </div>
                     </div>
@@ -295,11 +295,11 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
               <div className="p-4 bg-slate-100 dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 flex justify-between items-center">
                 <div className="text-left">
                   <h4 className="font-serif font-bold text-slate-900 dark:text-zinc-100 text-sm">{selectedStory.name}</h4>
-                  <p className="text-[10px] font-mono text-orange-400 font-semibold">{selectedStory.trip}</p>
+                  <p className="text-[10px] font-mono text-sky-400 font-semibold">{selectedStory.trip}</p>
                 </div>
                 <button
                   onClick={() => setSelectedStory(null)}
-                  className="p-1.5 rounded-full bg-white dark:bg-zinc-950 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer"
+                  className="p-1.5 rounded-full bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer"
                 >
                   <X className="h-4.5 w-4.5" />
                 </button>
@@ -362,9 +362,9 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
                   } else {
                     return (
                       <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 p-6 text-center">
-                        <Smile className="h-8 w-8 text-orange-500 mb-2" />
-                        <p className="text-slate-600 dark:text-zinc-400 text-xs font-serif font-bold mb-1">Authentic Pilgrim Experience</p>
-                        <p className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono leading-relaxed">Verification completed. Live footage stream currently active on partner reels.</p>
+                        <Smile className="h-8 w-8 text-sky-500 mb-2" />
+                        <p className="text-slate-900 dark:text-zinc-100 text-xs font-serif font-bold mb-1">Authentic Pilgrim Experience</p>
+                        <p className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono leading-relaxed">Verification completed. Live footage stream currently active on partner reels.</p>
                       </div>
                     );
                   }
@@ -378,7 +378,7 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
                         e.stopPropagation();
                         setIsMuted(!isMuted);
                       }}
-                      className="p-2 rounded-full bg-slate-50/65 dark:bg-zinc-950/65 text-white hover:bg-orange-600 transition cursor-pointer"
+                      className="p-2 rounded-full bg-slate-50/65 dark:bg-zinc-950/65 text-white hover:bg-sky-600 transition cursor-pointer"
                     >
                       {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                     </button>
@@ -387,11 +387,11 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
 
                 {/* Subtitle bottom banner */}
                 <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-50 via-black/85 to-transparent p-5 text-left pt-12">
-                  <p className="text-amber-100 italic text-xs leading-relaxed font-serif">
+                  <p className="text-blue-100 italic text-xs leading-relaxed font-serif">
                     "{selectedStory.quote}"
                   </p>
-                  <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-200/40 dark:border-zinc-800/40 text-[10px] font-mono text-slate-600 dark:text-zinc-400">
-                    <Smile className="h-3.5 w-3.5 text-orange-400" />
+                  <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-200/40 dark:border-zinc-800/40 text-[10px] font-mono text-slate-900 dark:text-zinc-100">
+                    <Smile className="h-3.5 w-3.5 text-sky-400" />
                     <span>Real-time pilgrim validation successfully verified.</span>
                   </div>
                 </div>

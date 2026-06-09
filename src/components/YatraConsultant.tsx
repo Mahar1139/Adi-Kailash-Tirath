@@ -171,12 +171,12 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-[360px] md:w-[400px] h-[550px] bg-white dark:bg-zinc-950 border border-orange-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 duration-300 font-sans">
+    <div className="fixed bottom-6 right-6 z-50 w-[360px] md:w-[400px] h-[550px] bg-white dark:bg-zinc-950 border border-sky-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 duration-300 font-sans">
       
       {/* Bot Header */}
-      <div className="p-4 bg-gradient-to-r from-slate-50 via-slate-100 to-slate-50 border-b border-orange-200 flex justify-between items-center select-none">
+      <div className="p-4 bg-gradient-to-r from-slate-50 via-slate-100 to-slate-50 border-b border-sky-200 flex justify-between items-center select-none">
         <div className="flex items-center gap-2.5 text-left">
-          <div className="h-9 w-9 rounded-full bg-orange-600/10 border border-orange-500/40 flex items-center justify-center text-orange-600">
+          <div className="h-9 w-9 rounded-full bg-sky-600/10 border border-sky-500/40 flex items-center justify-center text-sky-600">
             <Sparkles className="h-4.5 w-4.5 animate-pulse" />
           </div>
           <div>
@@ -189,7 +189,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
         </div>
         <button
           onClick={onClose}
-          className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 p-1 rounded-md bg-slate-100/60 dark:bg-zinc-900/60 border border-slate-200 dark:border-zinc-800 transition cursor-pointer"
+          className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 p-1 rounded-md bg-slate-100/60 dark:bg-zinc-900/60 border border-slate-200 dark:border-zinc-800 transition cursor-pointer"
         >
           <X className="h-4.5 w-4.5" />
         </button>
@@ -207,8 +207,8 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
               {/* Profile Orb indicator */}
               <div className={`h-7 w-7 rounded-full flex items-center justify-center flex-shrink-0 border select-none overflow-hidden ${
                 isBot 
-                  ? "bg-white dark:bg-zinc-950 border-orange-500/20" 
-                  : "bg-orange-600 text-white border-orange-500/45 text-xs"
+                  ? "bg-white dark:bg-zinc-950 border-sky-500/20" 
+                  : "bg-sky-600 text-white border-sky-500/45 text-xs"
               }`}>
                 {isBot ? <img src="/logo.jpg" alt="Bot" className="w-full h-full object-contain bg-white dark:bg-zinc-950" referrerPolicy="no-referrer" /> : <User className="h-3.5 w-3.5" />}
               </div>
@@ -216,8 +216,8 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
               {/* Text Bubble */}
               <div className={`max-w-[80%] rounded-xl px-3.5 py-2.5 text-xs text-left leading-relaxed shadow-sm ${
                 isBot 
-                  ? "bg-white dark:bg-zinc-950 text-slate-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-800" 
-                  : "bg-orange-600 text-white shadow-orange-500/20"
+                  ? "bg-white dark:bg-zinc-950 text-slate-900 dark:text-slate-900 border border-slate-200 dark:border-zinc-800" 
+                  : "bg-sky-600 text-white shadow-sky-500/20"
               }`}>
                 {/* Parse basic bold formatting and bullets to support beautiful markdown returned by Gemini */}
                 <div className="space-y-1 whitespace-pre-wrap">
@@ -234,7 +234,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
                         }
                         const end = formatted.indexOf("**", start + 2);
                         if (end !== -1) {
-                          segments.push(<strong key={end} className="text-orange-450 font-bold">{formatted.substring(start + 2, end)}</strong>);
+                          segments.push(<strong key={end} className="text-sky-450 font-bold">{formatted.substring(start + 2, end)}</strong>);
                           idx = end + 2;
                         } else {
                           segments.push(formatted.substring(start));
@@ -250,7 +250,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
                     if (isBullet) {
                       return (
                         <div key={lidx} className="flex gap-1.5 pl-2">
-                          <span className="text-orange-500">•</span>
+                          <span className="text-sky-500">•</span>
                           <span>{segments.length > 0 ? segments : line.replace(/^\*\s*/, "")}</span>
                         </div>
                       );
@@ -266,10 +266,10 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
 
         {loading && (
           <div className="flex items-start gap-2.5">
-            <div className="h-7 w-7 rounded-full bg-slate-50 dark:bg-zinc-950 border border-orange-500/20 flex items-center justify-center overflow-hidden animate-pulse">
+            <div className="h-7 w-7 rounded-full bg-slate-50 dark:bg-zinc-950 border border-sky-500/20 flex items-center justify-center overflow-hidden animate-pulse">
                <img src="/logo.jpg" alt="Loading" className="w-full h-full object-contain bg-white dark:bg-zinc-950" referrerPolicy="no-referrer" />
             </div>
-            <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 rounded-xl px-4 py-2.5 text-xs flex gap-1.5 items-center select-none animate-pulse">
+            <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-xs flex gap-1.5 items-center select-none animate-pulse">
               <span>{labels.waiting}</span>
             </div>
           </div>
@@ -283,7 +283,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
           <button
             key={index}
             onClick={() => handleSend(qp)}
-            className="flex-shrink-0 bg-slate-100 dark:bg-zinc-900 hover:bg-orange-600/10 hover:border-orange-500/30 text-slate-600 dark:text-zinc-400 hover:text-orange-400 border border-slate-200 dark:border-zinc-800 text-[10px] px-2.5 py-1 rounded-full cursor-pointer transition"
+            className="flex-shrink-0 bg-slate-100 dark:bg-zinc-900 hover:bg-sky-600/10 hover:border-sky-500/30 text-slate-900 dark:text-zinc-100 hover:text-sky-400 border border-slate-200 dark:border-zinc-800 text-[10px] px-2.5 py-1 rounded-full cursor-pointer transition"
           >
             {qp}
           </button>
@@ -304,16 +304,16 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={labels.placeholder}
-            className="flex-grow bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-zinc-100 focus:outline-none focus:border-orange-500/40"
+            className="flex-grow bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-zinc-100 focus:outline-none focus:border-sky-500/40"
           />
           <button
             type="submit"
-            className="bg-orange-600 hover:bg-orange-500 text-white p-2 rounded-lg cursor-pointer transition flex items-center justify-center border border-orange-500/30"
+            className="bg-sky-600 hover:bg-sky-500 text-white p-2 rounded-lg cursor-pointer transition flex items-center justify-center border border-sky-500/30"
           >
             <Send className="h-4 w-4" />
           </button>
         </form>
-        <p className="text-[9px] text-slate-500 dark:text-zinc-450 mt-1.5 text-center leading-none">
+        <p className="text-[9px] text-slate-900 dark:text-zinc-100 mt-1.5 text-center leading-none">
           {labels.poweredBy}
         </p>
       </div>

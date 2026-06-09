@@ -89,11 +89,11 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
   const labels = LOCALIZED_LABELS[currentLanguage] || LOCALIZED_LABELS["en"];
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-50/85 dark:bg-zinc-950/85 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto select-none">
-      <div className="bg-white dark:bg-zinc-950 border border-slate-300/85 dark:border-zinc-700/85 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col my-8 animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 bg-white dark:bg-zinc-950 overflow-y-auto select-none">
+      <div className="w-full min-h-screen max-w-7xl mx-auto flex flex-col bg-white dark:bg-zinc-950 animate-in slide-in-from-bottom duration-300">
         
         {/* Banner with Close button */}
-        <div className="relative h-64 md:h-80 bg-slate-100 dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800">
+        <div className="relative h-64 md:h-[400px] bg-slate-100 dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 shrink-0">
           <img
             src={pkg.imageUrl}
             alt={pkg.title}
@@ -105,32 +105,32 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
           {/* Close Trigger */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 bg-slate-50/60 dark:bg-zinc-950/60 rounded-full text-slate-700 dark:text-zinc-300 hover:text-white hover:bg-orange-655 transition cursor-pointer border border-slate-200 dark:border-zinc-800"
+            className="absolute top-4 right-4 p-2 bg-slate-50/60 dark:bg-zinc-950/60 rounded-full text-slate-900 dark:text-zinc-100 hover:text-white hover:bg-sky-655 transition cursor-pointer border border-slate-200 dark:border-zinc-800"
           >
             <X className="h-4.5 w-4.5" />
           </button>
 
           {/* Sub titles overlays */}
           <div className="absolute bottom-6 left-6 right-6 text-left">
-            <span className="bg-orange-600 text-white font-mono text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded mb-2.5 inline-block">
+            <span className="bg-sky-600 text-white font-mono text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded mb-2.5 inline-block">
               {pkg.badge}
             </span>
             <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-zinc-100 tracking-tight leading-tighter">
               {pkg.title}
             </h2>
-            <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-700 dark:text-zinc-300 mt-3 border-t border-slate-200/60 dark:border-zinc-800/60 pt-3">
+            <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-900 dark:text-zinc-100 mt-3 border-t border-slate-200/60 dark:border-zinc-800/60 pt-3">
               <span className="flex items-center gap-1">
-                <Calendar className="h-4 w-4 text-orange-500" />
+                <Calendar className="h-4 w-4 text-sky-500" />
                 {pkg.duration}
               </span>
               <span className="w-1 h-1 rounded-full bg-zinc-600 self-center" />
               <span className="flex items-center gap-1">
-                <MapPin className="h-4 w-4 text-orange-500" />
+                <MapPin className="h-4 w-4 text-sky-500" />
                 {pkg.fromRoute}
               </span>
               <span className="w-1 h-1 rounded-full bg-zinc-600 self-center" />
               <span className="flex items-center gap-1">
-                <Activity className="h-4 w-4 text-orange-500" />
+                <Activity className="h-4 w-4 text-sky-500" />
                 {pkg.difficulty} {labels.category}
               </span>
             </div>
@@ -138,15 +138,15 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
         </div>
 
         {/* Content body split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[450px] overflow-y-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 flex-grow">
           
           {/* Left Column: Itinerary Details */}
           <div className="lg:col-span-7 p-6 text-left border-r border-slate-300 dark:border-zinc-700 flex flex-col gap-5">
             <div>
-              <h3 className="text-sm font-mono text-orange-500 tracking-wider font-bold uppercase border-b border-slate-300 dark:border-zinc-700 pb-2 mb-3">
+              <h3 className="text-sm font-mono text-sky-500 tracking-wider font-bold uppercase border-b border-slate-300 dark:border-zinc-700 pb-2 mb-3">
                 {labels.pathway}
               </h3>
-              <p className="text-slate-600 dark:text-zinc-400 text-xs leading-relaxed mb-4">
+              <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed mb-4">
                 {pkg.overview}
               </p>
             </div>
@@ -160,8 +160,8 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
                   onClick={() => setActiveDay(it.day)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition shrink-0 cursor-pointer ${
                     activeDay === it.day
-                      ? "bg-orange-600 text-white"
-                      : "bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 hover:text-slate-800 dark:text-zinc-200"
+                      ? "bg-sky-600 text-white"
+                      : "bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-slate-900"
                   }`}
                 >
                   {labels.day} {it.day}
@@ -174,11 +174,11 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
               if (it.day !== activeDay) return null;
               return (
                 <div key={it.day} className="bg-slate-100/40 dark:bg-zinc-900/40 p-4 rounded-xl border border-slate-200/60 dark:border-zinc-800/60 animate-in fade-in-50 duration-300 text-left">
-                  <h4 className="font-serif text-sm font-bold text-orange-450 flex items-center gap-1.5 leading-tight">
-                    <span className="font-mono text-xs bg-orange-600/20 px-2 py-0.5 rounded text-orange-400">{labels.day.toUpperCase()} {it.day}</span>
+                  <h4 className="font-serif text-sm font-bold text-sky-450 flex items-center gap-1.5 leading-tight">
+                    <span className="font-mono text-xs bg-sky-600/20 px-2 py-0.5 rounded text-sky-400">{labels.day.toUpperCase()} {it.day}</span>
                     {it.title}
                   </h4>
-                  <p className="text-slate-700 dark:text-zinc-300 text-xs leading-relaxed mt-2.5 bg-white dark:bg-zinc-950 p-3 rounded-lg border border-slate-300/60 dark:border-zinc-700/60 font-sans select-text">
+                  <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed mt-2.5 bg-white dark:bg-zinc-950 p-3 rounded-lg border border-slate-300/60 dark:border-zinc-700/60 font-sans select-text">
                     {it.details}
                   </p>
                 </div>
@@ -186,12 +186,12 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
             })}
 
             {/* Quick health/altitude checks */}
-            <div className="bg-amber-600/5 p-4 rounded-xl border border-amber-500/20 text-left">
-              <span className="text-[10px] font-mono tracking-wider font-bold text-amber-500 uppercase flex items-center gap-1">
-                <AlertCircle className="h-4.5 w-4.5 text-amber-500" />
+            <div className="bg-blue-600/5 p-4 rounded-xl border border-blue-500/20 text-left">
+              <span className="text-[10px] font-mono tracking-wider font-bold text-blue-500 uppercase flex items-center gap-1">
+                <AlertCircle className="h-4.5 w-4.5 text-blue-500" />
                 {labels.altitudeNotice}
               </span>
-              <p className="text-slate-600 dark:text-zinc-400 text-xs mt-1.5 leading-relaxed">
+              <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1.5 leading-relaxed">
                 {labels.altitudeDesc}
               </p>
             </div>
@@ -202,12 +202,12 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
             
             {/* Inclusions */}
             <div>
-              <h4 className="text-xs font-mono text-slate-600 dark:text-zinc-400 tracking-wider font-bold uppercase pb-1.5 border-b border-slate-300 dark:border-zinc-700 mb-3">
+              <h4 className="text-xs font-mono text-slate-900 dark:text-zinc-100 tracking-wider font-bold uppercase pb-1.5 border-b border-slate-300 dark:border-zinc-700 mb-3">
                 {labels.included}
               </h4>
               <ul className="space-y-1.5">
                 {pkg.inclusion.map((inc, i) => (
-                  <li key={i} className="flex items-start gap-1.5 text-xs text-slate-700 dark:text-zinc-300 leading-tight">
+                  <li key={i} className="flex items-start gap-1.5 text-xs text-slate-900 dark:text-zinc-100 leading-tight">
                     <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                     <span>{inc}</span>
                   </li>
@@ -217,12 +217,12 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
 
             {/* Exclusions */}
             <div>
-              <h4 className="text-xs font-mono text-slate-600 dark:text-zinc-400 tracking-wider font-bold uppercase pb-1.5 border-b border-slate-300 dark:border-zinc-700 mb-3">
+              <h4 className="text-xs font-mono text-slate-900 dark:text-zinc-100 tracking-wider font-bold uppercase pb-1.5 border-b border-slate-300 dark:border-zinc-700 mb-3">
                 {labels.excluded}
               </h4>
               <ul className="space-y-1.5">
                 {pkg.exclusion.map((ex, i) => (
-                  <li key={i} className="flex items-start gap-1.5 text-xs text-slate-600 dark:text-zinc-400 leading-tight">
+                  <li key={i} className="flex items-start gap-1.5 text-xs text-slate-900 dark:text-zinc-100 leading-tight">
                     <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
                     <span>{ex}</span>
                   </li>
@@ -234,10 +234,10 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
             <div className="pt-4 border-t border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 flex flex-col gap-2">
               <div className="flex justify-between items-end mb-2">
                 <div>
-                  <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-450 block uppercase">{labels.estimatedTotal}</span>
-                  <span className="text-2xl font-mono text-orange-400 font-bold leading-none">{pkg.price}</span>
+                  <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 block uppercase">{labels.estimatedTotal}</span>
+                  <span className="text-2xl font-mono text-sky-400 font-bold leading-none">{pkg.price}</span>
                 </div>
-                <span className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-[10px] text-slate-600 dark:text-zinc-400 font-mono px-2 py-1 rounded">
+                <span className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-[10px] text-slate-900 dark:text-zinc-100 font-mono px-2 py-1 rounded">
                   {labels.maxPilgrims}
                 </span>
               </div>
@@ -246,9 +246,9 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
                   onConfirmBooking(pkg.title);
                   onClose();
                 }}
-                className="w-full bg-orange-600 hover:bg-orange-555 text-white font-mono text-xs font-bold py-3.5 rounded-lg shadow-lg shadow-orange-600/10 border border-orange-500/20 hover:scale-[1.01] transition duration-300 flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full bg-sky-600 hover:bg-sky-555 text-white font-mono text-xs font-bold py-3.5 rounded-lg shadow-lg shadow-sky-600/10 border border-sky-500/20 hover:scale-[1.01] transition duration-300 flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <Sparkles className="h-4 w-4 text-amber-300" />
+                <Sparkles className="h-4 w-4 text-blue-300" />
                 {labels.proceed.toUpperCase()}
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>

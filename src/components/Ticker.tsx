@@ -78,7 +78,7 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
             onClick={(e) => {
               e.stopPropagation(); // Stop parent bubble onClick handler triggering
             }}
-            className="inline text-orange-350 hover:text-orange-400 underline font-semibold font-mono mx-1 transition duration-200"
+            className="inline text-amber-900 hover:text-amber-800 underline font-extrabold font-mono mx-1 transition duration-200"
           >
             {rawPhone}
           </a>
@@ -95,17 +95,17 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
     }
 
     return (
-      <span className="flex items-center gap-1 hover:text-orange-300 transition duration-200">
+      <span className="flex items-center gap-1 hover:text-amber-700 transition duration-200">
         <span>{notice}</span>
-        <ArrowUpRight className="h-2.5 w-2.5 opacity-70 text-orange-400 inline" />
+        <ArrowUpRight className="h-2.5 w-2.5 opacity-70 text-amber-800 inline" />
       </span>
     );
   };
 
   return (
-    <div className="bg-red-750 text-white overflow-hidden py-1 border-b border-orange-500/30 text-xs font-serif tracking-wider select-none relative flex">
+    <div className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-900 overflow-hidden py-1.5 border-b border-amber-600/30 text-xs font-serif tracking-wider select-none relative flex shadow-inner">
       <div 
-        className="flex whitespace-nowrap items-center flex-shrink-0 animate-[marquee_45s_linear_infinite] gap-20 pr-20"
+        className="flex whitespace-nowrap items-center flex-shrink-0 animate-[marquee_90s_linear_infinite] gap-20 pr-20"
         style={{ animationPlayState: isPaused ? "paused" : "running" }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
@@ -116,18 +116,18 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
             onClick={() => handleNoticeClick(notice)}
             className="inline-flex items-center cursor-pointer"
           >
-            <Sparkles className="h-3 w-3 text-yellow-400 mr-2 animate-pulse flex-shrink-0" />
-            <span className="text-amber-100 font-medium">{renderNoticeContent(notice)}</span>
-            <span className="mx-4 text-orange-400">|</span>
-            <span className="inline-flex items-center text-gray-200 flex-shrink-0">
-              <ShieldCheck className="h-3 w-3 text-green-400 mr-1" />
+            <Sparkles className="h-3 w-3 text-amber-800 mr-2 animate-pulse flex-shrink-0" />
+            <span className="text-slate-900 font-semibold">{renderNoticeContent(notice)}</span>
+            <span className="mx-4 text-amber-700">|</span>
+            <span className="inline-flex items-center text-slate-800 font-medium flex-shrink-0">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-700 mr-1" />
               Gurupad Verified
             </span>
           </span>
         ))}
       </div>
       <div 
-        className="flex whitespace-nowrap items-center flex-shrink-0 animate-[marquee_45s_linear_infinite] gap-20 pr-20"
+        className="flex whitespace-nowrap items-center flex-shrink-0 animate-[marquee_90s_linear_infinite] gap-20 pr-20"
         style={{ animationPlayState: isPaused ? "paused" : "running" }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
@@ -139,11 +139,11 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
             onClick={() => handleNoticeClick(notice)}
             className="inline-flex items-center cursor-pointer"
           >
-            <Sparkles className="h-3 w-3 text-yellow-400 mr-2 animate-pulse flex-shrink-0" />
-            <span className="text-amber-100 font-medium">{renderNoticeContent(notice)}</span>
-            <span className="mx-4 text-orange-400">|</span>
-            <span className="inline-flex items-center text-gray-200 flex-shrink-0">
-              <ShieldCheck className="h-3 w-3 text-green-400 mr-1" />
+            <Sparkles className="h-3 w-3 text-amber-800 mr-2 animate-pulse flex-shrink-0" />
+            <span className="text-slate-900 font-semibold">{renderNoticeContent(notice)}</span>
+            <span className="mx-4 text-amber-700">|</span>
+            <span className="inline-flex items-center text-slate-800 font-medium flex-shrink-0">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-700 mr-1" />
               Gurupad Verified
             </span>
           </span>

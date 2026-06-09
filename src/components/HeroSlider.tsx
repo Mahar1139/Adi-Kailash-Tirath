@@ -270,8 +270,8 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
             <div className="max-w-7xl mx-auto w-full px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Text content block */}
               <div className="lg:col-span-7 flex flex-col items-start gap-4 text-left animate-in fade-in-50 slide-in-from-bottom-6 duration-700">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-orange-100 border border-orange-500/30 text-orange-600 font-mono text-[11px] font-semibold uppercase tracking-widest leading-none">
-                  <Sparkles className="h-3 w-3 text-amber-500 animate-spin-slow" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-sky-100 border border-sky-500/30 text-sky-600 font-mono text-[11px] font-semibold uppercase tracking-widest leading-none">
+                  <Sparkles className="h-3 w-3 text-blue-500 animate-spin-slow" />
                   {slide.pill}
                 </span>
 
@@ -279,22 +279,22 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
                   <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-zinc-100 leading-[1.1] tracking-tight">
                     {slide.title}
                   </h1>
-                  <h2 className="font-serif text-2xl md:text-4xl text-orange-500 font-bold mt-1">
+                  <h2 className="font-serif text-2xl md:text-4xl text-sky-500 font-bold mt-1">
                     {slide.subtitle}
                   </h2>
                 </div>
 
-                <p className="text-slate-700 dark:text-zinc-300 text-sm md:text-base leading-relaxed max-w-xl">
+                <p className="text-slate-900 dark:text-zinc-100 text-sm md:text-base leading-relaxed max-w-xl">
                   {slide.desc}
                 </p>
 
                 {/* Badges/Stats */}
-                <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-600 dark:text-zinc-400 mt-2 bg-slate-50/35 dark:bg-zinc-950/35 p-2 rounded backdrop-blur-xs border border-slate-300 dark:border-zinc-700">
+                <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-900 dark:text-zinc-100 mt-2 bg-slate-50/35 dark:bg-zinc-950/35 p-2 rounded backdrop-blur-xs border border-slate-300 dark:border-zinc-700">
                   <span className="flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5 text-orange-500" />
+                    <MapPin className="h-3.5 w-3.5 text-sky-500" />
                     {slide.stat}
                   </span>
-                  <span className="text-slate-400 dark:text-zinc-500">|</span>
+                  <span className="text-slate-900 dark:text-zinc-100">|</span>
                   <span className="flex items-center gap-1">
                     <ShieldCheck className="h-3.5 w-3.5 text-green-500" />
                     {sliderLabels.authOperator}
@@ -304,15 +304,15 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
                 <div className="flex flex-wrap items-center gap-3.5 mt-4">
                   <button
                     onClick={onExplorePackages}
-                    className="bg-orange-600 hover:bg-orange-500 text-white font-mono text-xs font-bold tracking-wider px-6 py-3.5 rounded-md shadow-lg shadow-orange-600/20 border border-orange-500/30 transition hover:scale-[1.02] cursor-pointer uppercase"
+                    className="bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-bold tracking-wider px-6 py-3.5 rounded-md shadow-lg shadow-sky-600/20 border border-sky-500/30 transition hover:scale-[1.02] cursor-pointer uppercase"
                   >
                     {t("explorePackagesBtn", currentLanguage)}
                   </button>
                   <button
                     onClick={onOpenConsultant}
-                    className="group bg-slate-100/95 dark:bg-zinc-900/95 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 hover:text-slate-900 dark:text-zinc-100 font-mono text-xs font-bold tracking-wider px-5 py-3.5 rounded-md border border-slate-300 dark:border-zinc-700 hover:border-orange-500/50 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer inline-flex items-center gap-1.5 uppercase shadow-lg hover:shadow-orange-500/10 hover:ring-2 hover:ring-orange-500/35 hover:ring-offset-2 hover:ring-offset-white"
+                    className="group bg-slate-100/95 dark:bg-zinc-900/95 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-slate-900 dark:text-slate-900 hover:text-slate-900 dark:text-zinc-100 font-mono text-xs font-bold tracking-wider px-5 py-3.5 rounded-md border border-slate-300 dark:border-zinc-700 hover:border-sky-500/50 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer inline-flex items-center gap-1.5 uppercase shadow-lg hover:shadow-sky-500/10 hover:ring-2 hover:ring-sky-500/35 hover:ring-offset-2 hover:ring-offset-white"
                   >
-                    <HelpCircle className="h-4 w-4 text-amber-500 group-hover:text-amber-500 group-hover:scale-110 group-hover:animate-bounce transition-all duration-300" />
+                    <HelpCircle className="h-4 w-4 text-blue-500 group-hover:text-blue-500 group-hover:scale-110 group-hover:animate-bounce transition-all duration-300" />
                     <span>{t("askAiBtn", currentLanguage)}</span>
                   </button>
                 </div>
@@ -320,27 +320,27 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
 
               {/* Package cards preview block */}
               <div className="hidden lg:col-span-5 lg:flex flex-col gap-4 animate-in fade-in-50 slide-in-from-right-6 duration-1000">
-                <div className="bg-slate-100/80 dark:bg-zinc-900/80 p-5 rounded-xl border border-orange-500/20 backdrop-blur-md shadow-xl">
-                  <p className="text-[10px] font-mono tracking-widest text-orange-500 font-bold uppercase mb-2">
+                <div className="bg-slate-100/80 dark:bg-zinc-900/80 p-5 rounded-xl border border-sky-500/20 backdrop-blur-md shadow-xl">
+                  <p className="text-[10px] font-mono tracking-widest text-sky-500 font-bold uppercase mb-2">
                     {t("gurupadVerified", currentLanguage)}
                   </p>
                   <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100 mb-2">
                     NAGARJUNA TRAVELS
                   </h3>
-                  <p className="text-slate-600 dark:text-zinc-400 text-xs leading-relaxed mb-4">
+                  <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed mb-4">
                     {t("securingPermits", currentLanguage)}
                   </p>
                   <div className="space-y-2.5 text-xs">
                     <div className="flex justify-between items-center py-1.5 border-b border-slate-200 dark:border-zinc-800">
-                      <span className="text-slate-500 dark:text-zinc-450">{sliderLabels.serviceCategory}</span>
-                      <span className="text-slate-700 dark:text-zinc-300 font-semibold font-mono">{sliderLabels.govApproved}</span>
+                      <span className="text-slate-900 dark:text-zinc-100">{sliderLabels.serviceCategory}</span>
+                      <span className="text-slate-900 dark:text-zinc-100 font-semibold font-mono">{sliderLabels.govApproved}</span>
                     </div>
                     <div className="flex justify-between items-center py-1.5 border-b border-slate-200 dark:border-zinc-800">
-                      <span className="text-slate-500 dark:text-zinc-450">{sliderLabels.minAge}</span>
-                      <span className="text-slate-700 dark:text-zinc-300 font-semibold font-mono">{sliderLabels.ageValue}</span>
+                      <span className="text-slate-900 dark:text-zinc-100">{sliderLabels.minAge}</span>
+                      <span className="text-slate-900 dark:text-zinc-100 font-semibold font-mono">{sliderLabels.ageValue}</span>
                     </div>
                     <div className="flex justify-between items-center py-1.5">
-                      <span className="text-slate-500 dark:text-zinc-450">{sliderLabels.oxygenBackups}</span>
+                      <span className="text-slate-900 dark:text-zinc-100">{sliderLabels.oxygenBackups}</span>
                       <span className="text-green-400 font-semibold font-mono">{sliderLabels.includedFree}</span>
                     </div>
                   </div>
@@ -354,14 +354,14 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
       {/* Manual Control Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 dark:bg-zinc-950/80 hover:bg-orange-600 text-slate-800 dark:text-zinc-200 hover:text-white shadow-md p-2 rounded-full border border-slate-200 dark:border-zinc-800 hover:border-orange-500/40 transition cursor-pointer"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 dark:bg-zinc-950/80 hover:bg-sky-600 text-slate-900 dark:text-slate-900 hover:text-white shadow-md p-2 rounded-full border border-slate-200 dark:border-zinc-800 hover:border-sky-500/40 transition cursor-pointer"
         aria-label="Previous slide"
       >
         <ChevronLeft className="h-5 w-5" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 dark:bg-zinc-950/80 hover:bg-orange-600 text-slate-800 dark:text-zinc-200 hover:text-white shadow-md p-2 rounded-full border border-slate-200 dark:border-zinc-800 hover:border-orange-500/40 transition cursor-pointer"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 dark:bg-zinc-950/80 hover:bg-sky-600 text-slate-900 dark:text-slate-900 hover:text-white shadow-md p-2 rounded-full border border-slate-200 dark:border-zinc-800 hover:border-sky-500/40 transition cursor-pointer"
         aria-label="Next slide"
       >
         <ChevronRight className="h-5 w-5" />
@@ -374,7 +374,7 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
             key={idx}
             onClick={() => setCurrent(idx)}
             className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-              idx === current ? "w-8 bg-orange-600" : "w-2 bg-slate-400 hover:bg-slate-500 dark:bg-zinc-800"
+              idx === current ? "w-8 bg-sky-600" : "w-2 bg-slate-400 hover:bg-slate-500 dark:bg-zinc-800"
             }`}
             aria-label={`Go to slide ${idx + 1}`}
           />

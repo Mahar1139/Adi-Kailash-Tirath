@@ -12,6 +12,7 @@ import DetailedModal from "./components/DetailedModal";
 import Footer from "./components/Footer";
 import AdminPanel from "./components/AdminPanel";
 import WhyChooseUs from "./components/WhyChooseUs";
+import { ContactUs, PrivacyPolicy, Feedback } from "./components/StaticPages";
 import { t, getLocalizedPackages, getLocalizedBlogs, getLocalizedStories, getLocalizedFeedback, getLocalizedTickerText, getLocalizedCircularDestinations } from "./utils/lang";
 
 import { BLOGS, ACCREDITATIONS, YATRA_PACKAGES, TRAVEL_STORIES, YATRI_FEEDBACKS } from "./data";
@@ -193,10 +194,10 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafaf9] dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-orange-600 selection:text-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#fafaf9] dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-sky-600 selection:text-white relative overflow-x-hidden">
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] max-w-[600px] max-h-[600px] rounded-full bg-orange-500/10 blur-[100px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full bg-amber-500/10 blur-[120px]" />
+        <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] max-w-[600px] max-h-[600px] rounded-full bg-sky-500/10 blur-[100px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full bg-blue-500/10 blur-[120px]" />
         <div className="absolute top-[40%] left-[20%] w-[30vw] h-[30vw] max-w-[500px] max-h-[500px] rounded-full bg-rose-500/5 blur-[120px]" />
       </div>
       <div className="relative z-10 flex flex-col min-h-screen">
@@ -241,23 +242,23 @@ export default function App() {
           siteData={localizedSiteData}
           currentLanguage={currentLanguage}
         />
-      ) : activeCategory === "why_choose_us" ? null : (
+      ) : ["why_choose_us", "contact_us", "privacy_policy", "feedback"].includes(activeCategory) ? null : (
         /* Alternate Category Header */
         <div className="relative py-16 bg-white dark:bg-zinc-950 border-b border-slate-300 dark:border-zinc-700 select-none overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 via-amber-500/5 to-transparent blur-md" />
+          <div className="absolute inset-0 bg-gradient-to-r from-sky-600/10 via-blue-500/5 to-transparent blur-md" />
           <div className="max-w-7xl mx-auto px-4 relative z-10 text-left animate-fade-in">
             <button
               onClick={() => {
                 setActiveCategory("home");
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="mb-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 hover:border-orange-500/40 text-orange-400 hover:text-slate-900 dark:text-zinc-100 transition rounded text-xs font-mono font-bold uppercase tracking-wide cursor-pointer shadow select-none"
+              className="mb-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 hover:border-sky-500/40 text-sky-400 hover:text-slate-900 dark:text-zinc-100 transition rounded text-xs font-mono font-bold uppercase tracking-wide cursor-pointer shadow select-none"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>{currentLanguage === "hi" ? "मुख्य पृष्ठ" : "Back to Home"}</span>
             </button>
             <br />
-            <span className="text-orange-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
+            <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
               {t("gurupadVerified", currentLanguage)}
             </span>
             <h1 className="font-serif text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-zinc-100 mt-1 uppercase tracking-tight">
@@ -274,10 +275,12 @@ export default function App() {
                 if (activeCategory === "darma_valley") return t("darmaValleyRef", currentLanguage);
                 if (activeCategory === "chirkilla_dam") return t("chirkillaDamRef", currentLanguage);
                 if (activeCategory === "narayan_ashram") return t("narayanAshramRef", currentLanguage);
+                if (activeCategory === "packages") return "All Packages";
+                if (activeCategory === "blogs") return "News & Blogs";
                 return activeCategory.replace("_", " ");
-              })()} {t("packages", currentLanguage)}
+              })()} {activeCategory !== "packages" && activeCategory !== "blogs" ? t("packages", currentLanguage) : ""}
             </h1>
-            <p className="text-slate-600 dark:text-zinc-400 text-sm max-w-xl mt-2 leading-relaxed">
+            <p className="text-slate-900 dark:text-zinc-100 text-sm max-w-xl mt-2 leading-relaxed">
               {t("shrineDesc", currentLanguage)}
             </p>
           </div>
@@ -288,13 +291,13 @@ export default function App() {
       {activeCategory === "home" && (
         <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className="py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none text-center">
           <div className="max-w-7xl mx-auto">
-            <span className="text-orange-500 font-mono text-xs font-bold uppercase tracking-[0.25em] block mb-2">
+            <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em] block mb-2">
               {t("shrineHeading", currentLanguage)}
             </span>
             <h2 className="font-serif text-2xl md:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
               {t("shrineSub", currentLanguage)}
             </h2>
-            <div className="h-0.5 w-16 bg-gradient-to-r from-orange-600 to-amber-500 rounded mx-auto mt-2 mb-10" />
+            <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-2 mb-10" />
 
             {/* Circular Grid Container with Horizontal Carousel & Autoplay */}
             <DestinationsCarousel
@@ -307,9 +310,9 @@ export default function App() {
       )}
 
       {/* 5. Active Packages Grid System */}
-      {activeCategory !== "why_choose_us" && (
+      {activeCategory !== "why_choose_us" && activeCategory !== "contact_us" && activeCategory !== "privacy_policy" && activeCategory !== "feedback" && (
         <PackageGrid
-          activeCategory={activeCategory}
+          activeCategory={activeCategory === "home" || activeCategory === "packages" ? "all" : activeCategory}
           setActiveCategory={setActiveCategory}
           onOpenPackage={(pkg) => setOpenedPackage(pkg)}
           siteData={localizedSiteData}
@@ -317,7 +320,6 @@ export default function App() {
         />
       )}
 
-      {/* Why Choose Us Full Page block */}
       {activeCategory === "why_choose_us" && (
         <WhyChooseUs
           currentLanguage={currentLanguage}
@@ -332,8 +334,12 @@ export default function App() {
         />
       )}
 
+      {activeCategory === "contact_us" && <ContactUs />}
+      {activeCategory === "privacy_policy" && <PrivacyPolicy />}
+      {activeCategory === "feedback" && <Feedback />}
+
       {/* 6. General Yatra Planning Form */}
-      <QuickPlanner currentLanguage={currentLanguage} />
+      {activeCategory === "home" && <QuickPlanner currentLanguage={currentLanguage} />}
 
       {/* 7. Why Choose Adi Kailash Tirath (Spiritual Dial spinner) */}
       {activeCategory === "home" && <InteractiveDial currentLanguage={currentLanguage} />}
@@ -342,18 +348,18 @@ export default function App() {
       {activeCategory === "home" && <TravelerReels siteData={localizedSiteData} currentLanguage={currentLanguage} />}
 
       {/* 9. Blogs and Spiritual Vlogs section */}
-      {activeCategory === "home" && (
-        <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className="py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none">
+      {(activeCategory === "home" || activeCategory === "blogs") && (
+        <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className={`py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none ${activeCategory === "blogs" ? "pt-24 min-h-screen" : ""}`}>
           <div className="max-w-7xl mx-auto">
             <div className="text-center flex flex-col items-center gap-2 mb-10">
-              <span className="text-orange-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
+              <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
                 {t("blog", currentLanguage)}
               </span>
               <h2 className="font-serif text-2xl md:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
                 {t("blogTitle", currentLanguage)}
               </h2>
-              <div className="h-0.5 w-16 bg-gradient-to-r from-orange-600 to-amber-500 rounded mt-1.5" />
-              <p className="text-slate-600 dark:text-zinc-400 text-xs mt-1.5">
+              <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded mt-1.5" />
+              <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1.5">
                 {t("blogSub", currentLanguage)}
               </p>
             </div>
@@ -363,7 +369,7 @@ export default function App() {
                 <div
                   key={blog.id}
                   onClick={() => setActiveBlog(blog)}
-                  className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-lg hover:border-orange-505/20 transition duration-300 flex flex-col justify-between cursor-pointer text-left group animate-fade-in"
+                  className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-lg hover:border-sky-505/20 transition duration-300 flex flex-col justify-between cursor-pointer text-left group animate-fade-in"
                 >
                   <div className="relative h-48 overflow-hidden">
                     <img
@@ -372,22 +378,22 @@ export default function App() {
                       className="w-full h-full object-cover group-hover:scale-103 transition duration-500 brightness-90"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute top-4 left-4 bg-white/80 dark:bg-zinc-950/80 px-2.5 py-1 text-[10px] font-mono text-slate-700 dark:text-zinc-300 rounded backdrop-blur-xs font-bold uppercase tracking-wider">
+                    <div className="absolute top-4 left-4 bg-white/80 dark:bg-zinc-950/80 px-2.5 py-1 text-[10px] font-mono text-slate-900 dark:text-zinc-100 rounded backdrop-blur-xs font-bold uppercase tracking-wider">
                       {blog.readTime}
                     </div>
                   </div>
                   <div className="p-5 flex-grow flex flex-col gap-2.5">
-                    <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-450 uppercase">
+                    <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 uppercase">
                       {blog.date} • {blog.author}
                     </span>
-                    <h4 className="font-serif text-base font-bold text-slate-900 dark:text-zinc-100 group-hover:text-orange-400 transition duration-300 leading-snug">
+                    <h4 className="font-serif text-base font-bold text-slate-900 dark:text-zinc-100 group-hover:text-sky-400 transition duration-300 leading-snug">
                       {blog.title}
                     </h4>
-                    <p className="text-slate-600 dark:text-zinc-400 text-xs leading-relaxed line-clamp-3">
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed line-clamp-3">
                       {blog.excerpt}
                     </p>
                   </div>
-                  <div className="p-5 pt-0 text-orange-450 font-mono text-[11px] font-bold flex items-center gap-1 group-hover:text-orange-400 border-t border-slate-300/60 dark:border-zinc-700/60 mt-3 pt-3">
+                  <div className="p-5 pt-0 text-sky-450 font-mono text-[11px] font-bold flex items-center gap-1 group-hover:text-sky-400 border-t border-slate-300/60 dark:border-zinc-700/60 mt-3 pt-3">
                     {t("readArticleBtn", currentLanguage)}
                   </div>
                 </div>
@@ -403,14 +409,14 @@ export default function App() {
           <p className="text-zinc-505 font-mono text-[10px] uppercase tracking-widest font-bold">
             {t("verifiedPartner", currentLanguage)}
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-6 text-slate-500 dark:text-zinc-450 text-xs font-serif font-semibold">
+          <div className="flex flex-wrap justify-center items-center gap-6 text-slate-900 dark:text-zinc-100 text-xs font-serif font-semibold">
             {accreditationsList.map((acc: any) => (
               <span
                 key={acc.id}
-                className="bg-white dark:bg-zinc-950 border border-zinc-805/85 px-4 py-2.5 rounded-lg flex items-center gap-2 hover:border-orange-505/20 transition duration-300 shadow-md"
+                className="bg-white dark:bg-zinc-950 border border-zinc-805/85 px-4 py-2.5 rounded-lg flex items-center gap-2 hover:border-sky-505/20 transition duration-300 shadow-md"
                 title={acc.detail}
               >
-                <Trophy className="h-4 w-4 text-orange-500 shrink-0" />
+                <Trophy className="h-4 w-4 text-sky-500 shrink-0" />
                 <span>{acc.name}</span>
               </span>
             ))}
@@ -456,12 +462,12 @@ export default function App() {
               />
               <button
                 onClick={() => setActiveBlog(null)}
-                className="absolute top-4 right-4 p-1.5 bg-slate-50/60 dark:bg-zinc-950/60 text-zinc-350 hover:text-slate-900 dark:text-zinc-100 rounded-full border border-slate-200 dark:border-zinc-800 cursor-pointer"
+                className="absolute top-4 right-4 p-1.5 bg-slate-50/60 dark:bg-zinc-950/60 text-slate-900 hover:text-slate-900 dark:text-zinc-100 rounded-full border border-slate-200 dark:border-zinc-800 cursor-pointer"
               >
                 ✕
               </button>
               <div className="absolute bottom-4 left-6 text-left">
-                <span className="text-[10px] font-mono text-orange-400 font-bold uppercase bg-orange-600/10 border border-orange-500/20 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-mono text-sky-400 font-bold uppercase bg-sky-600/10 border border-sky-500/20 px-2 py-0.5 rounded">
                   {activeBlog.readTime}
                 </span>
                 <h3 className="font-serif text-lg md:text-xl font-extrabold text-slate-900 dark:text-zinc-100 mt-2 leading-tight">
@@ -470,10 +476,10 @@ export default function App() {
               </div>
             </div>
             <div className="p-6 md:p-8 text-left max-h-[350px] overflow-y-auto text-xs text-zinc-320 leading-relaxed font-sans select-text">
-              <p className="text-slate-500 dark:text-zinc-450 font-mono text-[10px] uppercase mb-4">
+              <p className="text-slate-900 dark:text-zinc-100 font-mono text-[10px] uppercase mb-4">
                 Written by {activeBlog.author} • Published {activeBlog.date}
               </p>
-              <div className="whitespace-pre-wrap leading-relaxed text-slate-700 dark:text-zinc-300">
+              <div className="whitespace-pre-wrap leading-relaxed text-slate-900 dark:text-zinc-100">
                 {activeBlog.content}
               </div>
             </div>
@@ -483,13 +489,13 @@ export default function App() {
                   setActiveBlog(null);
                   setIsConsultantOpen(true);
                 }}
-                className="text-xs text-orange-500 font-mono font-bold hover:text-orange-400 transition cursor-pointer"
+                className="text-xs text-sky-500 font-mono font-bold hover:text-sky-400 transition cursor-pointer"
               >
                 ASK AI ABOUT THIS TOPIC
               </button>
               <button
                 onClick={() => setActiveBlog(null)}
-                className="bg-orange-600 text-white font-mono text-xs font-bold px-4 py-2 rounded border border-orange-500/20 hover:bg-orange-550 transition cursor-pointer"
+                className="bg-sky-600 text-white font-mono text-xs font-bold px-4 py-2 rounded border border-sky-500/20 hover:bg-sky-550 transition cursor-pointer"
               >
                 CLOSE READ
               </button>
@@ -567,7 +573,7 @@ export default function App() {
                 setIsConsultantOpen(true);
                 setIsMenuExpanded(false);
               }}
-              className={`absolute h-12 w-12 rounded-full bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-550 hover:to-amber-450 border border-white/10 text-white flex items-center justify-center shadow-xl transition-all duration-500 hover:scale-110 active:scale-95 cursor-pointer ${
+              className={`absolute h-12 w-12 rounded-full bg-gradient-to-r from-sky-600 to-blue-500 hover:from-sky-550 hover:to-blue-450 border border-white/10 text-white flex items-center justify-center shadow-xl transition-all duration-500 hover:scale-110 active:scale-95 cursor-pointer ${
                 isMenuExpanded 
                   ? "opacity-100 translate-x-0 translate-y-[-72px] scale-100 pointer-events-auto" 
                   : "opacity-0 translate-x-0 translate-y-0 scale-50 pointer-events-none"
@@ -580,7 +586,7 @@ export default function App() {
             {/* Main Trigger Hub Button with custom logo/X toggle */}
             <button
               onClick={() => setIsMenuExpanded(!isMenuExpanded)}
-              className={`relative h-14 w-14 rounded-full bg-gradient-to-r from-orange-600 to-amber-500 border-2 border-orange-500/40 text-white flex items-center justify-center shadow-2xl transition-all duration-300 cursor-pointer select-none ring-2 ring-orange-505/20 overflow-hidden ${
+              className={`relative h-14 w-14 rounded-full bg-gradient-to-r from-sky-600 to-blue-500 border-2 border-sky-500/40 text-white flex items-center justify-center shadow-2xl transition-all duration-300 cursor-pointer select-none ring-2 ring-sky-505/20 overflow-hidden ${
                 isMenuExpanded ? "scale-105 rotate-135" : "hover:scale-105 active:scale-95 animate-bounce"
               }`}
               title="Expand Options Menu"
@@ -589,7 +595,7 @@ export default function App() {
                 <X className="h-6 w-6 transform -rotate-135" />
               ) : (
                 <>
-                  <span className="absolute -inset-1 rounded-full bg-orange-600/30 blur-xs animate-ping opacity-60" />
+                  <span className="absolute -inset-1 rounded-full bg-sky-600/30 blur-xs animate-ping opacity-60" />
                   <span className="text-xl font-serif leading-none font-extrabold z-10">ॐ</span>
                 </>
               )}
@@ -602,7 +608,7 @@ export default function App() {
       {showScrollTop && !isMenuExpanded && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className={`fixed z-40 bg-white/95 dark:bg-zinc-950/95 border border-orange-200 hover:border-orange-500 text-orange-600 hover:text-white hover:bg-orange-600 h-11 w-11 rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer select-none group focus:outline-none ${
+          className={`fixed z-40 bg-white/95 dark:bg-zinc-950/95 border border-sky-200 hover:border-sky-500 text-sky-600 hover:text-white hover:bg-sky-600 h-11 w-11 rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer select-none group focus:outline-none ${
             isConsultantOpen ? "bottom-6 right-6" : "bottom-24 right-7.5"
           }`}
           title={currentLanguage === "hi" ? "ऊपर जाएं" : "Scroll to Top"}

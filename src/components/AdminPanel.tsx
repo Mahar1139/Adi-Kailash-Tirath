@@ -11,6 +11,89 @@ interface AdminPanelProps {
   onRefreshSiteData: () => void;
 }
 
+function ImageUploader({ value, onChange, label = "Image Link or Upload" }: { value: string, onChange: (v: string) => void, label?: string }) {
+  const [mode, setMode] = useState<"link" | "upload">("link");
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const base64 = event.target?.result as string;
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: file.name, base64 })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          onChange(data.url);
+        } else {
+          console.error("Upload failed.");
+        }
+        setUploading(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error(err);
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-1.5 w-full">
+      <div className="flex justify-between items-center">
+        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">{label}</label>
+        <div className="flex bg-slate-200 dark:bg-zinc-800 rounded p-0.5">
+          <button 
+            type="button" 
+            onClick={() => setMode("link")}
+            className={`px-2 py-0.5 text-[9px] rounded font-bold uppercase transition cursor-pointer ${mode === "link" ? "bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 shadow-sm" : "text-slate-500 dark:text-zinc-400"}`}
+          >
+            Google Link
+          </button>
+          <button 
+            type="button" 
+            onClick={() => setMode("upload")}
+            className={`px-2 py-0.5 text-[9px] rounded font-bold uppercase transition cursor-pointer ${mode === "upload" ? "bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 shadow-sm" : "text-slate-500 dark:text-zinc-400"}`}
+          >
+            Manual Upload
+          </button>
+        </div>
+      </div>
+      {mode === "link" ? (
+        <input
+          type="text"
+          value={value || ""}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Paste image URL..."
+          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2.5 focus:border-sky-500/50 outline-none font-mono"
+        />
+      ) : (
+        <div className="flex items-center gap-2">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            disabled={uploading}
+            className="flex-1 text-slate-600 dark:text-zinc-400 text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-sky-500/10 file:text-sky-600 hover:file:bg-sky-500/20 cursor-pointer"
+          />
+          {uploading && <span className="text-[10px] text-sky-500 font-bold uppercase animate-pulse">Uploading...</span>}
+        </div>
+      )}
+      {value && mode === "upload" && (
+        <div className="mt-1">
+          <img src={value} alt="Preview" className="h-16 w-16 object-cover rounded border border-slate-200 dark:border-zinc-800" referrerPolicy="no-referrer" />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData }: AdminPanelProps) {
   const [secretKey, setSecretKey] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -18,6 +101,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
   
   const [activeTab, setActiveTab] = useState<"bookings" | "global" | "slides" | "packages" | "gallery" | "reviews" | "blogs" | "accreditations" | "reels">("bookings");
   const [siteData, setSiteData] = useState<any>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{ message: string, action: () => void } | null>(null);
   
   // Real-time Booking Enquiries
   const [bookings, setBookings] = useState<any[]>([]);
@@ -112,7 +196,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
       if (res.ok) {
         loadBookings();
       } else {
-        alert("Failed to update status.");
+        console.error("Failed to update status.");
       }
     } catch (e) {
       console.error(e);
@@ -120,7 +204,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
   };
 
   const deleteBooking = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this yatra booking lead?")) return;
+    setConfirmDialog({ message: "Are you sure you want to delete this yatra booking lead?", action: async () => {
     try {
       const res = await fetch("/api/planners/delete", {
         method: "POST",
@@ -130,11 +214,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
       if (res.ok) {
         loadBookings();
       } else {
-        alert("Failed to delete booking.");
+        console.error("Failed to delete booking.");
       }
     } catch (e) {
       console.error(e);
     }
+    } });
   };
 
   // Generalized structural updates helper
@@ -154,14 +239,14 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
         <div className="absolute top-6 left-6">
           <button 
             onClick={onClose}
-            className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Sanctuary
           </button>
         </div>
 
         <div className="w-full max-w-md bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-8 rounded-2xl shadow-2xl relative">
-          <div className="absolute -top-10 left-12 w-fit rounded-full border border-orange-500/30 overflow-hidden bg-slate-50 dark:bg-zinc-950">
+          <div className="absolute -top-10 left-12 w-fit rounded-full border border-sky-500/30 overflow-hidden bg-slate-50 dark:bg-zinc-950">
             <img 
               src="/logo.jpg" 
               alt="Logo" 
@@ -174,7 +259,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             <h2 className="font-serif text-2xl font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wide">
               ADMINISTRATIVE LOGON
             </h2>
-            <p className="text-slate-600 dark:text-zinc-400 text-xs mt-1 leading-relaxed">
+            <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1 leading-relaxed">
               Authenticate using your master spiritual secret key to modify the Adi Kailash Tirath website content dynamically.
             </p>
           </div>
@@ -188,7 +273,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="flex flex-col gap-1.5 text-left">
-              <label className="text-slate-500 dark:text-zinc-450 text-[10.5px] font-mono uppercase tracking-wider">
+              <label className="text-slate-900 dark:text-zinc-100 text-[10.5px] font-mono uppercase tracking-wider">
                 Enter Master Secret Key
               </label>
               <div className="relative">
@@ -198,15 +283,15 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                   placeholder="Secret access key..."
                   value={secretKey}
                   onChange={(e) => setSecretKey(e.target.value)}
-                  className="w-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-orange-500/50"
+                  className="w-full bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-sky-500/50"
                 />
-                <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400 dark:text-zinc-500" />
+                <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-900 dark:text-zinc-100" />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-650 to-orange-500 hover:from-orange-600 hover:to-orange-400 text-white font-mono text-xs font-bold py-3.5 rounded-lg border border-orange-500/30 tracking-widest cursor-pointer shadow-lg shadow-orange-600/10 mt-4"
+              className="w-full bg-gradient-to-r from-sky-650 to-sky-500 hover:from-sky-600 hover:to-sky-400 text-white font-mono text-xs font-bold py-3.5 rounded-lg border border-sky-500/30 tracking-widest cursor-pointer shadow-lg shadow-sky-600/10 mt-4"
             >
               UNLOCK PORTAL
             </button>
@@ -217,7 +302,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 text-slate-700 dark:text-zinc-300 font-sans select-none flex flex-col md:flex-row">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 font-sans select-none flex flex-col md:flex-row">
       
       {/* Sidebar Controls */}
       <aside className="w-full md:w-64 bg-slate-100 dark:bg-zinc-900 border-r border-slate-200/80 dark:border-zinc-800/80 flex flex-col justify-between shrink-0">
@@ -226,15 +311,15 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
           <div className="p-5 border-b border-slate-200 dark:border-zinc-800 flex justify-between items-center bg-white dark:bg-zinc-950">
             <div className="flex flex-col">
               <span className="font-serif text-base font-extrabold text-slate-900 dark:text-zinc-100 tracking-wide">
-                ADI KAILASH <span className="text-orange-500">ADMIN</span>
+                ADI KAILASH <span className="text-sky-500">ADMIN</span>
               </span>
-              <span className="text-[9px] font-mono text-slate-500 dark:text-zinc-450 uppercase tracking-widest mt-0.5">
+              <span className="text-[9px] font-mono text-slate-900 dark:text-zinc-100 uppercase tracking-widest mt-0.5">
                 Dynamic Site Architect
               </span>
             </div>
             <button 
               onClick={onClose}
-              className="text-xs font-mono uppercase text-orange-400 hover:text-orange-355 transition bg-orange-500/10 px-2 py-1 rounded"
+              className="text-xs font-mono uppercase text-sky-400 hover:text-sky-355 transition bg-sky-500/10 px-2 py-1 rounded"
             >
               EXIT
             </button>
@@ -242,13 +327,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
           {/* Navigation Controls */}
           <nav className="p-3 space-y-1 text-left">
-            <p className="text-[9px] font-mono text-slate-500 dark:text-zinc-450 tracking-wider uppercase px-3 py-2">
+            <p className="text-[9px] font-mono text-slate-900 dark:text-zinc-100 tracking-wider uppercase px-3 py-2">
               REAL-TIME LEADS
             </p>
             <button
               onClick={() => { setActiveTab("bookings"); setEditingIndex(null); }}
               className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs font-mono transition ${
-                activeTab === "bookings" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                activeTab === "bookings" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <span className="flex items-center gap-2">
@@ -262,7 +347,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
               )}
             </button>
 
-            <p className="text-[9px] font-mono text-slate-500 dark:text-zinc-450 tracking-wider uppercase px-3 py-2 pt-4">
+            <p className="text-[9px] font-mono text-slate-900 dark:text-zinc-100 tracking-wider uppercase px-3 py-2 pt-4">
               EDITORIAL MANAGER
             </p>
 
@@ -270,12 +355,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
               onClick={() => { setActiveTab("global"); setEditingIndex(null); }}
               className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs font-mono transition border ${
                 activeTab === "global" 
-                  ? "bg-orange-500/15 text-orange-400 font-bold border-orange-500/30" 
-                  : "text-slate-700 dark:text-zinc-300 border-transparent hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                  ? "bg-sky-500/15 text-sky-400 font-bold border-sky-500/30" 
+                  : "text-slate-900 dark:text-zinc-100 border-transparent hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <span className="flex items-center gap-2">
-                <Globe className="h-4 w-4 text-orange-500" />
+                <Globe className="h-4 w-4 text-sky-500" />
                 Manage & Live Edit (लाइव चेंज)
               </span>
             </button>
@@ -284,12 +369,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
               onClick={() => { setActiveTab("slides"); setEditingIndex(null); }}
               className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs font-mono transition border ${
                 activeTab === "slides" 
-                  ? "bg-orange-500/15 text-orange-400 font-bold border-orange-500/30" 
-                  : "text-slate-700 dark:text-zinc-300 border-transparent hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                  ? "bg-sky-500/15 text-sky-400 font-bold border-sky-500/30" 
+                  : "text-slate-900 dark:text-zinc-100 border-transparent hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <span className="flex items-center gap-2">
-                <Sliders className="h-4 w-4 text-orange-500" />
+                <Sliders className="h-4 w-4 text-sky-500" />
                 Top Slider Slides (होम पेज स्लाइडर बदलें)
               </span>
             </button>
@@ -297,7 +382,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             <button
               onClick={() => { setActiveTab("packages"); setEditingIndex(null); }}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
-                activeTab === "packages" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                activeTab === "packages" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <List className="h-4 w-4" /> Yatra Packages ({siteData?.packages?.length || 0})
@@ -306,7 +391,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             <button
               onClick={() => { setActiveTab("gallery"); setEditingIndex(null); }}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
-                activeTab === "gallery" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                activeTab === "gallery" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <Image className="h-4 w-4" /> Sub-Destinations
@@ -315,7 +400,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             <button
               onClick={() => { setActiveTab("reviews"); setEditingIndex(null); }}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
-                activeTab === "reviews" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                activeTab === "reviews" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <Star className="h-4 w-4" /> Yatri Feedbacks ✍️ (लिखित फीडबैक)
@@ -324,7 +409,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             <button
               onClick={() => { setActiveTab("reels"); setEditingIndex(null); }}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
-                activeTab === "reels" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                activeTab === "reels" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <Video className="h-4 w-4" /> Pilgrim Video Reels 📹 (वीडियो रील्स)
@@ -333,7 +418,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             <button
               onClick={() => { setActiveTab("blogs"); setEditingIndex(null); }}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
-                activeTab === "blogs" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                activeTab === "blogs" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <FileText className="h-4 w-4" /> News & Blogs
@@ -342,7 +427,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             <button
               onClick={() => { setActiveTab("accreditations"); setEditingIndex(null); }}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
-                activeTab === "accreditations" ? "bg-orange-500/10 text-orange-400 font-semibold" : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+                activeTab === "accreditations" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
               }`}
             >
               <Award className="h-4 w-4" /> Accreditations
@@ -352,7 +437,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
         {/* Global Action Feed */}
         <div className="p-4 bg-white dark:bg-zinc-950 border-t border-slate-200 dark:border-zinc-800 text-left">
-          <p className="text-[9px] font-mono text-slate-500 dark:text-zinc-450 uppercase tracking-widest block mb-2">
+          <p className="text-[9px] font-mono text-slate-900 dark:text-zinc-100 uppercase tracking-widest block mb-2">
             DATABASE STATUS
           </p>
           <div className="flex items-center gap-2 text-xs font-mono text-green-400">
@@ -362,7 +447,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
           {saveStatus !== "idle" && (
             <div className={`mt-3 p-2 rounded text-[11px] font-mono ${
-              saveStatus === "saving" ? "bg-orange-500/10 text-orange-400" :
+              saveStatus === "saving" ? "bg-sky-500/10 text-sky-400" :
               saveStatus === "success" ? "bg-green-500/10 text-green-400 border border-green-550/20" :
               "bg-red-500/10 text-red-400"
             }`}>
@@ -376,8 +461,8 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
       <main className="flex-1 bg-white dark:bg-zinc-950 p-6 md:p-8 overflow-y-auto text-left">
         {!siteData ? (
           <div className="h-64 flex flex-col items-center justify-center gap-3">
-            <RefreshCw className="h-7 w-7 text-slate-400 dark:text-zinc-500 animate-spin" />
-            <p className="text-xs font-mono text-slate-500 dark:text-zinc-450">Initializing Database Connection...</p>
+            <RefreshCw className="h-7 w-7 text-slate-900 dark:text-zinc-100 animate-spin" />
+            <p className="text-xs font-mono text-slate-900 dark:text-zinc-100">Initializing Database Connection...</p>
           </div>
         ) : (
           <div>
@@ -388,11 +473,11 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Yatra Bookings Lead Console</h2>
-                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Manage planning logs registered in real time by pilgrims using the website form.</p>
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs mt-0.5">Manage planning logs registered in real time by pilgrims using the website form.</p>
                   </div>
                   <button 
                     onClick={loadBookings}
-                    className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 p-2 rounded transition cursor-pointer text-xs font-mono flex items-center gap-1 text-orange-400"
+                    className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 p-2 rounded transition cursor-pointer text-xs font-mono flex items-center gap-1 text-sky-400"
                   >
                     <RefreshCw className={`h-3 w-3 ${bookingLoading ? "animate-spin" : ""}`} /> Refresh Leads
                   </button>
@@ -400,8 +485,8 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
                 {bookings.length === 0 ? (
                   <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-12 rounded-xl text-center">
-                    <p className="text-sm font-serif text-slate-600 dark:text-zinc-400">No active planning requests found in memory.</p>
-                    <p className="text-xs font-mono text-slate-400 dark:text-zinc-500 mt-1">Submit names through the Quick Planner block to populate records instantly.</p>
+                    <p className="text-sm font-serif text-slate-900 dark:text-zinc-100">No active planning requests found in memory.</p>
+                    <p className="text-xs font-mono text-slate-900 dark:text-zinc-100 mt-1">Submit names through the Quick Planner block to populate records instantly.</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -409,48 +494,48 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                       <div key={booking.id} className="bg-zinc-90 w-full border border-slate-200 dark:border-zinc-800 p-5 rounded-xl hover:border-slate-200 dark:border-zinc-800 transition relative flex flex-col md:flex-row md:justify-between md:items-start gap-4">
                         <div className="space-y-2 text-left">
                           <div className="flex flex-wrap items-center gap-2.5">
-                            <span className="text-orange-450 font-bold font-mono text-xs">{booking.reference}</span>
-                            <span className="text-slate-400 dark:text-zinc-500 font-mono text-xs">|</span>
+                            <span className="text-sky-450 font-bold font-mono text-xs">{booking.reference}</span>
+                            <span className="text-slate-900 dark:text-zinc-100 font-mono text-xs">|</span>
                             <span className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100">{booking.name}</span>
-                            <span className="text-slate-400 dark:text-zinc-500 font-mono text-xs sm:inline">|</span>
-                            <span className="inline-flex items-center gap-1 text-[11px] font-mono text-orange-400 bg-orange-500/5 px-2 py-0.5 rounded border border-orange-500/10">
+                            <span className="text-slate-900 dark:text-zinc-100 font-mono text-xs sm:inline">|</span>
+                            <span className="inline-flex items-center gap-1 text-[11px] font-mono text-sky-400 bg-sky-500/5 px-2 py-0.5 rounded border border-sky-500/10">
                               {booking.destination}
                             </span>
                           </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-1.5 gap-x-6 text-xs font-mono text-slate-500 dark:text-zinc-450 pt-1">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-1.5 gap-x-6 text-xs font-mono text-slate-900 dark:text-zinc-100 pt-1">
                             <div className="flex items-center gap-1.5">
-                              <Phone className="h-3 w-3 text-orange-500" />
+                              <Phone className="h-3 w-3 text-sky-500" />
                               <a href={`tel:${booking.phone}`} className="hover:text-slate-900 dark:text-zinc-100 transition">{booking.phone}</a>
                             </div>
                             <div className="flex items-center gap-1.5">
-                              <Mail className="h-3 w-3 text-orange-500" />
+                              <Mail className="h-3 w-3 text-sky-500" />
                               <span>{booking.email}</span>
                             </div>
                             <div>
                               <span>👫 Travelers: </span>
-                              <span className="text-slate-700 dark:text-zinc-300 font-bold">{booking.travelers} Yatri(s)</span>
+                              <span className="text-slate-900 dark:text-zinc-100 font-bold">{booking.travelers} Yatri(s)</span>
                             </div>
                           </div>
 
-                          <p className="text-xs leading-relaxed text-slate-600 dark:text-zinc-400 bg-white dark:bg-zinc-950 p-3 rounded border border-slate-300 dark:border-zinc-700 mt-2">
-                            <span className="text-[10px] uppercase font-mono block text-amber-500/80 mb-0.5">Special Dietary & Health Backups request:</span>
+                          <p className="text-xs leading-relaxed text-slate-900 dark:text-zinc-100 bg-white dark:bg-zinc-950 p-3 rounded border border-slate-300 dark:border-zinc-700 mt-2">
+                            <span className="text-[10px] uppercase font-mono block text-blue-500/80 mb-0.5">Special Dietary & Health Backups request:</span>
                             {booking.message}
                           </p>
 
-                          <div className="text-[10px] font-mono text-slate-500 dark:text-zinc-450 flex items-center gap-1 mt-1">
+                          <div className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 flex items-center gap-1 mt-1">
                             <span>Requested date: </span>
-                            <span className="text-slate-600 dark:text-zinc-400">{booking.date}</span>
+                            <span className="text-slate-900 dark:text-zinc-100">{booking.date}</span>
                           </div>
                         </div>
 
                         <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0 md:items-end">
                           <div className="flex items-center gap-1.5">
-                            <label className="text-[10px] font-mono text-slate-500 dark:text-zinc-450 uppercase">Status:</label>
+                            <label className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 uppercase">Status:</label>
                             <select
                               value={booking.status}
                               onChange={(e) => updateBookingStatus(booking.id, e.target.value)}
-                              className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 px-2 py-1 text-xs font-mono text-amber-400 rounded focus:border-orange-500/50 cursor-pointer"
+                              className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 px-2 py-1 text-xs font-mono text-blue-400 rounded focus:border-sky-500/50 cursor-pointer"
                             >
                               <option value="Consultant Assigned">Consultant Assigned</option>
                               <option value="Documents Under Verification">Docs Under Verification</option>
@@ -479,9 +564,9 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             {activeTab === "global" && (
               <div>
                 <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider flex items-center gap-2">
-                  <span className="text-orange-500">⚙️</span> Manage & Edit Live (लाइव चेंज और मैनेज करें)
+                  <span className="text-sky-500">⚙️</span> Manage & Edit Live (लाइव चेंज और मैनेज करें)
                 </h2>
-                <p className="text-slate-500 dark:text-zinc-450 text-xs mb-6">
+                <p className="text-slate-900 dark:text-zinc-100 text-xs mb-6">
                   शीर्ष बैनर टिकर (Top Ticker), फ़ोन नंबर, ईमेल, सोशल मीडिया लिंक्स और उत्तराखंड टूरिज्म रजिस्ट्रेशन क्रेडेंशियल्स को यहाँ से तुरंत लाइव बदलें।
                 </p>
 
@@ -489,17 +574,17 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                   {/* Banner Notices list (TOP RE-ORDERED MODULE) */}
                   <div className="flex flex-col gap-3 pb-6 border-b border-slate-200 dark:border-zinc-800">
                     <div className="flex flex-col gap-1">
-                      <span className="text-orange-450 text-xs font-mono uppercase tracking-wider font-bold">
+                      <span className="text-sky-450 text-xs font-mono uppercase tracking-wider font-bold">
                         📢 Top Banner Ticker Announcements (शीर्ष बैनर घूमतें हुए संदेश)
                       </span>
-                      <p className="text-[11px] text-slate-500 dark:text-zinc-450 leading-relaxed">
+                      <p className="text-[11px] text-slate-900 dark:text-zinc-100 leading-relaxed">
                         इन्हें बदलें और यह तुरंत मुख्य पृष्ठ के शीर्ष पर घूमते हुए दिखाई देगा। बदलाव करने के बाद बाहर क्लिक (blur) करें।
                       </p>
                     </div>
                     <div className="space-y-2 mt-1">
                       {siteData.bannerTickerText.map((notice: string, nIdx: number) => (
                         <div key={nIdx} className="flex gap-2 items-center">
-                          <span className="text-xs font-mono font-bold text-slate-400 dark:text-zinc-500">{nIdx + 1}.</span>
+                          <span className="text-xs font-mono font-bold text-slate-900 dark:text-zinc-100">{nIdx + 1}.</span>
                           <input
                             type="text"
                             defaultValue={notice}
@@ -508,7 +593,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               nt[nIdx] = e.target.value;
                               handleSaveGlobalField("bannerTickerText", nt);
                             }}
-                            className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:border-zinc-700 focus:border-orange-500/60 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 focus:outline-none transition-all font-sans"
+                            className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:border-zinc-700 focus:border-sky-500/60 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2 focus:outline-none transition-all font-sans"
                           />
                           <button
                             type="button"
@@ -517,7 +602,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               nt.splice(nIdx, 1);
                               handleSaveGlobalField("bannerTickerText", nt);
                             }}
-                            className="p-2 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-red-400 rounded text-slate-500 dark:text-zinc-450 cursor-pointer transition-colors"
+                            className="p-2 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-red-400 rounded text-slate-900 dark:text-zinc-100 cursor-pointer transition-colors"
                             title="Delete Announcement Line"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -531,61 +616,61 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                         const nt = [...siteData.bannerTickerText, "🕉️ Enter your brand new sacred announcement ticker detail here..."];
                         handleSaveGlobalField("bannerTickerText", nt);
                       }}
-                      className="mt-2 w-fit bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 hover:border-orange-500/50 hover:text-orange-400 text-slate-600 dark:text-zinc-400 font-mono text-xs px-4 py-2 rounded inline-flex items-center gap-1.5 cursor-pointer transition"
+                      className="mt-2 w-fit bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 hover:border-sky-500/50 hover:text-sky-400 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-2 rounded inline-flex items-center gap-1.5 cursor-pointer transition"
                     >
                       <Plus className="h-3.5 w-3.5" /> Add New Notice Line (नया संदेश जोड़ें)
                     </button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono uppercase tracking-wider">Navbar Logo Primary Text</label>
+                      <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider">Navbar Logo Primary Text</label>
                       <input
                         type="text"
                         defaultValue={siteData.logoText}
                         onBlur={(e) => handleSaveGlobalField("logoText", e.target.value)}
-                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider">Full Company / Brand Name</label>
+                      <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider">Full Company / Brand Name</label>
                       <input
                         type="text"
                         defaultValue={siteData.companyName}
                         onBlur={(e) => handleSaveGlobalField("companyName", e.target.value)}
-                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono uppercase tracking-wider">Motto / Sub-tagline</label>
+                      <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider">Motto / Sub-tagline</label>
                       <input
                         type="text"
                         defaultValue={siteData.tagline}
                         onBlur={(e) => handleSaveGlobalField("tagline", e.target.value)}
-                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider">Active Season Pill Text</label>
+                      <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider">Active Season Pill Text</label>
                       <input
                         type="text"
                         defaultValue={siteData.activeSeason}
                         onBlur={(e) => handleSaveGlobalField("activeSeason", e.target.value)}
-                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                       />
                     </div>
                   </div>
 
-                  <div className="col-span-full bg-zinc-955/80 border border-orange-500/35 p-6 rounded-xl space-y-6 shadow-2xl my-2">
+                  <div className="col-span-full bg-zinc-955/80 border border-sky-500/35 p-6 rounded-xl space-y-6 shadow-2xl my-2">
                     <div className="flex items-start gap-2.5 pb-3 border-b border-slate-200/70 dark:border-zinc-800/70">
-                      <Phone className="h-5 w-5 text-orange-500 mt-0.5 animate-pulse" />
+                      <Phone className="h-5 w-5 text-sky-500 mt-0.5 animate-pulse" />
                       <div>
-                        <span className="text-orange-400 text-xs font-mono uppercase tracking-widest font-bold block">
+                        <span className="text-sky-400 text-xs font-mono uppercase tracking-widest font-bold block">
                           📞 Phone & Support Contacts (हेल्पलाइन फ़ोन नंबर और व्हाट्सएप सेटिंग)
                         </span>
-                        <p className="text-[11.5px] text-slate-600 dark:text-zinc-400 mt-1 leading-relaxed">
+                        <p className="text-[11.5px] text-slate-900 dark:text-zinc-100 mt-1 leading-relaxed">
                           यहाँ आप जो दोनों फ़ोन नंबर डालेंगे, वे मुख्य ऊपर पट्टी (Navbar Header) और घूमते टीकर (Announcement Ticker) में तुरंत लाइव अपडेट हो जायेंगे।
                         </p>
                       </div>
@@ -593,7 +678,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-orange-300 text-[10.5px] font-mono uppercase tracking-wider font-bold">
+                        <label className="text-sky-300 text-[10.5px] font-mono uppercase tracking-wider font-bold">
                           ☎️ Toll-Free Phone 1 (पहला मुख्य हेल्पलाइन फ़ोन नंबर)
                         </label>
                         <input
@@ -605,12 +690,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             ph[0] = e.target.value;
                             handleSaveGlobalField("phones", ph);
                           }}
-                          className="bg-zinc-90 w-full bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-orange-500 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
+                          className="bg-zinc-90 w-full bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-orange-300 text-[10.5px] font-mono uppercase tracking-wider font-bold">
+                        <label className="text-sky-300 text-[10.5px] font-mono uppercase tracking-wider font-bold">
                           ☎️ Toll-Free Phone 2 (दूसरा मुख्य हेल्पलाइन फ़ोन नंबर)
                         </label>
                         <input
@@ -625,33 +710,33 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             ph[1] = e.target.value;
                             handleSaveGlobalField("phones", ph);
                           }}
-                          className="bg-zinc-90 w-full bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-orange-500 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
+                          className="bg-zinc-90 w-full bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-sky-500 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider font-bold">
+                        <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider font-bold">
                           WhatsApp Link-Phone (व्हाट्सएप डायरेक्ट लिंक - e.g. https://wa.me/917017535116)
                         </label>
                         <input
                           type="text"
                           defaultValue={siteData.whatsapp || "https://wa.me/917017535116"}
                           onBlur={(e) => handleSaveGlobalField("whatsapp", e.target.value)}
-                          className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
+                          className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider font-bold">
+                        <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider font-bold">
                           Primary Email Address (ईमेल पता)
                         </label>
                         <input
                           type="email"
                           defaultValue={siteData.email || "info@adikailashtirath.com"}
                           onBlur={(e) => handleSaveGlobalField("email", e.target.value)}
-                          className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
+                          className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none transition-all font-mono hover:border-slate-300 dark:border-zinc-700"
                         />
                       </div>
                     </div>
@@ -659,33 +744,33 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono uppercase tracking-wider">Uttarakhand Tourism Registration ID</label>
+                      <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider">Uttarakhand Tourism Registration ID</label>
                       <input
                         type="text"
                         defaultValue={siteData.regNumber}
                         onBlur={(e) => handleSaveGlobalField("regNumber", e.target.value)}
-                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                       />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-slate-600 dark:text-zinc-400 text-[10px] font-mono uppercase tracking-wider">Official Inner Line NOC Certification</label>
+                      <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider">Official Inner Line NOC Certification</label>
                       <input
                         type="text"
                         defaultValue={siteData.nocNumber}
                         onBlur={(e) => handleSaveGlobalField("nocNumber", e.target.value)}
-                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                       />
                     </div>
                   </div>
 
                   {/* Configurable Divine Social Media Links */}
                   <div className="flex flex-col gap-4 pt-4 border-t border-slate-200 dark:border-zinc-800">
-                    <span className="text-slate-500 dark:text-zinc-450 text-[10px] font-mono uppercase tracking-wider block">Social Media Platform Redirection Links</span>
-                    <p className="text-[11px] text-slate-500 dark:text-zinc-450">Paste the complete destination URLs (https://...) for your social channels. Fields commit automatically when you click away.</p>
+                    <span className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider block">Social Media Platform Redirection Links</span>
+                    <p className="text-[11px] text-slate-900 dark:text-zinc-100">Paste the complete destination URLs (https://...) for your social channels. Fields commit automatically when you click away.</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {/* Facebook */}
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Facebook URL</label>
+                        <label className="text-slate-900 dark:text-zinc-100 text-[9px] font-mono uppercase tracking-wide">Facebook URL</label>
                         <input
                           type="text"
                           placeholder="https://facebook.com/your-page"
@@ -697,12 +782,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             };
                             handleSaveGlobalField("socialLinks", updated);
                           }}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
                       {/* Instagram */}
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Instagram URL</label>
+                        <label className="text-slate-900 dark:text-zinc-100 text-[9px] font-mono uppercase tracking-wide">Instagram URL</label>
                         <input
                           type="text"
                           placeholder="https://instagram.com/your-username"
@@ -714,12 +799,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             };
                             handleSaveGlobalField("socialLinks", updated);
                           }}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
                       {/* LinkedIn */}
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">LinkedIn URL</label>
+                        <label className="text-slate-900 dark:text-zinc-100 text-[9px] font-mono uppercase tracking-wide">LinkedIn URL</label>
                         <input
                           type="text"
                           placeholder="https://linkedin.com/company/your-brand"
@@ -731,12 +816,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             };
                             handleSaveGlobalField("socialLinks", updated);
                           }}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
                       {/* YouTube */}
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">YouTube Channel URL</label>
+                        <label className="text-slate-900 dark:text-zinc-100 text-[9px] font-mono uppercase tracking-wide">YouTube Channel URL</label>
                         <input
                           type="text"
                           placeholder="https://youtube.com/c/your-channel"
@@ -748,12 +833,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             };
                             handleSaveGlobalField("socialLinks", updated);
                           }}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
                       {/* Pinterest */}
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Pinterest URL</label>
+                        <label className="text-slate-900 dark:text-zinc-100 text-[9px] font-mono uppercase tracking-wide">Pinterest URL</label>
                         <input
                           type="text"
                           placeholder="https://pinterest.com/your-profile"
@@ -765,12 +850,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             };
                             handleSaveGlobalField("socialLinks", updated);
                           }}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
                       {/* Reddit */}
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Reddit URL</label>
+                        <label className="text-slate-900 dark:text-zinc-100 text-[9px] font-mono uppercase tracking-wide">Reddit URL</label>
                         <input
                           type="text"
                           placeholder="https://reddit.com/r/your-community"
@@ -782,12 +867,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             };
                             handleSaveGlobalField("socialLinks", updated);
                           }}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
                       {/* Twitter / X */}
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-slate-500 dark:text-zinc-450 text-[9px] font-mono uppercase tracking-wide">Twitter / X URL</label>
+                        <label className="text-slate-900 dark:text-zinc-100 text-[9px] font-mono uppercase tracking-wide">Twitter / X URL</label>
                         <input
                           type="text"
                           placeholder="https://x.com/your-handle"
@@ -799,7 +884,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             };
                             handleSaveGlobalField("socialLinks", updated);
                           }}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
                     </div>
@@ -816,9 +901,9 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                   <div>
                     <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider flex items-center gap-2">
-                      <span className="text-orange-500">🌅</span> Top Slider Slides (होम पेज का मुख्य स्लाइडर)
+                      <span className="text-sky-500">🌅</span> Top Slider Slides (होम पेज का मुख्य स्लाइडर)
                     </h2>
-                    <p className="text-slate-500 dark:text-zinc-450 text-xs">
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs">
                       मुख्य पृष्ठ (Home Page) के सबसे ऊपर दिखने वाली सुंदर तस्वीरों, मुख्य शीर्षकों (Titles) और विवरणों (Descriptions) को यहाँ से तुरंत बदलें या नई तस्वीरें जोड़ें।
                     </p>
                   </div>
@@ -836,7 +921,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80"
                         });
                       }}
-                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-4 py-2.5 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold transition-all shrink-0 shadow-lg"
+                      className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-4 py-2.5 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold transition-all shrink-0 shadow-lg"
                     >
                       <Plus className="h-4 w-4" /> Add New Slide (नई स्लाइड जोड़े)
                     </button>
@@ -855,18 +940,18 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             referrerPolicy="no-referrer"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-100 to-transparent" />
-                          <span className="absolute top-3 left-3 bg-orange-600/90 text-[10px] font-mono font-bold uppercase tracking-wider text-white px-2 py-0.5 rounded border border-orange-500/20">
+                          <span className="absolute top-3 left-3 bg-sky-600/90 text-[10px] font-mono font-bold uppercase tracking-wider text-white px-2 py-0.5 rounded border border-sky-500/20">
                             {slide.pill}
                           </span>
                         </div>
 
                         <div className="p-4 flex-1 text-left">
-                          <span className="text-[10px] font-mono text-amber-500 uppercase block mb-0.5">{slide.subtitle}</span>
+                          <span className="text-[10px] font-mono text-blue-500 uppercase block mb-0.5">{slide.subtitle}</span>
                           <h4 className="font-serif text-base font-bold text-slate-900 dark:text-zinc-100 leading-tight mb-2">{slide.title}</h4>
-                          <p className="text-slate-500 dark:text-zinc-450 text-xs line-clamp-3 leading-relaxed mb-4">{slide.desc}</p>
-                          <div className="text-[10px] font-mono text-slate-500 dark:text-zinc-450 border-t border-slate-200 dark:border-zinc-800 pt-2.5">
+                          <p className="text-slate-900 dark:text-zinc-100 text-xs line-clamp-3 leading-relaxed mb-4">{slide.desc}</p>
+                          <div className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 border-t border-slate-200 dark:border-zinc-800 pt-2.5">
                             <span>Altitude parameter: </span>
-                            <span className="text-slate-700 dark:text-zinc-300">{slide.stat}</span>
+                            <span className="text-slate-900 dark:text-zinc-100">{slide.stat}</span>
                           </div>
                         </div>
 
@@ -877,7 +962,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               setEditingIndex(sIdx);
                               setSlideDraft({ ...slide });
                             }}
-                            className="flex-1 bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-orange-400 font-mono text-xs py-2 rounded text-center border border-slate-200 dark:border-zinc-800 transition cursor-pointer inline-flex items-center justify-center gap-1.5"
+                            className="flex-1 bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-sky-400 font-mono text-xs py-2 rounded text-center border border-slate-200 dark:border-zinc-800 transition cursor-pointer inline-flex items-center justify-center gap-1.5"
                           >
                             <Edit2 className="h-3 w-3" /> Edit Slide Details
                           </button>
@@ -887,7 +972,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                                 const updatedSlides = siteData.heroSlides.filter((_: any, idx: number) => idx !== sIdx);
                                 handleSaveGlobalField("heroSlides", updatedSlides);
                               }}
-                              className="p-2 border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 text-slate-500 dark:text-zinc-450 hover:text-red-405 rounded cursor-pointer transition-colors"
+                              className="p-2 border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 hover:text-red-405 rounded cursor-pointer transition-colors"
                               title="Delete Slide (स्लाइड हटाएं)"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
@@ -905,7 +990,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                       </h3>
                       <button 
                         onClick={() => setEditingIndex(null)}
-                        className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer text-xs font-mono"
+                        className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer text-xs font-mono"
                       >
                         Cancel (रद्द करें)
                       </button>
@@ -914,64 +999,56 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Top Pill Category/Tag (ऊपर छोटा पीला टैग - e.g. EXPEDITION)</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Top Pill Category/Tag (ऊपर छोटा पीला टैग - e.g. EXPEDITION)</label>
                           <input
                             type="text"
                             value={slideDraft.pill}
                             onChange={(e) => setSlideDraft({ ...slideDraft, pill: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2.5 outline-none focus:border-orange-500/50"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2.5 outline-none focus:border-sky-500/50"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Altitude Badge/Stat (दाहिनी ओर ऊंचाई मीटर - e.g. 5,100 M)</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Altitude Badge/Stat (दाहिनी ओर ऊंचाई मीटर - e.g. 5,100 M)</label>
                           <input
                             type="text"
                             value={slideDraft.stat}
                             onChange={(e) => setSlideDraft({ ...slideDraft, stat: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2.5 outline-none focus:border-orange-500/50"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2.5 outline-none focus:border-sky-500/50"
                           />
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Slide Main Display Title (मुख्य बड़ी हेडिंग/शीर्षक)</label>
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Slide Main Display Title (मुख्य बड़ी हेडिंग/शीर्षक)</label>
                         <input
                           type="text"
                           value={slideDraft.title}
                           onChange={(e) => setSlideDraft({ ...slideDraft, title: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2.5 outline-none focus:border-orange-500/50"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2.5 outline-none focus:border-sky-500/50"
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Slide Colored Subtitle (उप-शीर्षक / जैसे: Adi Kailash Yatra)</label>
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Slide Colored Subtitle (उप-शीर्षक / जैसे: Adi Kailash Yatra)</label>
                         <input
                           type="text"
                           value={slideDraft.subtitle}
                           onChange={(e) => setSlideDraft({ ...slideDraft, subtitle: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2.5 outline-none focus:border-orange-500/50"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2.5 outline-none focus:border-sky-500/50"
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Descriptive Copy Text (स्लाइड की जानकारी/विवरण)</label>
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Descriptive Copy Text (स्लाइड की जानकारी/विवरण)</label>
                         <textarea
                           rows={3}
                           value={slideDraft.desc}
                           onChange={(e) => setSlideDraft({ ...slideDraft, desc: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 outline-none focus:border-orange-500/50 font-sans"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2.5 outline-none focus:border-sky-500/50 font-sans"
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Slide Cover Background Image URL (फोटो का लिंक/गूगल ड्राइव या इमेज यूआरएल)</label>
-                        <input
-                          type="text"
-                          value={slideDraft.img}
-                          onChange={(e) => setSlideDraft({ ...slideDraft, img: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 outline-none focus:border-orange-500/50 font-mono"
-                        />
-                      </div>
+                      <ImageUploader label="Slide Background Image" value={slideDraft.img} onChange={(url) => setSlideDraft({ ...slideDraft, img: url })} />
 
                       <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
                         <button
@@ -985,13 +1062,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             handleSaveGlobalField("heroSlides", updatedSlides);
                             setEditingIndex(null);
                           }}
-                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-3 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold transition-all"
+                          className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-5 py-3 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold transition-all"
                         >
                           <Save className="h-4 w-4" /> {formMode === "create" ? "Create Slide (स्लाइड जोड़ें)" : "Save Slide Changes (स्लाइड सेव करें)"}
                         </button>
                         <button
                           onClick={() => setEditingIndex(null)}
-                          className="bg-white dark:bg-zinc-950 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 font-mono text-xs px-4 py-3 rounded cursor-pointer"
+                          className="bg-white dark:bg-zinc-950 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-3 rounded cursor-pointer"
                         >
                           Disregard (बंद करें)
                         </button>
@@ -1008,7 +1085,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Yatra Packages Catalog</h2>
-                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Define pricing details, inclusions, exclusions, highlights list, and day-wise itineraries directly.</p>
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs mt-0.5">Define pricing details, inclusions, exclusions, highlights list, and day-wise itineraries directly.</p>
                   </div>
                   {editingIndex === null && (
                     <button
@@ -1043,7 +1120,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
                         });
                       }}
-                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-4 py-2.5 rounded font-bold uppercase tracking-wider cursor-pointer inline-flex items-center gap-1.5"
+                      className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-4 py-2.5 rounded font-bold uppercase tracking-wider cursor-pointer inline-flex items-center gap-1.5"
                     >
                       <Plus className="h-4 w-4" /> Create New Yatra Package
                     </button>
@@ -1063,15 +1140,15 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           />
                           <div>
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-[10px] font-mono uppercase bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 px-2 py-0.5 rounded border border-slate-300 dark:border-zinc-700">{pkg.category}</span>
-                              <span className="text-[10px] font-mono uppercase bg-orange-550/15 text-orange-400 px-2 py-0.5 rounded border border-orange-500/10 font-bold">{pkg.badge}</span>
-                              <span className="text-xs text-slate-500 dark:text-zinc-450 font-mono">{pkg.duration}</span>
+                              <span className="text-[10px] font-mono uppercase bg-slate-200 dark:bg-zinc-800 text-slate-900 dark:text-zinc-100 px-2 py-0.5 rounded border border-slate-300 dark:border-zinc-700">{pkg.category}</span>
+                              <span className="text-[10px] font-mono uppercase bg-sky-550/15 text-sky-400 px-2 py-0.5 rounded border border-sky-500/10 font-bold">{pkg.badge}</span>
+                              <span className="text-xs text-slate-900 dark:text-zinc-100 font-mono">{pkg.duration}</span>
                             </div>
                             <h4 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100 mt-1 leading-snug">{pkg.title}</h4>
-                            <div className="flex items-center gap-4 text-xs font-mono text-slate-500 dark:text-zinc-450 mt-1">
-                              <span>From: <strong className="text-slate-700 dark:text-zinc-300 font-normal">{pkg.fromRoute}</strong></span>
+                            <div className="flex items-center gap-4 text-xs font-mono text-slate-900 dark:text-zinc-100 mt-1">
+                              <span>From: <strong className="text-slate-900 dark:text-zinc-100 font-normal">{pkg.fromRoute}</strong></span>
                               <span>•</span>
-                              <span>Price: <strong className="text-orange-400 font-bold">{pkg.price}</strong></span>
+                              <span>Price: <strong className="text-sky-400 font-bold">{pkg.price}</strong></span>
                             </div>
                           </div>
                         </div>
@@ -1083,17 +1160,17 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               setEditingIndex(pIdx);
                               setPackageDraft(JSON.parse(JSON.stringify(pkg))); // deep local draft setup
                             }}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-orange-400 font-mono text-xs px-3.5 py-2 rounded inline-flex items-center gap-1 cursor-pointer transition"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-sky-400 font-mono text-xs px-3.5 py-2 rounded inline-flex items-center gap-1 cursor-pointer transition"
                           >
                             <Edit2 className="h-3 w-3" /> Edit Package Content
                           </button>
                           <button
                             onClick={() => {
-                              if (!window.confirm(`Are you absolutely sure you want to delete "${pkg.title}" package permanently from catalog?`)) return;
+                              setConfirmDialog({ message: `Are you absolutely sure you want to delete "${pkg.title}" package permanently from catalog?`, action: async () => {
                               const updatedPackages = [...siteData.packages];
                               updatedPackages.splice(pIdx, 1);
                               handleSaveGlobalField("packages", updatedPackages);
-                            }}
+                            } }); }}
                             className="bg-red-500/5 hover:bg-red-500/20 text-red-400 p-2 border border-slate-200 dark:border-zinc-800 rounded cursor-pointer transition"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -1108,18 +1185,18 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                       <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">
                         {formMode === "create" ? "Establish New Pilgrimage Package" : `Modify Package: ${packageDraft.title}`}
                       </h3>
-                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer">Cancel</button>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 transition cursor-pointer">Cancel</button>
                     </div>
 
                     <div className="space-y-6">
                       {/* Section A: Essential parameters */}
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Category Filter ID Tag</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Category Filter ID Tag</label>
                           <select
                             value={packageDraft.category}
                             onChange={(e) => setPackageDraft({ ...packageDraft, category: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 cursor-pointer outline-none font-mono"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 cursor-pointer outline-none font-mono"
                           >
                             <option value="adi_kailash">Adi Kailash Packages</option>
                             <option value="kailash_mansarovar">Kailash Mansarovar</option>
@@ -1136,21 +1213,21 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           </select>
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Package Special Badge</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Package Special Badge</label>
                           <input
                             type="text"
                             value={packageDraft.badge}
                             onChange={(e) => setPackageDraft({ ...packageDraft, badge: e.target.value })}
                             placeholder="e.g., Best Seller / Elite Experience"
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Difficulty Rating</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Difficulty Rating</label>
                           <select
                             value={packageDraft.difficulty}
                             onChange={(e) => setPackageDraft({ ...packageDraft, difficulty: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 cursor-pointer outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 cursor-pointer outline-none"
                           >
                             <option value="Easy">Easy</option>
                             <option value="Moderate">Moderate</option>
@@ -1162,74 +1239,66 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Itinerary Duration Label</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Itinerary Duration Label</label>
                           <input
                             type="text"
                             value={packageDraft.duration}
                             onChange={(e) => setPackageDraft({ ...packageDraft, duration: e.target.value })}
                             placeholder="e.g., 7 Nights / 8 Days"
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Cost Pricing Label</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Cost Pricing Label</label>
                           <input
                             type="text"
                             value={packageDraft.price}
                             onChange={(e) => setPackageDraft({ ...packageDraft, price: e.target.value })}
                             placeholder="e.g., ₹42,000"
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Numeric Pricing Value (for calculations)</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Numeric Pricing Value (for calculations)</label>
                           <input
                             type="number"
                             value={packageDraft.numericPrice || 0}
                             onChange={(e) => setPackageDraft({ ...packageDraft, numericPrice: Number(e.target.value) })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                           />
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Travel Title Header</label>
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Travel Title Header</label>
                         <input
                           type="text"
                           value={packageDraft.title}
                           onChange={(e) => setPackageDraft({ ...packageDraft, title: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                         />
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Route / Pickup Base Location</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Route / Pickup Base Location</label>
                           <input
                             type="text"
                             value={packageDraft.fromRoute}
                             onChange={(e) => setPackageDraft({ ...packageDraft, fromRoute: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-orange-500/50 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none"
                           />
                         </div>
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Card Poster Image URL Link</label>
-                          <input
-                            type="text"
-                            value={packageDraft.imageUrl}
-                            onChange={(e) => setPackageDraft({ ...packageDraft, imageUrl: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2.5 focus:border-orange-500/50 outline-none font-mono"
-                          />
-                        </div>
+                        <ImageUploader label="Card Poster Image" value={packageDraft.imageUrl} onChange={(url) => setPackageDraft({ ...packageDraft, imageUrl: url })} />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Introduction & Overview</label>
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Introduction & Overview</label>
                         <textarea
                           rows={3}
                           value={packageDraft.overview}
                           onChange={(e) => setPackageDraft({ ...packageDraft, overview: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2.5 focus:border-orange-500/50 outline-none font-sans"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2.5 focus:border-sky-500/50 outline-none font-sans"
                         />
                       </div>
 
@@ -1237,7 +1306,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200 dark:border-zinc-800">
                         {/* Highlights */}
                         <div className="space-y-2">
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-orange-400 block font-bold">🎯 Package Highlights</span>
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-sky-400 block font-bold">🎯 Package Highlights</span>
                           {packageDraft.highlights.map((hlt: string, hIdx: number) => (
                             <div key={hIdx} className="flex gap-1.5 items-center">
                               <input
@@ -1248,7 +1317,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                                   temp[hIdx] = e.target.value;
                                   setPackageDraft({ ...packageDraft, highlights: temp });
                                 }}
-                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-2 py-1.5"
+                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-2 py-1.5"
                               />
                               <button
                                 onClick={() => {
@@ -1265,7 +1334,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           <button
                             type="button"
                             onClick={() => setPackageDraft({ ...packageDraft, highlights: [...packageDraft.highlights, "New amazing highlight"] })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-600 dark:text-zinc-400 px-2 py-1 rounded"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-900 dark:text-zinc-100 px-2 py-1 rounded"
                           >
                             + Highlight
                           </button>
@@ -1284,7 +1353,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                                   temp[iIdx] = e.target.value;
                                   setPackageDraft({ ...packageDraft, inclusion: temp });
                                 }}
-                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-2 py-1.5"
+                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-2 py-1.5"
                               />
                               <button
                                 onClick={() => {
@@ -1301,7 +1370,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           <button
                             type="button"
                             onClick={() => setPackageDraft({ ...packageDraft, inclusion: [...packageDraft.inclusion, "New dynamic inclusion"] })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-600 dark:text-zinc-400 px-2 py-1 rounded"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-900 dark:text-zinc-100 px-2 py-1 rounded"
                           >
                             + Inclusion
                           </button>
@@ -1320,7 +1389,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                                   temp[eIdx] = e.target.value;
                                   setPackageDraft({ ...packageDraft, exclusion: temp });
                                 }}
-                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-2 py-1.5"
+                                className="flex-1 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-2 py-1.5"
                               />
                               <button
                                 onClick={() => {
@@ -1337,7 +1406,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           <button
                             type="button"
                             onClick={() => setPackageDraft({ ...packageDraft, exclusion: [...packageDraft.exclusion, "New general exclusion"] })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-600 dark:text-zinc-400 px-2 py-1 rounded"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-xs font-mono text-slate-900 dark:text-zinc-100 px-2 py-1 rounded"
                           >
                             + Exclusion
                           </button>
@@ -1346,11 +1415,11 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
                       {/* Day wise itineraries! */}
                       <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 space-y-4">
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-amber-500 block font-bold">📅 Day-by-Day Historical Tour Itinerary Details</span>
+                        <span className="text-[11px] font-mono uppercase tracking-wider text-blue-500 block font-bold">📅 Day-by-Day Historical Tour Itinerary Details</span>
                         {packageDraft.itinerary.map((itn: any, idx: number) => (
                           <div key={idx} className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 p-4 rounded-lg space-y-3">
                             <div className="flex justify-between items-center bg-slate-100 dark:bg-zinc-900 px-3 py-1.5 rounded">
-                              <span className="text-xs font-mono font-bold text-orange-400">DAY {itn.day || (idx + 1)}</span>
+                              <span className="text-xs font-mono font-bold text-sky-400">DAY {itn.day || (idx + 1)}</span>
                               <button
                                 type="button"
                                 onClick={() => {
@@ -1366,7 +1435,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               </button>
                             </div>
                             <div className="flex flex-col gap-1">
-                              <label className="text-[10px] font-mono uppercase text-slate-500 dark:text-zinc-450">Day Header title</label>
+                              <label className="text-[10px] font-mono uppercase text-slate-900 dark:text-zinc-100">Day Header title</label>
                               <input
                                 type="text"
                                 value={itn.title}
@@ -1375,11 +1444,11 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                                   temp[idx].title = e.target.value;
                                   setPackageDraft({ ...packageDraft, itinerary: temp });
                                 }}
-                                className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 outline-none focus:border-orange-500/50"
+                                className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2 outline-none focus:border-sky-500/50"
                               />
                             </div>
                             <div className="flex flex-col gap-1">
-                              <label className="text-[10px] font-mono uppercase text-slate-500 dark:text-zinc-450">Full detailed Day explanation narrative</label>
+                              <label className="text-[10px] font-mono uppercase text-slate-900 dark:text-zinc-100">Full detailed Day explanation narrative</label>
                               <textarea
                                 rows={2}
                                 value={itn.details}
@@ -1388,7 +1457,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                                   temp[idx].details = e.target.value;
                                   setPackageDraft({ ...packageDraft, itinerary: temp });
                                 }}
-                                className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300 text-xs rounded px-3 py-2 outline-none focus:border-orange-500/50 font-sans"
+                                className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-3 py-2 outline-none focus:border-sky-500/50 font-sans"
                               />
                             </div>
                           </div>
@@ -1400,7 +1469,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             const newDay = { day: newDayNum, title: "Unveiled Spiritual Destination", details: "Enter detailed explanations about local transit halts, acclimatization practices, and holy visits here." };
                             setPackageDraft({ ...packageDraft, itinerary: [...packageDraft.itinerary, newDay] });
                           }}
-                          className="w-full py-2.5 border border-dashed border-slate-200 dark:border-zinc-800 hover:border-orange-500/30 text-slate-600 dark:text-zinc-400 hover:text-orange-400 font-mono text-xs rounded text-center transition"
+                          className="w-full py-2.5 border border-dashed border-slate-200 dark:border-zinc-800 hover:border-sky-500/30 text-slate-900 dark:text-zinc-100 hover:text-sky-400 font-mono text-xs rounded text-center transition"
                         >
                           + Add Next Travel Day Segment
                         </button>
@@ -1419,13 +1488,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             handleSaveGlobalField("packages", updated);
                             setEditingIndex(null);
                           }}
-                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-3.5 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold"
+                          className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-5 py-3.5 rounded inline-flex items-center gap-1.5 cursor-pointer font-bold"
                         >
                           <Save className="h-4 w-4" /> Save Package Details
                         </button>
                         <button
                           onClick={() => setEditingIndex(null)}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 font-mono text-xs px-4 py-3.5 rounded cursor-pointer"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-3.5 rounded cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -1440,7 +1509,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             {activeTab === "gallery" && (
               <div>
                 <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider">Sub-Destinations Grid & Category References</h2>
-                <p className="text-slate-500 dark:text-zinc-450 text-xs mb-6">Modify circular navigation circles displayed inside individual packages detail boxes.</p>
+                <p className="text-slate-900 dark:text-zinc-100 text-xs mb-6">Modify circular navigation circles displayed inside individual packages detail boxes.</p>
 
                 {editingIndex === null ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1449,22 +1518,33 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                         <img 
                           src={dest.img} 
                           alt={dest.title} 
-                          className="h-14 w-14 rounded-full object-cover border border-orange-500/25 shrink-0" 
+                          className="h-14 w-14 rounded-full object-cover border border-sky-500/25 shrink-0" 
                           referrerPolicy="no-referrer"
                         />
                         <div className="flex-1 text-left">
-                          <span className="text-[9px] font-mono uppercase text-slate-500 dark:text-zinc-450 block">{dest.categoryRef}</span>
-                          <h4 className="font-serif text-sm font-bold text-slate-800 dark:text-zinc-200">{dest.title}</h4>
-                          <p className="text-slate-500 dark:text-zinc-450 text-[11px] line-clamp-2 leading-tight">{dest.description}</p>
+                          <span className="text-[9px] font-mono uppercase text-slate-900 dark:text-zinc-100 block">{dest.categoryRef}</span>
+                          <h4 className="font-serif text-sm font-bold text-slate-900 dark:text-slate-900">{dest.title}</h4>
+                          <p className="text-slate-900 dark:text-zinc-100 text-[11px] line-clamp-2 leading-tight">{dest.description}</p>
                           <div className="mt-2.5 flex gap-2">
                             <button
                               onClick={() => {
                                 setEditingIndex(dIdx);
                                 setDestDraft({ ...dest });
                               }}
-                              className="text-[10px] font-mono text-orange-400 flex items-center gap-0.5"
+                              className="text-[10px] font-mono text-sky-400 flex items-center gap-0.5 cursor-pointer"
                             >
-                              Edit details
+                              <Edit2 className="h-3 w-3" /> Edit details
+                            </button>
+                            <button
+                              onClick={() => {
+                                setConfirmDialog({ message: `Are you absolutely sure you want to delete "${dest.title}" from sub-destinations?`, action: async () => {
+                                const updated = [...siteData.circularDestinations];
+                                updated.splice(dIdx, 1);
+                                handleSaveGlobalField("circularDestinations", updated);
+                              } }); }}
+                              className="text-[10px] font-mono text-red-500 hover:text-red-400 flex items-center gap-0.5 cursor-pointer"
+                            >
+                              <Trash2 className="h-3 w-3" /> Delete
                             </button>
                           </div>
                         </div>
@@ -1475,50 +1555,42 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                   <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-700 p-6 rounded-xl text-left">
                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
                       <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Edit Sub-Destination Details</h3>
-                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
                     </div>
 
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5 font-mono">
-                          <label className="text-[10px] uppercase text-slate-500 dark:text-zinc-450 tracking-wider">Related Category Reference ID</label>
+                          <label className="text-[10px] uppercase text-slate-900 dark:text-zinc-100 tracking-wider">Related Category Reference ID</label>
                           <input
                             type="text"
                             value={destDraft.categoryRef}
                             onChange={(e) => setDestDraft({ ...destDraft, categoryRef: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] uppercase text-slate-500 dark:text-zinc-450 tracking-wider">Sub-Destination Header Title</label>
+                          <label className="text-[10px] uppercase text-slate-900 dark:text-zinc-100 tracking-wider">Sub-Destination Header Title</label>
                           <input
                             type="text"
                             value={destDraft.title}
                             onChange={(e) => setDestDraft({ ...destDraft, title: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                           />
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] uppercase text-slate-600 dark:text-zinc-400 tracking-wider">Summary Narrative</label>
+                        <label className="text-[10px] uppercase text-slate-900 dark:text-zinc-100 tracking-wider">Summary Narrative</label>
                         <textarea
                           rows={2}
                           value={destDraft.description}
                           onChange={(e) => setDestDraft({ ...destDraft, description: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 focus:border-orange-500/50 outline-none font-sans"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2 focus:border-sky-500/50 outline-none font-sans"
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] uppercase text-slate-600 dark:text-zinc-400 tracking-wider">Circular Image URL Link</label>
-                        <input
-                          type="text"
-                          value={destDraft.img}
-                          onChange={(e) => setDestDraft({ ...destDraft, img: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 focus:border-orange-500/50 font-mono outline-none"
-                        />
-                      </div>
+                      <ImageUploader label="Circular Destination Image" value={destDraft.img} onChange={(url) => setDestDraft({ ...destDraft, img: url })} />
 
                       <div className="pt-4 border-t border-slate-200 dark:border-zinc-800 flex gap-2">
                         <button
@@ -1528,13 +1600,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             handleSaveGlobalField("circularDestinations", updated);
                             setEditingIndex(null);
                           }}
-                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                          className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
                         >
                           Save Changes
                         </button>
                         <button
                           onClick={() => setEditingIndex(null)}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -1551,7 +1623,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Yatri Feedbacks ✍️ (लिखित फीडबैक)</h2>
-                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Manage written customer reviews, star ratings, and personal yatra testimonials.</p>
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs mt-0.5">Manage written customer reviews, star ratings, and personal yatra testimonials.</p>
                   </div>
                   {editingIndex === null && (
                     <button
@@ -1567,7 +1639,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           quote: "A truly blissful, deeply divine and well-organized pilgrimage experience. The hospitality, guidance, and meals were outstanding."
                         });
                       }}
-                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
+                      className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
                     >
                       <Plus className="h-4.5 w-4.5" /> Add New Yatri Feedback
                     </button>
@@ -1580,21 +1652,21 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                       <div key={fb.id} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow flex flex-col justify-between">
                         <div className="p-4 flex-1">
                           <div className="flex justify-between items-start mb-2">
-                            <span className="text-[10px] font-mono text-orange-400 block uppercase font-bold">{fb.trip}</span>
+                            <span className="text-[10px] font-mono text-sky-400 block uppercase font-bold">{fb.trip}</span>
                             <div className="flex items-center gap-0.5">
                               {Array.from({ length: 5 }).map((_, r_idx) => (
-                                <Star key={r_idx} className={`h-3 w-3 ${r_idx < (fb.rating || 5) ? "fill-amber-450 text-amber-450 font-bold" : "text-slate-400 dark:text-zinc-500"}`} />
+                                <Star key={r_idx} className={`h-3 w-3 ${r_idx < (fb.rating || 5) ? "fill-blue-450 text-blue-450 font-bold" : "text-slate-900 dark:text-zinc-100"}`} />
                               ))}
                             </div>
                           </div>
-                          <p className="text-xs italic leading-relaxed text-slate-700 dark:text-zinc-300">"{fb.quote}"</p>
+                          <p className="text-xs italic leading-relaxed text-slate-900 dark:text-zinc-100">"{fb.quote}"</p>
                           <div className="mt-4 flex items-center gap-2.5 pt-3 border-t border-slate-200 dark:border-zinc-800">
-                            <span className="h-9 w-9 text-slate-600 dark:text-zinc-400 rounded-full border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex items-center justify-center font-serif text-sm font-bold text-orange-400">
+                            <span className="h-9 w-9 text-slate-900 dark:text-zinc-100 rounded-full border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex items-center justify-center font-serif text-sm font-bold text-sky-400">
                               {fb.name ? fb.name.charAt(0) : "Y"}
                             </span>
                             <div>
                               <h5 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100">{fb.name}</h5>
-                              <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-450">{fb.location}</span>
+                              <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100">{fb.location}</span>
                             </div>
                           </div>
                         </div>
@@ -1606,17 +1678,17 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               setEditingIndex(idx);
                               setFeedbackDraft({ ...fb });
                             }}
-                            className="bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-orange-400 border border-slate-200 dark:border-zinc-800 hover:border-orange-500/20 text-xs font-mono px-3 py-1.5 rounded cursor-pointer flex items-center gap-1"
+                            className="bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-sky-400 border border-slate-200 dark:border-zinc-800 hover:border-sky-500/20 text-xs font-mono px-3 py-1.5 rounded cursor-pointer flex items-center gap-1"
                           >
                             <Edit2 className="h-3 w-3" /> Edit Feedback
                           </button>
                           <button
                             onClick={() => {
-                              if (!window.confirm("Delete this feedback review?")) return;
+                              setConfirmDialog({ message: "Delete this feedback review?", action: async () => {
                               const temp = [...(siteData.yatriFeedbacks || [])];
                               temp.splice(idx, 1);
                               handleSaveGlobalField("yatriFeedbacks", temp);
-                            }}
+                            } }); }}
                             className="text-red-400 hover:text-red-300 text-xs font-mono p-1"
                           >
                             Delete
@@ -1629,48 +1701,48 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                   <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl text-left">
                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
                       <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Establish/Edit Yatri Feedback Review</h3>
-                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
                     </div>
 
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Yatri Pilgrim Name</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Yatri Pilgrim Name</label>
                           <input
                             type="text"
                             value={feedbackDraft?.name || ""}
                             onChange={(e) => setFeedbackDraft({ ...feedbackDraft, name: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Home City / Location</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Home City / Location</label>
                           <input
                             type="text"
                             value={feedbackDraft?.location || ""}
                             onChange={(e) => setFeedbackDraft({ ...feedbackDraft, location: e.target.value })}
                             placeholder="e.g., Bangalore, Karnataka"
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2"
                           />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Pilgrimage Undertaken</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Pilgrimage Undertaken</label>
                           <input
                             type="text"
                             value={feedbackDraft?.trip || ""}
                             onChange={(e) => setFeedbackDraft({ ...feedbackDraft, trip: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Star Rating (1 to 5)</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Star Rating (1 to 5)</label>
                           <select
                             value={feedbackDraft?.rating || 5}
                             onChange={(e) => setFeedbackDraft({ ...feedbackDraft, rating: Number(e.target.value) })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2"
                           >
                             <option value={5}>5 Stars (Excellent)</option>
                             <option value={4}>4 Stars (Very Good)</option>
@@ -1682,12 +1754,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Testimonial Feedback Quote</label>
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Testimonial Feedback Quote</label>
                         <textarea
                           rows={4}
                           value={feedbackDraft?.quote || ""}
                           onChange={(e) => setFeedbackDraft({ ...feedbackDraft, quote: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 font-sans"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2 font-sans"
                         />
                       </div>
 
@@ -1703,13 +1775,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             handleSaveGlobalField("yatriFeedbacks", temp);
                             setEditingIndex(null);
                           }}
-                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                          className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
                         >
                           Save Changes
                         </button>
                         <button
                           onClick={() => setEditingIndex(null)}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -1726,7 +1798,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Pilgrim Video Reels 📹 (वीडियो रील्स)</h2>
-                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Control mobile-friendly video clips, Instagram reels, and YouTube shorts backgrounds.</p>
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs mt-0.5">Control mobile-friendly video clips, Instagram reels, and YouTube shorts backgrounds.</p>
                   </div>
                   {editingIndex === null && (
                     <button
@@ -1744,7 +1816,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           duration: "0:45"
                         });
                       }}
-                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
+                      className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
                     >
                       <Plus className="h-4.5 w-4.5" /> Add New Video Reel
                     </button>
@@ -1756,10 +1828,10 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                     {(siteData.travelStories || []).map((story: any, idx: number) => (
                       <div key={story.id} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow flex flex-col justify-between">
                         <div className="p-4 flex-1">
-                          <span className="text-[10px] font-mono text-orange-400 block mb-1 uppercase font-bold">{story.trip}</span>
-                          <p className="text-xs italic leading-relaxed text-slate-700 dark:text-zinc-300">"{story.quote}"</p>
-                          <div className="mt-2 text-[10px] text-slate-500 dark:text-zinc-450 font-mono truncate">
-                            Video Link: <span className="text-orange-300">{story.videoUrl || "None"}</span>
+                          <span className="text-[10px] font-mono text-sky-400 block mb-1 uppercase font-bold">{story.trip}</span>
+                          <p className="text-xs italic leading-relaxed text-slate-900 dark:text-zinc-100">"{story.quote}"</p>
+                          <div className="mt-2 text-[10px] text-slate-900 dark:text-zinc-100 font-mono truncate">
+                            Video Link: <span className="text-sky-300">{story.videoUrl || "None"}</span>
                           </div>
                           <div className="mt-4 flex items-center gap-2.5 pt-3 border-t border-slate-200 dark:border-zinc-800">
                             <img 
@@ -1770,7 +1842,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             />
                             <div>
                               <h5 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100">{story.name}</h5>
-                              <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-450">{story.location} ({story.duration})</span>
+                              <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100">{story.location} ({story.duration})</span>
                             </div>
                           </div>
                         </div>
@@ -1782,17 +1854,17 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               setEditingIndex(idx);
                               setStoryDraft({ ...story });
                             }}
-                            className="bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-orange-400 border border-slate-200 dark:border-zinc-800 hover:border-orange-500/20 text-xs font-mono px-3 py-1.5 rounded cursor-pointer flex items-center gap-1"
+                            className="bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-sky-400 border border-slate-200 dark:border-zinc-800 hover:border-sky-500/20 text-xs font-mono px-3 py-1.5 rounded cursor-pointer flex items-center gap-1"
                           >
                             <Edit2 className="h-3 w-3" /> Edit Reel
                           </button>
                           <button
                             onClick={() => {
-                              if (!window.confirm("Delete this pilgrim video reel?")) return;
+                              setConfirmDialog({ message: "Delete this pilgrim video reel?", action: async () => {
                               const temp = [...(siteData.travelStories || [])];
                               temp.splice(idx, 1);
                               handleSaveGlobalField("travelStories", temp);
-                            }}
+                            } }); }}
                             className="text-red-400 hover:text-red-300 text-xs font-mono p-1"
                           >
                             Delete
@@ -1805,84 +1877,76 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                   <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl text-left">
                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
                       <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Establish/Edit Pilgrim Video Reel</h3>
-                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
                     </div>
 
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Yatri Pilgrim Name</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Yatri Pilgrim Name</label>
                           <input
                             type="text"
                             value={storyDraft?.name || ""}
                             onChange={(e) => setStoryDraft({ ...storyDraft, name: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-zinc-450">Home City / Location</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Home City / Location</label>
                           <input
                             type="text"
                             value={storyDraft?.location || ""}
                             onChange={(e) => setStoryDraft({ ...storyDraft, location: e.target.value })}
                             placeholder="e.g., Mumbai, Maharashtra"
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2"
                           />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Pilgrimage Undertaken</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Pilgrimage Undertaken</label>
                           <input
                             type="text"
                             value={storyDraft?.trip || ""}
                             onChange={(e) => setStoryDraft({ ...storyDraft, trip: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Video duration label</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Video duration label</label>
                           <input
                             type="text"
                             value={storyDraft?.duration || ""}
                             onChange={(e) => setStoryDraft({ ...storyDraft, duration: e.target.value })}
                             placeholder="e.g., 0:45"
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2"
                           />
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Brief Testimonial Quote</label>
+                        <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Brief Testimonial Quote</label>
                         <textarea
                           rows={3}
                           value={storyDraft?.quote || ""}
                           onChange={(e) => setStoryDraft({ ...storyDraft, quote: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 font-sans"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2 font-sans"
                         />
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ImageUploader label="Poster Cover Image URL" value={storyDraft?.coverImage} onChange={(url) => setStoryDraft({ ...storyDraft, coverImage: url })} />
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Poster Cover Image URL Link</label>
-                          <input
-                            type="text"
-                            value={storyDraft?.coverImage || ""}
-                            onChange={(e) => setStoryDraft({ ...storyDraft, coverImage: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 font-mono"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-600 dark:text-zinc-400">Reel Video Link / URL (Supports Instagram Reels & YouTube Shorts/Videos & MP4)</label>
+                          <label className="text-[10px] font-mono uppercase tracking-wider text-slate-900 dark:text-zinc-100">Reel Video Link / URL (Supports Instagram Reels & YouTube Shorts/Videos & MP4)</label>
                           <input
                             type="text"
                             value={storyDraft?.videoUrl || ""}
                             onChange={(e) => setStoryDraft({ ...storyDraft, videoUrl: e.target.value })}
                             placeholder="e.g., https://www.instagram.com/reel/C8q8qUfS_R9/ or https://youtu.be/..."
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2.5 font-mono"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2.5 font-mono"
                           />
-                          <span className="text-[10px] text-slate-500 dark:text-zinc-450 font-mono">You can paste standard .mp4 video links, YouTube video/shorts links, or public Instagram Reels links. We will auto-embed them perfectly.</span>
+                          <span className="text-[10px] text-slate-900 dark:text-zinc-100 font-mono">You can paste standard .mp4 video links, YouTube video/shorts links, or public Instagram Reels links. We will auto-embed them perfectly.</span>
                         </div>
                       </div>
 
@@ -1898,13 +1962,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             handleSaveGlobalField("travelStories", temp);
                             setEditingIndex(null);
                           }}
-                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                          className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
                         >
                           Save Changes
                         </button>
                         <button
                           onClick={() => setEditingIndex(null)}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -1921,7 +1985,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider">Dynamic Blog Posts & Advisories</h2>
-                    <p className="text-slate-500 dark:text-zinc-450 text-xs mt-0.5">Edit detailed guide instructions, reading times, write-ups and poster image assets.</p>
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs mt-0.5">Edit detailed guide instructions, reading times, write-ups and poster image assets.</p>
                   </div>
                   {editingIndex === null && (
                     <button
@@ -1939,7 +2003,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           content: "This is the full detailed informational body of your blog post. Share helpful advice about permissions registries, packing checklist items, breathing systems exercises and itinerary maps."
                         });
                       }}
-                      className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
+                      className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-3 py-2 rounded inline-flex items-center gap-1 cursor-pointer font-bold"
                     >
                       <Plus className="h-4.5 w-4.5" /> Compose New Blog
                     </button>
@@ -1959,12 +2023,12 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           />
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-[10px] font-mono text-slate-500 dark:text-zinc-450">{blog.date}</span>
-                              <span className="text-[10px] text-slate-300 dark:text-zinc-600 font-mono">|</span>
-                              <span className="text-[10px] font-mono text-orange-400 bg-orange-500/5 px-2 py-0.5 border border-orange-500/10 rounded">{blog.readTime}</span>
+                              <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100">{blog.date}</span>
+                              <span className="text-[10px] text-slate-900 dark:text-zinc-100 font-mono">|</span>
+                              <span className="text-[10px] font-mono text-sky-400 bg-sky-500/5 px-2 py-0.5 border border-sky-500/10 rounded">{blog.readTime}</span>
                             </div>
-                            <h4 className="font-serif text-sm font-bold text-slate-800 dark:text-zinc-200 mt-1 leading-tight">{blog.title}</h4>
-                            <p className="text-slate-500 dark:text-zinc-450 text-xs line-clamp-1">{blog.excerpt}</p>
+                            <h4 className="font-serif text-sm font-bold text-slate-900 dark:text-slate-900 mt-1 leading-tight">{blog.title}</h4>
+                            <p className="text-slate-900 dark:text-zinc-100 text-xs line-clamp-1">{blog.excerpt}</p>
                           </div>
                         </div>
 
@@ -1975,17 +2039,17 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               setEditingIndex(bIdx);
                               setBlogDraft({ ...blog });
                             }}
-                            className="text-xs font-mono text-orange-450 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 px-3 py-2 rounded cursor-pointer"
+                            className="text-xs font-mono text-sky-450 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 px-3 py-2 rounded cursor-pointer"
                           >
                             Modify
                           </button>
                           <button
                             onClick={() => {
-                              if (!window.confirm("Delete this blog post?")) return;
+                              setConfirmDialog({ message: "Delete this blog post?", action: async () => {
                               const temp = [...siteData.blogs];
                               temp.splice(bIdx, 1);
                               handleSaveGlobalField("blogs", temp);
-                            }}
+                            } }); }}
                             className="text-red-400 hover:text-red-300 text-xs font-mono p-1"
                           >
                             Delete
@@ -1998,42 +2062,42 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                   <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-300 dark:border-zinc-700 p-6 rounded-xl text-left">
                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
                       <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Compose/Edit Blog Post Content</h3>
-                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
                     </div>
 
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Date Published</label>
+                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-900 dark:text-zinc-100">Date Published</label>
                           <input
                             type="text"
                             value={blogDraft.date}
                             onChange={(e) => setBlogDraft({ ...blogDraft, date: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2 outline-none"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Author Name</label>
+                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-900 dark:text-zinc-100">Author Name</label>
                           <input
                             type="text"
                             value={blogDraft.author}
                             onChange={(e) => setBlogDraft({ ...blogDraft, author: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2 outline-none"
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Read Time duration</label>
+                          <label className="text-[10px] uppercase font-mono tracking-wider text-slate-900 dark:text-zinc-100">Read Time duration</label>
                           <input
                             type="text"
                             value={blogDraft.readTime}
                             onChange={(e) => setBlogDraft({ ...blogDraft, readTime: e.target.value })}
-                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-sm rounded px-3 py-2 outline-none"
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-sm rounded px-3 py-2 outline-none"
                           />
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-600 dark:text-zinc-400">Blog Header Title</label>
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-900 dark:text-zinc-100">Blog Header Title</label>
                         <input
                           type="text"
                           value={blogDraft.title}
@@ -2043,32 +2107,24 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-600 dark:text-zinc-400">Introductory Summary Excerpt</label>
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-900 dark:text-zinc-100">Introductory Summary Excerpt</label>
                         <textarea
                           rows={2}
                           value={blogDraft.excerpt}
                           onChange={(e) => setBlogDraft({ ...blogDraft, excerpt: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 outline-none font-sans"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2 outline-none font-sans"
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-600 dark:text-zinc-400">Main Poster Image URL Link</label>
-                        <input
-                          type="text"
-                          value={blogDraft.imageUrl}
-                          onChange={(e) => setBlogDraft({ ...blogDraft, imageUrl: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 outline-none font-mono"
-                        />
-                      </div>
+                      <ImageUploader label="Main Poster Image URL Link" value={blogDraft.imageUrl} onChange={(url) => setBlogDraft({ ...blogDraft, imageUrl: url })} />
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-600 dark:text-zinc-400 font-bold">Detailed Write-Up / Blog Body Content</label>
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-900 dark:text-zinc-100 font-bold">Detailed Write-Up / Blog Body Content</label>
                         <textarea
                           rows={8}
                           value={blogDraft.content}
                           onChange={(e) => setBlogDraft({ ...blogDraft, content: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 text-xs rounded px-3 py-2 outline-none font-sans leading-relaxed"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-slate-900 text-xs rounded px-3 py-2 outline-none font-sans leading-relaxed"
                         />
                       </div>
 
@@ -2084,13 +2140,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             handleSaveGlobalField("blogs", temp);
                             setEditingIndex(null);
                           }}
-                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                          className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
                         >
                           Save Blog
                         </button>
                         <button
                           onClick={() => setEditingIndex(null)}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -2105,16 +2161,16 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             {activeTab === "accreditations" && (
               <div>
                 <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider">Accreditations & Badges of Honor</h2>
-                <p className="text-slate-500 dark:text-zinc-450 text-xs mb-6">Modify official registration tags shown in footer and security blocks list.</p>
+                <p className="text-slate-900 dark:text-zinc-100 text-xs mb-6">Modify official registration tags shown in footer and security blocks list.</p>
 
                 {editingIndex === null ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {siteData.accreditations.map((accred: any, idx: number) => (
                       <div key={accred.id} className="bg-zinc-90 w-full border border-slate-200 dark:border-zinc-800 p-4 rounded-xl flex flex-col justify-between text-left">
                         <div>
-                          <span className="text-[10px] font-mono text-orange-400 block mb-1 font-bold uppercase">{accred.id}</span>
+                          <span className="text-[10px] font-mono text-sky-400 block mb-1 font-bold uppercase">{accred.id}</span>
                           <h4 className="font-serif text-sm font-bold text-slate-900 dark:text-zinc-100">{accred.name}</h4>
-                          <p className="text-slate-500 dark:text-zinc-450 text-xs mt-1 leading-normal">{accred.detail}</p>
+                          <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1 leading-normal">{accred.detail}</p>
                         </div>
                         <div className="pt-4 mt-3 border-t border-slate-200/80 dark:border-zinc-800/80 flex gap-2 justify-end">
                           <button
@@ -2122,9 +2178,20 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                               setEditingIndex(idx);
                               setAccredDraft({ ...accred });
                             }}
-                            className="text-xs font-mono text-orange-450 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 px-3 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 cursor-pointer"
+                            className="text-[10px] font-mono text-sky-450 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 px-3 py-1 rounded hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 cursor-pointer flex items-center gap-0.5"
                           >
-                            Edit
+                            <Edit2 className="h-3 w-3" /> Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              setConfirmDialog({ message: `Are you absolutely sure you want to delete accreditation "${accred.name}"?`, action: async () => {
+                              const updated = [...siteData.accreditations];
+                              updated.splice(idx, 1);
+                              handleSaveGlobalField("accreditations", updated);
+                            } }); }}
+                            className="text-[10px] font-mono text-red-500 hover:text-white hover:bg-red-500 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 px-3 py-1 rounded cursor-pointer flex items-center gap-0.5 transition"
+                          >
+                            <Trash2 className="h-3 w-3" /> Delete
                           </button>
                         </div>
                       </div>
@@ -2134,27 +2201,27 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                   <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 rounded-xl text-left">
                     <div className="flex justify-between items-center mb-6 pb-4 border-b border-slate-200 dark:border-zinc-800">
                       <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100">Modify Accreditation Certification Details</h3>
-                      <button onClick={() => setEditingIndex(null)} className="text-slate-500 dark:text-zinc-450 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                      <button onClick={() => setEditingIndex(null)} className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
                     </div>
 
                     <div className="space-y-4">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Badge Title</label>
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-900 dark:text-zinc-100">Badge Title</label>
                         <input
                           type="text"
                           value={accredDraft.name}
                           onChange={(e) => setAccredDraft({ ...accredDraft, name: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-zinc-450">Badge Detail Sub-explanation</label>
+                        <label className="text-[10px] uppercase font-mono tracking-wider text-slate-900 dark:text-zinc-100">Badge Detail Sub-explanation</label>
                         <input
                           type="text"
                           value={accredDraft.detail}
                           onChange={(e) => setAccredDraft({ ...accredDraft, detail: e.target.value })}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-orange-500/50 outline-none"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none"
                         />
                       </div>
 
@@ -2166,13 +2233,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                             handleSaveGlobalField("accreditations", updated);
                             setEditingIndex(null);
                           }}
-                          className="bg-orange-650 hover:bg-orange-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
+                          className="bg-sky-650 hover:bg-sky-600 text-white font-mono text-xs px-5 py-2.5 rounded font-bold cursor-pointer"
                         >
                           Save Changes
                         </button>
                         <button
                           onClick={() => setEditingIndex(null)}
-                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-450 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-2.5 rounded cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -2185,6 +2252,21 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
           </div>
         )}
+
+        {confirmDialog && (
+          <div className="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-zinc-950 p-6 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-2xl max-w-sm w-full text-center">
+              <div className="text-sky-500 mb-4 flex justify-center"><ShieldAlert className="h-10 w-10" /></div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-zinc-100 mb-2">Confirm Action</h3>
+              <p className="text-slate-600 dark:text-zinc-400 text-sm mb-6">{confirmDialog.message}</p>
+              <div className="flex gap-3 justify-center">
+                <button onClick={() => setConfirmDialog(null)} className="px-4 py-2 border border-slate-200 dark:border-zinc-800 rounded font-mono text-xs hover:bg-slate-50 dark:hover:bg-zinc-900 text-slate-900 dark:text-zinc-100 cursor-pointer">Cancel</button>
+                <button onClick={() => { confirmDialog.action(); setConfirmDialog(null); }} className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded font-mono text-xs font-bold cursor-pointer">Yes, Delete</button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
     </div>

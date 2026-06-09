@@ -8,9 +8,13 @@
   --color-zinc-450: #a1a1aa;
   --color-zinc-350: #d4d4d8;
   --color-zinc-250: #f4f4f5;
-  --color-orange-450: #f97316;
-  --color-orange-550: #ea580c;
-  --color-orange-650: #c2410c;
+  --color-sky-450: #f97316;
+  --color-sky-550: #ea580c;
+  --color-sky-650: #c2410c;
+}
+
+body {
+  @apply bg-[#f4f9fc] dark:bg-zinc-950 text-slate-900 dark:text-zinc-100;
 }
 
 @keyframes marquee {

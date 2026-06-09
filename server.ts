@@ -11,7 +11,13 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(express.json());
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+  // Serve persistent uploads
+  const uploadsDir = path.join(process.cwd(), "uploads");
+  if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+  app.use("/uploads", express.static(uploadsDir));
 
   // Initialize the Google GenAI client with correct telemetry header
   const ai = new GoogleGenAI({
@@ -414,6 +420,33 @@ For instant personalized assistance, day-wise itineraries, or special group disc
         return res.json({ success: true, planners });
       }
       res.status(404).json({ error: "Booking request not found." });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/upload", (req, res) => {
+    try {
+      const { name, base64 } = req.body;
+      if (!name || !base64) {
+        return res.status(400).json({ error: "Missing image file" });
+      }
+
+      const match = base64.match(/^data:([A-Za-z-+\\/]+);base64,(.+)$/);
+      if (!match || match.length !== 3) {
+        return res.status(400).json({ error: "Invalid base64 encoding" });
+      }
+
+      const buffer = Buffer.from(match[2], 'base64');
+      const filename = `${Date.now()}-${name.replace(/[^a-zA-Z0-9.-]/g, "")}`;
+      
+      const uploadsDir = path.join(process.cwd(), "uploads");
+      if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+      
+      const filepath = path.join(uploadsDir, filename);
+      fs.writeFileSync(filepath, buffer);
+      
+      res.json({ url: `/uploads/${filename}` });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
