@@ -310,7 +310,7 @@ export default function App() {
       )}
 
       {/* 5. Active Packages Grid System */}
-      {activeCategory !== "why_choose_us" && activeCategory !== "contact_us" && activeCategory !== "privacy_policy" && activeCategory !== "feedback" && (
+      {activeCategory !== "why_choose_us" && activeCategory !== "contact_us" && activeCategory !== "privacy_policy" && activeCategory !== "feedback" && activeCategory !== "blogs" && (
         <PackageGrid
           activeCategory={activeCategory === "home" || activeCategory === "packages" ? "all" : activeCategory}
           setActiveCategory={setActiveCategory}
@@ -336,7 +336,7 @@ export default function App() {
 
       {activeCategory === "contact_us" && <ContactUs />}
       {activeCategory === "privacy_policy" && <PrivacyPolicy />}
-      {activeCategory === "feedback" && <Feedback />}
+      {activeCategory === "feedback" && <Feedback feedbacks={localizedSiteData.yatriFeedbacks} />}
 
       {/* 6. General Yatra Planning Form */}
       {activeCategory === "home" && <QuickPlanner currentLanguage={currentLanguage} />}
@@ -345,7 +345,7 @@ export default function App() {
       {activeCategory === "home" && <InteractiveDial currentLanguage={currentLanguage} />}
 
       {/* 8. Vertical Traveler Reels block */}
-      {activeCategory === "home" && <TravelerReels siteData={localizedSiteData} currentLanguage={currentLanguage} />}
+      {(activeCategory === "home" || activeCategory === "feedback") && <TravelerReels siteData={localizedSiteData} currentLanguage={currentLanguage} />}
 
       {/* 9. Blogs and Spiritual Vlogs section */}
       {(activeCategory === "home" || activeCategory === "blogs") && (
@@ -405,19 +405,19 @@ export default function App() {
 
       {/* 10. Accreditations Badges */}
       <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.7 }} className="py-12 bg-slate-100/40 dark:bg-zinc-900/40 border-t border-slate-300/60 dark:border-zinc-700/60 px-4 select-none">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-10">
-          <p className="text-zinc-505 font-mono text-[10px] uppercase tracking-widest font-bold">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row flex-wrap justify-center items-center gap-5 md:gap-10">
+          <p className="text-zinc-505 font-mono text-[10px] uppercase tracking-widest font-bold text-center md:text-left">
             {t("verifiedPartner", currentLanguage)}
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-6 text-slate-900 dark:text-zinc-100 text-xs font-serif font-semibold">
+          <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-3 md:gap-6 text-slate-900 dark:text-zinc-100 text-[10px] md:text-xs font-serif font-semibold w-full md:w-auto">
             {accreditationsList.map((acc: any) => (
               <span
                 key={acc.id}
-                className="bg-white dark:bg-zinc-950 border border-zinc-805/85 px-4 py-2.5 rounded-lg flex items-center gap-2 hover:border-sky-505/20 transition duration-300 shadow-md"
+                className="bg-white dark:bg-zinc-950 border border-zinc-805/85 px-2 py-2 md:px-4 md:py-2.5 rounded-lg flex items-center justify-center md:justify-start gap-1.5 md:gap-2 hover:border-sky-505/20 transition duration-300 shadow-md whitespace-nowrap overflow-hidden text-ellipsis"
                 title={acc.detail}
               >
-                <Trophy className="h-4 w-4 text-sky-500 shrink-0" />
-                <span>{acc.name}</span>
+                <Trophy className="h-3 w-3 md:h-4 md:w-4 text-sky-500 shrink-0" />
+                <span className="truncate">{acc.name}</span>
               </span>
             ))}
           </div>

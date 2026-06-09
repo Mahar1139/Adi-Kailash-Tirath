@@ -130,9 +130,10 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md shadow-lg border-b border-sky-500/10">
       {/* Top Contact Utility Bar */}
-      <div className="bg-[#2563eb] px-2 py-1.5 md:px-4 md:py-2 text-[11px] md:text-[13px] font-medium text-white">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-1.5 md:gap-0">
-          <div className="flex flex-wrap justify-center items-center gap-3 md:gap-4">
+      <div className="bg-[#2563eb] px-1 py-1 md:px-4 md:py-2 text-[10px] md:text-[13px] font-medium text-white">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between md:justify-start gap-y-2 md:gap-0 w-full px-1">
+          {/* Phones (Hidden on mobile) */}
+          <div className="hidden md:flex items-center gap-2 md:gap-4 order-3 md:order-1">
             {phones.map((phone: string, idx: number) => (
               <React.Fragment key={idx}>
                 <a href={`tel:${phone}`} className="flex items-center gap-1 md:gap-1.5 hover:text-white hover:brightness-125 transition">
@@ -143,16 +144,19 @@ export default function Navbar({
               </React.Fragment>
             ))}
             <span className="text-white/40 hidden sm:inline">|</span>
-            <a href={`mailto:${emailVal}`} className="hidden sm:flex items-center gap-1 md:gap-1.5 hover:text-white hover:brightness-125 transition">
+          </div>
+
+          {/* Email (Hidden on mobile) */}
+          <div className="hidden sm:flex items-center gap-1 md:gap-1.5 order-4 md:order-2 md:mr-3">
+            <a href={`mailto:${emailVal}`} className="flex items-center gap-1 md:gap-1.5 hover:text-white hover:brightness-125 transition">
               <Mail className="h-3 w-3 md:h-4 md:w-4 text-rose-300" />
               <span className="tracking-wide">{emailVal}</span>
             </a>
+            <span className="text-white/40 hidden sm:inline ml-2">|</span>
+          </div>
 
-            {/* Divider for Search Option */}
-            <span className="text-white/40 hidden sm:inline">|</span>
-
-            {/* Expandable Search Input Bar directly right of Gmail emailVal */}
-            <div ref={searchContainerRef} className="relative flex items-center">
+          {/* Expandable Search Input Bar */}
+          <div ref={searchContainerRef} className="relative flex items-center order-1 md:order-3 md:mr-auto">
               <div className={`flex items-center bg-[#1d4ed8] border border-blue-400/50 ${isSearchExpanded ? "w-36 md:w-40 sm:w-56 pr-2" : "w-7 md:w-8 hover:bg-[#1e40af]"} transition-all duration-300 rounded h-7 md:h-8 overflow-hidden`}>
                 <button
                   type="button"
@@ -286,15 +290,17 @@ export default function Navbar({
                 </>
               )}
             </div>
-          </div>
-          <div className="flex items-center gap-4 animate-fade-in flex-wrap">
-            <span className="inline-flex items-center gap-1.5 text-amber-500 text-[11.5px] font-medium bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 rounded-full select-none">
-              <Sparkles className="h-2.5 w-2.5 animate-pulse" />
+
+          {/* Active Season */}
+          <div className="flex items-center order-2 md:order-4 shrink-0">
+            <span className="inline-flex items-center gap-1 md:gap-1.5 text-amber-500 text-[10px] md:text-[11.5px] font-medium bg-amber-500/10 border border-amber-500/25 px-1.5 py-0.5 md:px-2 md:py-0.5 rounded-full select-none whitespace-nowrap">
+              <Sparkles className="h-2 w-2 md:h-2.5 md:w-2.5 animate-pulse" />
               {activeSeason}
             </span>
+          </div>
             
-            {/* Elegant Dropdown for English, Hindi, Tamil, Telugu, Gujarati, Punjabi */}
-            <div className="relative">
+          {/* Elegant Dropdown for English, Hindi, Tamil, Telugu, Gujarati, Punjabi */}
+          <div className="relative order-3 md:order-5 shrink-0">
               <button
                 id="language-dropdown-trigger"
                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
@@ -335,7 +341,7 @@ export default function Navbar({
             </div>
 
             {/* Social Icons inside Header Right Zone */}
-            <div className="flex items-center gap-1.5 border-l border-slate-300/60 dark:border-zinc-700/60 pl-3 ml-0.5 mt-0.5 md:mt-0">
+            <div className="flex items-center justify-start md:justify-center gap-1.5 w-full md:w-auto border-t border-white/20 md:border-t-0 md:border-l md:border-slate-300/60 pt-1.5 md:pt-0 mt-1.5 md:mt-0 md:pl-3 pr-24 md:pr-0 -ml-1 md:ml-0.5 order-5 md:order-6 pb-0.5 md:pb-0 relative">
               {socialLinks.facebook && (
                 <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="p-1 rounded-full text-slate-900 dark:text-zinc-100 hover:text-sky-500 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 transition" title="Facebook">
                   <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
@@ -371,8 +377,18 @@ export default function Navbar({
                   <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 </a>
               )}
+              
+              <button
+                onClick={() => {
+                  setActiveCategory("contact_us");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="md:hidden absolute right-2 text-[10.5px] font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-widest flex items-center gap-1.5 hover:text-sky-500 transition px-2.5 py-1 rounded-full border border-slate-300 dark:border-zinc-700 dark:hover:border-sky-500 bg-white dark:bg-zinc-900 shadow-sm"
+              >
+                <Phone className="h-3 w-3 text-sky-500" />
+                Contact
+              </button>
             </div>
-          </div>
         </div>
       </div>
 

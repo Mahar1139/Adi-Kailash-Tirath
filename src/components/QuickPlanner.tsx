@@ -282,13 +282,13 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                     <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("numberOfYatris", currentLanguage)}
                     </label>
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-2 md:flex md:flex-row gap-2">
                       {["1", "2", "3-5", "5-10", "10+"].map((num) => (
                         <button
                           key={num}
                           type="button"
                           onClick={() => setFormData({ ...formData, travelers: num })}
-                          className={`flex-1 py-2 text-xs font-mono rounded border transition cursor-pointer ${
+                          className={`flex-1 py-1.5 md:py-2 text-[10px] md:text-xs font-mono rounded border transition cursor-pointer ${
                             formData.travelers === num
                               ? "bg-sky-600/20 text-sky-400 border-sky-500"
                               : "bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 border-slate-300/80 dark:border-zinc-700/80 hover:border-slate-300 dark:border-zinc-700"

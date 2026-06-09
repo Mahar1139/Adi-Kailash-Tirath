@@ -107,7 +107,7 @@ export default function InteractiveDial() {
               With deep Himalayan connections and experienced high-altitude operations, we guarantee a safe, pious, and seamless spiritual experience. Click any advantage to learn more:
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-2 md:gap-4">
               {keyAdvantages.map((adv, idx) => {
                 const Icon = adv.icon;
                 const isActive = activeSegment === idx;
@@ -117,26 +117,26 @@ export default function InteractiveDial() {
                     key={idx}
                     type="button"
                     onClick={() => setActiveSegment(idx)}
-                    className={`p-5 rounded-2xl border text-left group transition duration-300 flex flex-col gap-3 cursor-pointer ${
+                    className={`p-3 md:p-5 rounded-xl md:rounded-2xl border text-left group transition duration-300 flex flex-col gap-2 md:gap-3 cursor-pointer ${
                       isActive
-                        ? "bg-gradient-to-br from-sky-600/10 to-transparent border-sky-500/40 shadow-xl shadow-sky-500/5 text-white"
+                        ? "bg-gradient-to-br from-sky-600/10 to-transparent border-sky-500/40 shadow-xl shadow-sky-500/5 text-slate-900 dark:text-white"
                         : "bg-slate-100/50 dark:bg-zinc-900/50 border-slate-300/60 dark:border-zinc-700/60 text-slate-900 dark:text-zinc-100 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 hover:border-slate-300 dark:border-zinc-700"
                     }`}
                   >
-                    <div className="flex gap-2 items-center">
-                      <div className={`p-2 rounded-lg ${
+                    <div className="flex flex-col md:flex-row gap-2 md:items-center">
+                      <div className={`p-1.5 md:p-2 rounded-lg self-start md:self-auto ${
                         isActive 
-                          ? "bg-sky-500/15 text-sky-400 border border-sky-500/25" 
-                          : "bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 group-hover:text-sky-400"
+                          ? "bg-sky-500/15 text-sky-500 border border-sky-500/25" 
+                          : "bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 group-hover:text-sky-500"
                       }`}>
-                        <Icon className="h-5 w-5" />
+                        <Icon className="h-4 w-4 md:h-5 md:w-5" />
                       </div>
-                      <h4 className={`font-serif font-bold text-sm ${isActive ? "text-sky-400" : "text-slate-900 dark:text-slate-900"}`}>
+                      <h4 className={`font-serif font-bold text-[11px] leading-tight md:text-sm ${isActive ? "text-sky-500" : "text-slate-900 dark:text-zinc-100"}`}>
                         {adv.title}
                       </h4>
                     </div>
                     {/* Always show details instead of only when isActive */}
-                    <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed mt-1 pb-1">
+                    <p className="text-slate-900 dark:text-zinc-100 text-[9.5px] md:text-xs leading-relaxed mt-1 pb-1">
                       {adv.details}
                     </p>
                   </button>
