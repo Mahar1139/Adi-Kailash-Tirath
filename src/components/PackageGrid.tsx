@@ -196,8 +196,8 @@ export default function PackageGrid({
                   <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 uppercase tracking-wider leading-none">
                     SPECIAL RATE
                   </span>
-                  <span className="text-xl font-mono font-bold text-sky-400 mt-1 leading-none">
-                    {pkg.price}
+                  <span className="text-xl font-sans font-medium text-sky-400 mt-1 leading-none">
+                    {pkg.price} <span className="text-sm font-sans">/Person</span>
                   </span>
                 </div>
                 <div

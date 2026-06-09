@@ -53,7 +53,7 @@ async function startServer() {
       if (showMockFallback) {
         let text = "";
         if (language === "hi") {
-          text = `🚩 *नोट: आपके Secrets में जेमिनी एपीआई कुंजी वर्तमान में सेट नहीं है। यहाँ हिन्दी में एक मार्गदर्शक प्रतिक्रिया है:*
+          text = `🚩 *नोट: आपके Secrets में मुफ़्त जेमिनी एपीआई कुंजी वर्तमान में सेट नहीं है (Google AI Studio से मुफ़्त में प्राप्त करें)। यहाँ हिन्दी में एक मार्गदर्शक प्रतिक्रिया है:*
 
 नमस्ते यात्री! 🙏 आदि कैलाश तीर्थ में आपका हार्दिक स्वागत है।
 
@@ -113,7 +113,7 @@ async function startServer() {
 
 ਅਸੀਂ ਯਾਤਰਾ ਬੁੱਕ ਕਰਨ ਲਈ ਤੁਹਾਡਾ ਸਵਾਗਤ ਕਰਦੇ ਹਾਂ!`;
         } else {
-          text = `🚩 *Note: The Gemini API Key is currently not set in your Secrets. Here is a friendly tour operator response in ${selectedLanguageName}:*
+          text = `🚩 *Note: The Free Gemini API Key is currently not set in your Secrets. You can get one for free from Google AI Studio. Here is a friendly tour operator response in ${selectedLanguageName}:*
 
 Namaste! Thank you for contacting **Adi Kailash Tirath**. 
 
@@ -145,7 +145,14 @@ We would love to guide your spiritual path. Let us know if you want detailed day
       let lastError: any = null;
       
       // Attempt robust call with retries and fallback models
-      const modelsToTry = ["gemini-3.5-flash", "gemini-3.1-flash-lite"];
+      const modelsToTry = [
+        "gemini-3.1-pro-preview", 
+        "gemini-3.5-flash", 
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+        "gemini-1.5-pro",
+        "gemini-1.5-flash"
+      ];
 
       for (const modelName of modelsToTry) {
         let attemptCount = 0;

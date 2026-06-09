@@ -220,7 +220,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
               <form onSubmit={handleSubmit} className="space-y-5 text-left">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-mono uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("yatriName", currentLanguage)} *
                     </label>
                     <input
@@ -233,7 +233,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-mono uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("emailOptional", currentLanguage)}
                     </label>
                     <input
@@ -248,7 +248,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-mono uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("phNo", currentLanguage)} *
                     </label>
                     <input
@@ -261,7 +261,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-mono uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("destToExplore", currentLanguage)}
                     </label>
                     <select
@@ -279,7 +279,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-1.5 col-span-2">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-mono uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("numberOfYatris", currentLanguage)}
                     </label>
                     <div className="flex gap-2">
@@ -294,7 +294,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                               : "bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 border-slate-300/80 dark:border-zinc-700/80 hover:border-slate-300 dark:border-zinc-700"
                           }`}
                         >
-                          {num} {num === "1" ? (currentLanguage === "hi" ? "यात्री" : "Yatri") : (currentLanguage === "hi" ? "यात्री" : "Yatris")}
+                          {num} {num === "1" ? (currentLanguage === "hi" ? "व्यक्ति" : "Person") : (currentLanguage === "hi" ? "लोग" : "People")}
                         </button>
                       ))}
                     </div>
@@ -302,7 +302,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-mono uppercase tracking-wider">
+                  <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                     {t("specialRequests", currentLanguage)}
                   </label>
                   <textarea

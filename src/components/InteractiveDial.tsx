@@ -135,11 +135,10 @@ export default function InteractiveDial() {
                         {adv.title}
                       </h4>
                     </div>
-                    {isActive && (
-                      <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed animate-in fade-in duration-500 mt-1 pb-1">
-                        {adv.details}
-                      </p>
-                    )}
+                    {/* Always show details instead of only when isActive */}
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed mt-1 pb-1">
+                      {adv.details}
+                    </p>
                   </button>
                 );
               })}

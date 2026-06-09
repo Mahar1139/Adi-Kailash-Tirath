@@ -384,11 +384,10 @@ export default function Navbar({
             setActiveCategory("home");
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}>
-            <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-sky-600 to-blue-500 opacity-20 blur group-hover:opacity-40 transition duration-700"></div>
             <img 
               src="/logo.jpg" 
               alt="Adi Kailash Tirath Logo" 
-              className="relative w-[3.25rem] h-[3.25rem] md:w-14 md:h-14 rounded-full border border-sky-500/30 object-contain bg-white dark:bg-zinc-950 shadow-lg"
+              className="relative w-[3.25rem] h-[3.25rem] md:w-14 md:h-14 rounded-full border border-sky-500/30 object-contain shadow-lg"
               referrerPolicy="no-referrer"
             />
             <div className="hidden sm:flex flex-col">
