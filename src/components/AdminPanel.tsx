@@ -22,8 +22,8 @@ function ImageUploader({ value, onChange, label = "Image Link or Upload" }: { va
     setUploading(true);
     try {
       const reader = new FileReader();
-      reader.onload = async (event) => {
-        const base64 = event.target?.result as string;
+      reader.onloadend = async () => {
+        const base64 = reader.result as string;
         const res = await fetch("/api/upload", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -32,8 +32,6 @@ function ImageUploader({ value, onChange, label = "Image Link or Upload" }: { va
         if (res.ok) {
           const data = await res.json();
           onChange(data.url);
-        } else {
-          console.error("Upload failed.");
         }
         setUploading(false);
       };
@@ -150,7 +148,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
     }
   }, [isAuthorized]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (secretKey === "@12321@##") {
       setIsAuthorized(true);
@@ -161,13 +159,14 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
   };
 
   const saveToBackend = async (updatedData: any) => {
+    if (secretKey !== "@12321@##") return; // Keep existing weak auth on UI side since they requested no DB for users
     setSaveStatus("saving");
     setSaveMessage("Publishing updates to site database...");
     try {
       const res = await fetch("/api/site-data", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ secretKey, data: updatedData })
+        body: JSON.stringify(updatedData)
       });
       if (res.ok) {
         setSaveStatus("success");
@@ -176,9 +175,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
         onRefreshSiteData();
         setTimeout(() => setSaveStatus("idle"), 3000);
       } else {
-        const err = await res.json();
-        setSaveStatus("error");
-        setSaveMessage(err.error || "Failed to update configuration.");
+        throw new Error("Failed to save changes");
       }
     } catch (e: any) {
       setSaveStatus("error");
@@ -187,17 +184,14 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
   };
 
   const updateBookingStatus = async (id: number, newStatus: string) => {
+    if (secretKey !== "@12321@##") return;
     try {
-      const res = await fetch("/api/planners/status", {
+      await fetch("/api/planners/status", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ secretKey, id, status: newStatus })
+        body: JSON.stringify({ id, status: newStatus })
       });
-      if (res.ok) {
-        loadBookings();
-      } else {
-        console.error("Failed to update status.");
-      }
+      loadBookings();
     } catch (e) {
       console.error(e);
     }
@@ -205,17 +199,14 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
 
   const deleteBooking = async (id: number) => {
     setConfirmDialog({ message: "Are you sure you want to delete this yatra booking lead?", action: async () => {
+    if (secretKey !== "@12321@##") return;
     try {
-      const res = await fetch("/api/planners/delete", {
+      await fetch("/api/planners/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ secretKey, id })
+        body: JSON.stringify({ id })
       });
-      if (res.ok) {
-        loadBookings();
-      } else {
-        console.error("Failed to delete booking.");
-      }
+      loadBookings();
     } catch (e) {
       console.error(e);
     }

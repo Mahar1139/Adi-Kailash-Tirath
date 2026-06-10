@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "Planner": {
+      "title": "Planner",
+      "description": "A yatra booking inquiry made by a pilgrim.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "destination": { "type": "string" },
+        "travelers": { "type": "number" },
+        "message": { "type": "string" },
+        "date": { "type": "string" },
+        "status": { "type": "string" },
+        "reference": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "phone", "destination", "travelers", "status", "reference", "createdAt"]
+    },
+    "SiteData": {
+      "title": "SiteData",
+      "description": "Global website configuration.",
+      "type": "object",
+      "properties": {
+        "bannerTickerText": { "type": "array" },
+        "logoText": { "type": "string" },
+        "companyName": { "type": "string" },
+        "tagline": { "type": "string" },
+        "activeSeason": { "type": "string" },
+        "phones": { "type": "array" },
+        "whatsapp": { "type": "string" },
+        "email": { "type": "string" },
+        "regNumber": { "type": "string" },
+        "nocNumber": { "type": "string" },
+        "socialLinks": { "type": "object" },
+        "aboutText": { "type": "string" },
+        "packages": { "type": "array" },
+        "slides": { "type": "array" },
+        "gallery": { "type": "array" },
+        "accreditations": { "type": "array" },
+        "whyUs": { "type": "array" },
+        "updatedAt": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/planners/{plannerId}": {
+      "schema": { "$ref": "#/entities/Planner" },
+      "description": "Stores all yatra booking requests."
+    },
+    "/config/siteData": {
+      "schema": { "$ref": "#/entities/SiteData" },
+      "description": "Stores global site settings."
+    }
+  }
+}
