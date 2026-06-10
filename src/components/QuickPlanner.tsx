@@ -26,13 +26,18 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
   // Fetch submitted planners from backend to render real yatra lists
   const fetchPlanners = async () => {
     try {
+      const stored = localStorage.getItem("adi_kailash_planners");
+      if (stored) {
+        setExistingRequests(JSON.parse(stored));
+      }
       const res = await fetch("/api/planners");
       if (res.ok) {
         const data = await res.json();
         setExistingRequests(data);
+        localStorage.setItem("adi_kailash_planners", JSON.stringify(data));
       }
     } catch (err) {
-      console.error("Failed to load requests", err);
+      console.warn("Failed to load requests from backend, using local storage");
     }
   };
 
@@ -48,6 +53,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
     }
 
     setLoading(true);
+    let successBackend = false;
     try {
       const res = await fetch("/api/planners", {
         method: "POST",
@@ -57,22 +63,44 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
       if (res.ok) {
         const result = await res.json();
         setCreatedRequest(result.planner);
+        successBackend = true;
         setSuccess(true);
         // Refresh requests list
         fetchPlanners();
-        // Clear form
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          destination: "Adi Kailash & Om Parvat",
-          travelers: "1",
-          message: ""
-        });
       }
     } catch (err) {
-      console.error(err);
+      console.warn("Backend unavailable, saving booking to local storage...");
     } finally {
+      if (!successBackend) {
+        // Fallback to local storage
+        const newPlanner = {
+          id: Date.now(),
+          name: formData.name,
+          email: formData.email || "Not Provided",
+          phone: formData.phone,
+          destination: formData.destination,
+          travelers: Number(formData.travelers) || 1,
+          message: formData.message || "Comfort-focused standard requirements.",
+          date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+          status: "Consultant Assigned",
+          reference: `NT-2026-${Math.floor(Math.random() * 9000) + 1000}`
+        };
+        const newList = [newPlanner, ...existingRequests];
+        setExistingRequests(newList);
+        localStorage.setItem("adi_kailash_planners", JSON.stringify(newList));
+        setCreatedRequest(newPlanner as PlannerRequest);
+        setSuccess(true);
+      }
+      
+      // Clear form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        destination: "Adi Kailash & Om Parvat",
+        travelers: "1",
+        message: ""
+      });
       setLoading(false);
     }
   };

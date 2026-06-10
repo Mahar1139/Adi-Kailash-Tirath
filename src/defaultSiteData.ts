@@ -1,4 +1,4 @@
-{
+export const DEFAULT_SITE_DATA = {
   "logoText": "ADI KAILASH TIRATH",
   "companyName": "ADI KAILASH TIRATH",
   "tagline": "The Spiritual Yatra Pioneer",
@@ -673,4 +673,4 @@
     }
   ],
   "whatsapp": "https://wa.me/+917017535116"
-}
+};

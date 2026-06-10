@@ -19,103 +19,7 @@ import { BLOGS, ACCREDITATIONS, YATRA_PACKAGES, TRAVEL_STORIES, YATRI_FEEDBACKS 
 import { YatraPackage, Blog } from "./types";
 import { Sparkles, Calendar, MapPin, Compass, Trophy, Star, ArrowRight, ArrowLeft, ShieldCheck, Mail, Phone, Heart, MessageCircle, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-
-const DEFAULT_SITE_DATA = {
-  logoText: "ADI KAILASH",
-  companyName: "ADI KAILASH TIRATH",
-  tagline: "The Spiritual Yatra Pioneer",
-  activeSeason: "Yatra Season 2026 Active",
-  phones: ["+91 7017535116", "+91 9760651947"],
-  whatsapp: "https://wa.me/917017535116",
-  email: "info@adikailashtirath.com",
-  regNumber: "UT-NT-2026-904",
-  nocNumber: "UT-NOC-SHIVA-9092",
-  socialLinks: {
-    facebook: "https://facebook.com",
-    instagram: "https://instagram.com",
-    linkedin: "https://linkedin.com",
-    youtube: "https://youtube.com",
-    pinterest: "https://pinterest.com",
-    reddit: "https://reddit.com",
-    twitter: "https://twitter.com"
-  },
-  bannerTickerText: [
-    "🕉️ Experience the Divine Adi Kailash & Om Parvat Yatra 2026 - Bookings Open!",
-    "📞 Contact our High Altitude Specialists at +91 7017535116 or +91 9760651947",
-    "💼 Registered with Uttarakhand Tourism Board (Reg ID: NT-2026)",
-    "✈️ Mount Kailash Aerial Darshan Flight (Lucknow Base) - No Chinese Visa/Passport Required!",
-    "🏔️ Outer Line Permits & medical forms handled seamlessly by Adi Kailash Tirath team."
-  ],
-  heroSlides: [
-    {
-      title: "Travel Where Spirit Meets The Himalaya",
-      subtitle: "Kailash Mansarovar Yatra",
-      desc: "Adi Kailash Tirath curates spiritually meaningful journeys with clear planning, trusted stays, permit guidance, and dedicated mountain-ground support from departure to return.",
-      img: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200",
-      pill: "Vyas Valley & Himalayas 2026",
-      stat: "海拔 5,640m (Over 18,000 ft)"
-    },
-    {
-      title: "Experience the Divine Mystery of Snow Symbolism",
-      subtitle: "Adi Kailash & Om Parvat",
-      desc: "Watch the holy self-formed divine Om symbol appear naturally in pristine white snow. Explore Parvati Kund, Gauri Kund, and the source of Vyas valley spirituality accompanied by seasoned native sherpas.",
-      img: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=1200",
-      pill: "Border Region Authorized Tour Partner",
-      stat: "100% Permit Success Rate"
-    },
-    {
-      title: "The Ultimate Four Abodes of the Deities",
-      subtitle: "Classics of Chardham",
-      desc: "An all-inclusive, divine expedition covering Yamunotri, Gangotri, Kedarnath, and Badrinath. Relax in pre-vetted warm riverside cottages with healthy pure organic vegetarian cuisine.",
-      img: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=1200",
-      pill: "Complete Kedarnath-Badrinath Ring",
-      stat: "500+ Devotees Guided Yearly"
-    }
-  ],
-  circularDestinations: [
-    {
-      title: "Adi Kailash Parvat",
-      categoryRef: "adi_kailash",
-      img: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
-      description: "Sacred trek to Adi Kailash, Gauri Kund, Parvati Kund and Om Parvat."
-    },
-    {
-      title: "Complete Chardham",
-      categoryRef: "chardham",
-      img: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=200",
-      description: "Divine yatra of Yamunotri, Gangotri, Kedarnath, and Badrinath shrines."
-    },
-    {
-      title: "Babaji Cave Dunagiri",
-      categoryRef: "adi_kailash",
-      img: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=200",
-      description: "Spiritual meditation at Mahavatar Babaji's Cave in Ranikhet hills."
-    },
-    {
-      title: "Amarnath Helicopter",
-      categoryRef: "amarnath",
-      img: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=200",
-      description: "Hassle-free 1-day helicopter transfers from Baltal to pure icy Cave shrines."
-    },
-    {
-      title: "Amarnath & Vaishno Devi",
-      categoryRef: "amarnath",
-      img: "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=200",
-      description: "Divine combination yatra crossing Katra Bhavan & Srinagar heli routes."
-    },
-    {
-      title: "Amarnath Tours",
-      categoryRef: "amarnath",
-      img: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
-      description: "Rigorous classic trekking groups via Pahalgam under certified medical guidelines."
-    }
-  ],
-  packages: YATRA_PACKAGES,
-  travelStories: TRAVEL_STORIES,
-  yatriFeedbacks: YATRI_FEEDBACKS,
-  blogs: BLOGS,
-  accreditations: ACCREDITATIONS
-};
+import { DEFAULT_SITE_DATA } from "./defaultSiteData";
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState<string>("home");
@@ -130,15 +34,20 @@ export default function App() {
 
   const fetchSiteData = async () => {
     try {
+      const stored = localStorage.getItem("adi_kailash_site_data");
+      if (stored) {
+        setSiteData(JSON.parse(stored));
+      }
       const res = await fetch("/api/site-data");
       if (res.ok) {
         const data = await res.json();
         if (data && Object.keys(data).length > 0) {
           setSiteData(data);
+          localStorage.setItem("adi_kailash_site_data", JSON.stringify(data));
         }
       }
     } catch (e) {
-      console.error("Failed to load backend site-data, using local dynamic fallback:", e);
+      console.warn("Backend fetch failed, using local/fallback site data:", e);
     }
   };
 
