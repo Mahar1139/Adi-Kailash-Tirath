@@ -22,8 +22,8 @@ function ImageUploader({ value, onChange, label = "Image Link or Upload" }: { va
     setUploading(true);
     try {
       const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64 = reader.result as string;
+      reader.onload = async (event) => {
+        const base64 = event.target?.result as string;
         const res = await fetch("/api/upload", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -32,6 +32,8 @@ function ImageUploader({ value, onChange, label = "Image Link or Upload" }: { va
         if (res.ok) {
           const data = await res.json();
           onChange(data.url);
+        } else {
+          console.error("Upload failed.");
         }
         setUploading(false);
       };
@@ -130,18 +132,13 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
   const loadBookings = async () => {
     setBookingLoading(true);
     try {
-      const stored = localStorage.getItem("adi_kailash_planners");
-      if (stored) {
-        setBookings(JSON.parse(stored));
-      }
       const res = await fetch("/api/planners");
       if (res.ok) {
         const data = await res.json();
         setBookings(data);
-        localStorage.setItem("adi_kailash_planners", JSON.stringify(data));
       }
     } catch (e) {
-      console.warn("Backend unavailable, using localized bookings");
+      console.error(e);
     } finally {
       setBookingLoading(false);
     }
@@ -153,7 +150,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
     }
   }, [isAuthorized]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (secretKey === "@12321@##") {
       setIsAuthorized(true);
@@ -164,15 +161,8 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
   };
 
   const saveToBackend = async (updatedData: any) => {
-    if (secretKey !== "@12321@##") return; // Keep existing weak auth on UI side since they requested no DB for users
     setSaveStatus("saving");
     setSaveMessage("Publishing updates to site database...");
-    
-    // Save locally immediately
-    localStorage.setItem("adi_kailash_site_data", JSON.stringify(updatedData));
-    setSiteData(updatedData);
-    onRefreshSiteData();
-
     try {
       const res = await fetch("/api/site-data", {
         method: "POST",
@@ -182,58 +172,52 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
       if (res.ok) {
         setSaveStatus("success");
         setSaveMessage("Changes saved & published successfully!");
+        setSiteData(updatedData);
+        onRefreshSiteData();
         setTimeout(() => setSaveStatus("idle"), 3000);
       } else {
-        throw new Error("Failed to save changes");
+        const err = await res.json();
+        setSaveStatus("error");
+        setSaveMessage(err.error || "Failed to update configuration.");
       }
     } catch (e: any) {
-      // Offline / netlify case handled by localstorage above 
-      setSaveStatus("success");
-      setSaveMessage("Saved locally (offline mode).");
-      setTimeout(() => setSaveStatus("idle"), 3000);
+      setSaveStatus("error");
+      setSaveMessage(e.message || "Network Error.");
     }
   };
 
   const updateBookingStatus = async (id: number, newStatus: string) => {
-    if (secretKey !== "@12321@##") return;
-    
-    // Update locally
-    const stored = localStorage.getItem("adi_kailash_planners");
-    let localList = stored ? JSON.parse(stored) : bookings;
-    localList = localList.map((p: any) => p.id === id ? { ...p, status: newStatus } : p);
-    localStorage.setItem("adi_kailash_planners", JSON.stringify(localList));
-    setBookings(localList);
-
     try {
-      await fetch("/api/planners/status", {
+      const res = await fetch("/api/planners/status", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, status: newStatus, secretKey })
+        body: JSON.stringify({ secretKey, id, status: newStatus })
       });
+      if (res.ok) {
+        loadBookings();
+      } else {
+        console.error("Failed to update status.");
+      }
     } catch (e) {
-      console.warn("Backend unavailable, status updated locally.");
+      console.error(e);
     }
   };
 
   const deleteBooking = async (id: number) => {
     setConfirmDialog({ message: "Are you sure you want to delete this yatra booking lead?", action: async () => {
-    if (secretKey !== "@12321@##") return;
-    
-    // Update locally
-    const stored = localStorage.getItem("adi_kailash_planners");
-    let localList = stored ? JSON.parse(stored) : bookings;
-    localList = localList.filter((p: any) => p.id !== id);
-    localStorage.setItem("adi_kailash_planners", JSON.stringify(localList));
-    setBookings(localList);
-
     try {
-      await fetch("/api/planners/delete", {
+      const res = await fetch("/api/planners/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, secretKey })
+        body: JSON.stringify({ secretKey, id })
       });
+      if (res.ok) {
+        loadBookings();
+      } else {
+        console.error("Failed to delete booking.");
+      }
     } catch (e) {
-      console.warn("Backend unavailable, deleted locally.");
+      console.error(e);
     }
     } });
   };
