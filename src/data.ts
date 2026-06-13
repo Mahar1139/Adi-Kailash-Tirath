@@ -138,6 +138,459 @@ export const YATRA_PACKAGES: YatraPackage[] = [
       { day: 5, title: "Pithoragarh to Delhi", details: "Breakfast at pithoragarh . Drive back to delhi. Drop-off at delhi." }
     ],
     imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
+  },
+  // --- Dummy Packages for other destinations ---
+  {
+    id: "kailash-mansarovar-dummy",
+    category: "kailash_mansarovar",
+    title: "Kailash Mansarovar Aerial Package (Dummy)",
+    badge: "Special Aerial",
+    duration: "2 Nights / 3 Days",
+    price: "₹65,000",
+    fromRoute: "Pickup & Drop: Lucknow",
+    overview: "This is a dummy package for Kailash Mansarovar Aerial tours.",
+    difficulty: "Easy",
+    highlights: ["Aerial Darshan", "VIP Assistance"],
+    inclusion: ["Flight tickets", "Accommodation"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Arrival", details: "Arrive at base." },
+      { day: 2, title: "Aerial Tour", details: "Take flight for Darshan." },
+      { day: 3, title: "Departure", details: "Return journey." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800"
+  },
+  {
+    id: "amarnath-dummy",
+    category: "amarnath",
+    title: "Amarnath Shrine Yatra (Dummy)",
+    badge: "Helicopter Route",
+    duration: "3 Nights / 4 Days",
+    price: "₹20,000",
+    fromRoute: "Pickup & Drop: Srinagar",
+    overview: "This is a dummy package for Amarnath Cave.",
+    difficulty: "Moderate",
+    highlights: ["Helicopter to Panchtarni", "VIP Darshan"],
+    inclusion: ["Helicopter Tickets", "Food"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Arrival in Srinagar", details: "Check into houseboat." },
+      { day: 2, title: "Baltal to Panchtarni", details: "Heli ride and darshan." },
+      { day: 3, title: "Srinagar Sightseeing", details: "Local city tour." },
+      { day: 4, title: "Departure", details: "Airport drop." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
+  },
+  {
+    id: "om-parvat-dummy",
+    category: "om_parvat",
+    title: "Exclusive Om Parvat Darshan (Dummy)",
+    badge: "Vyas Valley",
+    duration: "3 Nights / 4 Days",
+    price: "₹18,000",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "This is a dummy package for Om Parvat darshan only.",
+    difficulty: "Easy",
+    highlights: ["Om Parvat Darshan", "Vyas Gufa"],
+    inclusion: ["Transport", "Stay"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Arrival", details: "Dharchula Check-in." },
+      { day: 2, title: "Gunji Travel", details: "Reach Gunji." },
+      { day: 3, title: "Om Parvat Darshan", details: "See Om Parvat." },
+      { day: 4, title: "Return", details: "Back to Dharchula." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
+  },
+  {
+    id: "munsyari-dummy",
+    category: "munsyari",
+    title: "Munsyari Exploration (Dummy)",
+    badge: "Scenic Escape",
+    duration: "3 Nights / 4 Days",
+    price: "₹12,000",
+    fromRoute: "Pickup & Drop: Kathgodam",
+    overview: "This is a dummy package for Munsyari.",
+    difficulty: "Easy",
+    highlights: ["Panchachuli viewpoint", "Birthi falls"],
+    inclusion: ["Hotel stay", "Breakfast"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Kathgodam to Munsyari", details: "Long scenic drive." },
+      { day: 2, title: "Sightseeing", details: "Visit Nanda Devi Temple." },
+      { day: 3, title: "Birthi Falls", details: "Excursion to waterfall." },
+      { day: 4, title: "Return", details: "Back to Kathgodam." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=800"
+  },
+  {
+    id: "kainchi-dham-dummy",
+    category: "kainchi_dham",
+    title: "Kainchi Dham Tour (Dummy)",
+    badge: "Neem Karoli Baba",
+    duration: "2 Nights / 3 Days",
+    price: "₹8,500",
+    fromRoute: "Pickup & Drop: Haldwani",
+    overview: "This is a dummy package for Kainchi Dham.",
+    difficulty: "Easy",
+    highlights: ["Ashram Visit", "Nainital Sightseeing"],
+    inclusion: ["Hotel", "Food"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Arrival", details: "Check in at Nainital." },
+      { day: 2, title: "Ashram Visit", details: "Full day at Kainchi Dham." },
+      { day: 3, title: "Departure", details: "Return to Haldwani." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=800"
+  },
+  {
+    id: "maa-purnagiri-dummy",
+    category: "maa_purnagiri",
+    title: "Maa Purnagiri Darshan (Dummy)",
+    badge: "Shakti Peeth",
+    duration: "1 Night / 2 Days",
+    price: "₹4,000",
+    fromRoute: "Pickup & Drop: Tanakpur",
+    overview: "This is a dummy package for Maa Purnagiri.",
+    difficulty: "Moderate",
+    highlights: ["Temple Darshan", "River side view"],
+    inclusion: ["Stay", "Transport"],
+    exclusion: ["Personal Expenses"],
+    itinerary: [
+      { day: 1, title: "Tanakpur base", details: "Arrive and rest." },
+      { day: 2, title: "Darshan and Departure", details: "Early morning darshan." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1626621341517-bbf3d926b12d?q=80&w=800"
+  },
+  {
+    id: "panchachuli-dummy",
+    category: "panchachuli",
+    title: "Panchachuli Base Camp (Dummy)",
+    badge: "Adventure Trek",
+    duration: "4 Nights / 5 Days",
+    price: "₹15,000",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "This is a dummy package for Panchachuli trekking.",
+    difficulty: "Challenging",
+    highlights: ["Glacier view", "Camping"],
+    inclusion: ["Tents", "Meals"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Dharchula to Dar", details: "Drive up to Dar." },
+      { day: 2, title: "Trek to Duktu", details: "Trek begins." },
+      { day: 3, title: "Base Camp", details: "Explore glacier base." },
+      { day: 4, title: "Return Trek", details: "Head downwards." },
+      { day: 5, title: "Departure", details: "Back to Dharchula." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
+  },
+  {
+    id: "darma-valley-dummy",
+    category: "darma_valley",
+    title: "Darma Valley Excursion (Dummy)",
+    badge: "Hidden Gem",
+    duration: "4 Nights / 5 Days",
+    price: "₹18,500",
+    fromRoute: "Pickup & Drop: Pithoragarh",
+    overview: "This is a dummy package for Darma Valley.",
+    difficulty: "Moderate",
+    highlights: ["Tribal Village stay", "Valley views"],
+    inclusion: ["Homestay", "Food"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Pithoragarh to Dharchula", details: "Drive." },
+      { day: 2, title: "Dharchula to Dantu", details: "Enter Darma valley." },
+      { day: 3, title: "Explore Villages", details: "Walk around." },
+      { day: 4, title: "Return to Dharchula", details: "Drive back." },
+      { day: 5, title: "Departure", details: "Back to base." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=800"
+  },
+  {
+    id: "chirkilla-dam-dummy",
+    category: "chirkilla_dam",
+    title: "Chirkilla Dam Picnic (Dummy)",
+    badge: "Day Tour",
+    duration: "Day Trip",
+    price: "₹2,000",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "This is a dummy package for Chirkilla Dam.",
+    difficulty: "Easy",
+    highlights: ["Dam view", "Kali River"],
+    inclusion: ["Transport", "Lunch"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Day Visit", details: "Visit dam and return to Dharchula." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=800"
+  },
+  {
+    id: "narayan-ashram-dummy",
+    category: "narayan_ashram",
+    title: "Narayan Ashram Retreat (Dummy)",
+    badge: "Spiritual",
+    duration: "2 Nights / 3 Days",
+    price: "₹9,000",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "This is a dummy package for Narayan Ashram.",
+    difficulty: "Easy",
+    highlights: ["Ashram Stay", "Meditation"],
+    inclusion: ["Ashram Donation stay", "Vegetarian Food"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Reach Ashram", details: "Drive from Dharchula." },
+      { day: 2, title: "Ashram Life", details: "Participate in prayers." },
+      { day: 3, title: "Departure", details: "Return journey." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
+  },
+  {
+    id: "chardham-dummy-2",
+    category: "chardham",
+    title: "Chardham Express (Dummy)",
+    badge: "Fast Track",
+    duration: "4 Nights / 5 Days",
+    price: "₹18,000",
+    fromRoute: "Pickup & Drop: Dehradun",
+    overview: "Fast track dummy package for Chardham.",
+    difficulty: "Challenging",
+    highlights: ["Helicopter to Kedarnath"],
+    inclusion: ["Stay", "Meals"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Day 1", details: "Arrival" },
+      { day: 2, title: "Day 2", details: "Darshan" },
+      { day: 3, title: "Day 3", details: "Return" }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=800"
+  },
+  {
+    id: "babaji-cave-dummy",
+    category: "babaji_cave",
+    title: "Mahavatar Babaji Cave Retreat (Dummy)",
+    badge: "Spiritual Trek",
+    duration: "1 Night / 2 Days",
+    price: "₹5,000",
+    fromRoute: "Pickup & Drop: Ranikhet",
+    overview: "Meditation retreat to the sacred cave.",
+    difficulty: "Moderate",
+    highlights: ["Cave Meditation", "Trekking"],
+    inclusion: ["Guide", "Meals"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Arrive at Kukuchina", details: "Trek to Cave" },
+      { day: 2, title: "Morning Meditation", details: "Return to base" }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
+  },
+  {
+    id: "adi-kailash-dummy-2",
+    category: "adi_kailash",
+    title: "Adi Kailash Quick Visit (Dummy)",
+    badge: "Short Trip",
+    duration: "3 Nights / 4 Days",
+    price: "₹14,000",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "Short dummy package for Adi Kailash.",
+    difficulty: "Moderate",
+    highlights: ["Quick Darshan", "Jolingkong base"],
+    inclusion: ["Jeep", "Stay"],
+    exclusion: ["Food"],
+    itinerary: [
+      { day: 1, title: "Reach Base", details: "Arrival at base" },
+      { day: 2, title: "Darshan", details: "Darshan at Adi kailash" },
+      { day: 3, title: "Departure", details: "Back to origin" }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
+  },
+  {
+    id: "kailash-mansarovar-dummy-2",
+    category: "kailash_mansarovar",
+    title: "Kailash Mansarovar Heli Package (Dummy)",
+    badge: "Fast Track",
+    duration: "2 Nights / 3 Days",
+    price: "₹65,000",
+    fromRoute: "Pickup & Drop: Lucknow",
+    overview: "Another dummy package for Kailash Mansarovar Aerial tours.",
+    difficulty: "Easy",
+    highlights: ["Aerial Darshan", "VIP Assistance"],
+    inclusion: ["Flight tickets", "Accommodation"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Arrival", details: "Arrive at base." },
+      { day: 2, title: "Aerial Tour", details: "Take flight for Darshan." },
+      { day: 3, title: "Departure", details: "Return journey." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800"
+  },
+  {
+    id: "amarnath-dummy-2",
+    category: "amarnath",
+    title: "Amarnath Shrine Trek (Dummy)",
+    badge: "Trekking",
+    duration: "4 Nights / 5 Days",
+    price: "₹15,000",
+    fromRoute: "Pickup & Drop: Srinagar",
+    overview: "Dumy package for amarnath trekking.",
+    difficulty: "Difficult",
+    highlights: ["Trek via Pahalgam"],
+    inclusion: ["Camps", "Food"],
+    exclusion: ["Ponies"],
+    itinerary: [
+      { day: 1, title: "Arrival", details: "Arrive at Srinagar." },
+      { day: 2, title: "Trek", details: "Start trek." },
+      { day: 3, title: "Darshan", details: "Cave Darshan." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
+  },
+  {
+    id: "om-parvat-dummy-2",
+    category: "om_parvat",
+    title: "Om Parvat Short Tour (Dummy)",
+    badge: "Quick Trip",
+    duration: "2 Nights / 3 Days",
+    price: "₹12,000",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "Quick tour to Om Parvat.",
+    difficulty: "Easy",
+    highlights: ["Om Parvat"],
+    inclusion: ["Transport", "Stay"],
+    exclusion: ["Food"],
+    itinerary: [
+      { day: 1, title: "Arrival", details: "Arrive at base." },
+      { day: 2, title: "Darshan", details: "Darshan and return." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
+  },
+  {
+    id: "munsyari-dummy-2",
+    category: "munsyari",
+    title: "Munsyari Weekend Gateway (Dummy)",
+    badge: "Weekend",
+    duration: "2 Nights / 3 Days",
+    price: "₹9,000",
+    fromRoute: "Pickup & Drop: Kathgodam",
+    overview: "Weekend gateway to Munsyari.",
+    difficulty: "Easy",
+    highlights: ["Relaxation"],
+    inclusion: ["Hotel", "Breakfast"],
+    exclusion: ["Transport"],
+    itinerary: [
+      { day: 1, title: "Arrival", details: "Arrive and rest." },
+      { day: 2, title: "Sightseeing", details: "Local views." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=800"
+  },
+  {
+    id: "kainchi-dham-dummy-2",
+    category: "kainchi_dham",
+    title: "Kainchi Dham Weekend Tour (Dummy)",
+    badge: "Baba Darshan",
+    duration: "1 Night / 2 Days",
+    price: "₹5,500",
+    fromRoute: "Pickup & Drop: Kathgodam",
+    overview: "Weekend package for Kainchi Dham.",
+    difficulty: "Easy",
+    highlights: ["Ashram visit"],
+    inclusion: ["Hotel"],
+    exclusion: ["Food"],
+    itinerary: [
+      { day: 1, title: "Visit Ashram", details: "Darshan." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=800"
+  },
+  {
+    id: "maa-purnagiri-dummy-2",
+    category: "maa_purnagiri",
+    title: "Maa Purnagiri Express (Dummy)",
+    badge: "Fast Track",
+    duration: "1 Day Trip",
+    price: "₹2,000",
+    fromRoute: "Pickup & Drop: Tanakpur",
+    overview: "1 Day dummy trip.",
+    difficulty: "Moderate",
+    highlights: ["Darshan"],
+    inclusion: ["Transport"],
+    exclusion: ["Stay"],
+    itinerary: [
+      { day: 1, title: "Tanakpur base", details: "Return trip." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1626621341517-bbf3d926b12d?q=80&w=800"
+  },
+  {
+    id: "panchachuli-dummy-2",
+    category: "panchachuli",
+    title: "Panchachuli Heli Drop (Dummy)",
+    badge: "Aerial",
+    duration: "2 Nights / 3 Days",
+    price: "₹45,000",
+    fromRoute: "Pickup & Drop: Pithoragarh",
+    overview: "Aerial view of Panchachuli.",
+    difficulty: "Easy",
+    highlights: ["Aerial Views"],
+    inclusion: ["Helicopter"],
+    exclusion: ["Trekking"],
+    itinerary: [
+      { day: 1, title: "Arrival", details: "At Pithoragarh." },
+      { day: 2, title: "Fly", details: "Take flight." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
+  },
+  {
+    id: "darma-valley-dummy-2",
+    category: "darma_valley",
+    title: "Darma Valley Weekend (Dummy)",
+    badge: "Short Break",
+    duration: "2 Nights / 3 Days",
+    price: "₹10,500",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "Quick valley trip.",
+    difficulty: "Moderate",
+    highlights: ["Nature Walk"],
+    inclusion: ["Homestay"],
+    exclusion: ["Personal"],
+    itinerary: [
+      { day: 1, title: "Drive", details: "Go inside valley." },
+      { day: 2, title: "Return", details: "Come back." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=800"
+  },
+  {
+    id: "chirkilla-dam-dummy-2",
+    category: "chirkilla_dam",
+    title: "Chirkilla Lake Boating (Dummy)",
+    badge: "Activity",
+    duration: "Half Day",
+    price: "₹1,000",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "Half day dummy package.",
+    difficulty: "Easy",
+    highlights: ["Boating"],
+    inclusion: ["Ticket"],
+    exclusion: ["Transport"],
+    itinerary: [
+      { day: 1, title: "Visit", details: "Enjoy the dam." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=800"
+  },
+  {
+    id: "narayan-ashram-dummy-2",
+    category: "narayan_ashram",
+    title: "Narayan Ashram Yoga (Dummy)",
+    badge: "Wellness",
+    duration: "4 Nights / 5 Days",
+    price: "₹15,000",
+    fromRoute: "Pickup & Drop: Dharchula",
+    overview: "Yoga retreat dummy.",
+    difficulty: "Easy",
+    highlights: ["Yoga Sessions", "Ashram Stay"],
+    inclusion: ["Food", "Stay"],
+    exclusion: ["Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Arrive", details: "Join retreat." },
+      { day: 2, title: "Yoga", details: "Do yoga." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
   }
 ];
 

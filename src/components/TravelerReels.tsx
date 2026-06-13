@@ -90,10 +90,10 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
   };
 
   return (
-    <section className="py-16 bg-slate-100/40 dark:bg-zinc-900/40 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-16 bg-slate-100/40 dark:bg-zinc-900/40 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 select-none">
+      <div className="w-full max-w-full mx-auto">
         
-        <div className="text-center flex flex-col items-center gap-2 mb-8">
+        <div className="text-center flex flex-col items-center gap-2 mb-8 px-4">
           <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
             {t("yatriFeedbacks", currentLanguage)}
           </span>
@@ -137,11 +137,11 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
 
         {/* Tab content 1: Video Reels (with Left/Right Overlay Buttons) */}
         {activeTab === "reels" && (
-          <div className="relative w-full max-w-6xl mx-auto group/carousel px-4">
+          <div className="relative w-full mx-auto group/carousel">
             {/* Custom Left Arrow Button */}
             <button
               onClick={handlePrev}
-              className="absolute left-[-16px] md:left-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
+              className="absolute left-[16px] md:left-[24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
               title="Previous Story"
             >
               <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
@@ -150,7 +150,7 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
             {/* Custom Right Arrow Button */}
             <button
               onClick={handleNext}
-              className="absolute right-[-16px] md:right-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
+              className="absolute right-[16px] md:right-[24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
               title="Next Story"
             >
               <ChevronRight className="h-6 w-6 stroke-[2.5]" />
@@ -166,13 +166,18 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
                 <div
                   key={story.id}
                   onClick={() => setSelectedStory(story)}
-                  className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[310px] snap-start relative aspect-[9/16] rounded-2xl overflow-hidden border border-slate-200 dark:border-zinc-800 hover:border-sky-500/40 shadow-2xl group cursor-pointer hover:scale-[1.01] transition-all duration-300 bg-white dark:bg-zinc-950"
+                  className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[310px] snap-start relative aspect-[9/16] rounded-2xl overflow-hidden border border-slate-200 dark:border-zinc-800 hover:border-yellow-500/50 hover:shadow-yellow-500/20 shadow-2xl group cursor-pointer hover:scale-[1.02] transition-all duration-500 bg-white dark:bg-zinc-950"
                 >
+                  {/* Golden slide effect overlay */}
+                  <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent animate-golden-slide" />
+                  </div>
+
                   {/* Backing Cover image */}
                   <img
                     src={story.coverImage}
                     alt={story.name}
-                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 brightness-[0.6] group-hover:brightness-[0.4]"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 brightness-[0.6] group-hover:brightness-[0.5]"
                     referrerPolicy="no-referrer"
                   />
 
@@ -218,11 +223,11 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
 
         {/* Tab content 2: Written Feedbacks Grid (now in 1 Row Carousel) */}
         {activeTab === "feedbacks" && (
-          <div className="relative w-full max-w-6xl mx-auto group/carousel px-4">
+          <div className="relative w-full mx-auto group/carousel">
             {/* Custom Left Arrow Button */}
             <button
               onClick={handlePrev}
-              className="absolute left-[-16px] md:left-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
+              className="absolute left-[16px] md:left-[24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
               title="Previous Feedback"
             >
               <ChevronLeft className="h-6 w-6 stroke-[2.5]" />
@@ -231,7 +236,7 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
             {/* Custom Right Arrow Button */}
             <button
               onClick={handleNext}
-              className="absolute right-[-16px] md:right-[-24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 w-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
+              className="absolute right-[16px] md:right-[24px] top-1/2 -translate-y-1/2 z-20 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/90 dark:bg-zinc-950/90 border border-slate-200/80 dark:border-zinc-800/80 text-slate-900 dark:text-zinc-100 hover:border-sky-500 hover:text-slate-900 dark:text-zinc-100 flex items-center justify-center transition-all duration-300 shadow-2xl backdrop-blur-md hover:scale-110 active:scale-95 cursor-pointer opacity-100 md:opacity-0 md:group-hover/carousel:opacity-100"
               title="Next Feedback"
             >
               <ChevronRight className="h-6 w-6 stroke-[2.5]" />

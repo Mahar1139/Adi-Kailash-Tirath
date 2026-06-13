@@ -80,6 +80,18 @@ const DEFAULT_SITE_DATA = {
       description: "Sacred trek to Adi Kailash, Gauri Kund, Parvati Kund and Om Parvat."
     },
     {
+      title: "Om Parvat",
+      categoryRef: "om_parvat",
+      img: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
+      description: "Witness the miraculous Om symbol formed by snow on the sacred peak."
+    },
+    {
+      title: "Kailash Mansarovar",
+      categoryRef: "kailash_mansarovar",
+      img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=200",
+      description: "Divine aerial Darshan flights from Lucknow."
+    },
+    {
       title: "Complete Chardham",
       categoryRef: "chardham",
       img: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=200",
@@ -90,6 +102,48 @@ const DEFAULT_SITE_DATA = {
       categoryRef: "adi_kailash",
       img: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=200",
       description: "Spiritual meditation at Mahavatar Babaji's Cave in Ranikhet hills."
+    },
+    {
+      title: "Munsyari Exploration",
+      categoryRef: "munsyari",
+      img: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=200",
+      description: "Discover picturesque landscapes and the majestic Panchachuli peaks."
+    },
+    {
+      title: "Kainchi Dham",
+      categoryRef: "kainchi_dham",
+      img: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=200",
+      description: "Visit the renowned ashram of Neem Karoli Baba."
+    },
+    {
+      title: "Maa Purnagiri Shrine",
+      categoryRef: "maa_purnagiri",
+      img: "https://images.unsplash.com/photo-1626621341517-bbf3d926b12d?q=80&w=200",
+      description: "Perform the sacred trek to the revered Shakti Peeth."
+    },
+    {
+      title: "Panchachuli Glaciers",
+      categoryRef: "panchachuli",
+      img: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
+      description: "Trek to the majestic five-peak glacier base camp."
+    },
+    {
+      title: "Darma Valley",
+      categoryRef: "darma_valley",
+      img: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=200",
+      description: "Explore tribal villages and pristine high-altitude valley landscapes."
+    },
+    {
+      title: "Chirkilla Dam",
+      categoryRef: "chirkilla_dam",
+      img: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=200",
+      description: "Enjoy a scenic lakeside retreat and picnic excursion."
+    },
+    {
+      title: "Narayan Ashram",
+      categoryRef: "narayan_ashram",
+      img: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=200",
+      description: "A tranquil spiritual retreat established by Narayan Swami."
     },
     {
       title: "Amarnath Helicopter",
@@ -160,7 +214,7 @@ export default function App() {
   const localizedSiteData = {
     ...siteData,
     bannerTickerText: getLocalizedTickerText(siteData?.bannerTickerText || DEFAULT_SITE_DATA.bannerTickerText, currentLanguage),
-    packages: getLocalizedPackages(siteData?.packages || YATRA_PACKAGES, currentLanguage),
+    packages: getLocalizedPackages([...(siteData?.packages || []), ...YATRA_PACKAGES.filter(p => !(siteData?.packages || []).find((sp: any) => sp.id === p.id))], currentLanguage),
     blogs: getLocalizedBlogs(siteData?.blogs || DEFAULT_SITE_DATA.blogs, currentLanguage),
     travelStories: getLocalizedStories(siteData?.travelStories || DEFAULT_SITE_DATA.travelStories, currentLanguage),
     yatriFeedbacks: getLocalizedFeedback(siteData?.yatriFeedbacks || DEFAULT_SITE_DATA.yatriFeedbacks, currentLanguage),
@@ -246,7 +300,7 @@ export default function App() {
         /* Alternate Category Header */
         <div className="relative py-16 bg-white dark:bg-zinc-950 border-b border-slate-300 dark:border-zinc-700 select-none overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-sky-600/10 via-blue-500/5 to-transparent blur-md" />
-          <div className="max-w-7xl mx-auto px-4 relative z-10 text-left animate-fade-in">
+          <div className="w-full max-w-full mx-auto px-4 md:px-8 relative z-10 text-left animate-fade-in">
             <button
               onClick={() => {
                 setActiveCategory("home");
@@ -289,16 +343,18 @@ export default function App() {
 
       {/* 4. Journey Destinations Circular Grid */}
       {activeCategory === "home" && (
-        <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className="py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none text-center">
-          <div className="max-w-7xl mx-auto">
-            <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em] block mb-2">
+        <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className="py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 select-none text-center">
+          <div className="w-full max-w-full mx-auto px-4 md:px-8">
+            <span className="text-sky-500 font-mono text-xs md:text-sm lg:text-base font-bold uppercase tracking-[0.25em] block mb-2">
               {t("shrineHeading", currentLanguage)}
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
+            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl xl:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
               {t("shrineSub", currentLanguage)}
             </h2>
             <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-2 mb-10" />
+          </div>
 
+          <div className="w-full">
             {/* Circular Grid Container with Horizontal Carousel & Autoplay */}
             <DestinationsCarousel
               circularDestinations={circularDestinations}
@@ -350,7 +406,7 @@ export default function App() {
       {/* 9. Blogs and Spiritual Vlogs section */}
       {(activeCategory === "home" || activeCategory === "blogs") && (
         <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className={`py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none ${activeCategory === "blogs" ? "pt-24 min-h-screen" : ""}`}>
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full max-w-full mx-auto px-4 md:px-8">
             <div className="text-center flex flex-col items-center gap-2 mb-10">
               <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
                 {t("blog", currentLanguage)}
@@ -369,13 +425,18 @@ export default function App() {
                 <div
                   key={blog.id}
                   onClick={() => setActiveBlog(blog)}
-                  className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-lg hover:border-sky-505/20 transition duration-300 flex flex-col justify-between cursor-pointer text-left group animate-fade-in"
+                  className="relative bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-lg hover:border-yellow-500/50 hover:shadow-2xl hover:-translate-y-2 hover:shadow-yellow-500/20 transition-all duration-500 flex flex-col justify-between cursor-pointer text-left group animate-fade-in"
                 >
+                  {/* Golden slide effect overlay */}
+                  <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent animate-golden-slide" />
+                  </div>
+
                   <div className="relative h-48 overflow-hidden">
                     <img
                       src={blog.imageUrl}
                       alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-103 transition duration-500 brightness-90"
+                      className="w-full h-full object-cover group-hover:scale-110 group-hover:brightness-100 transition-all duration-700 brightness-90"
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute top-4 left-4 bg-white/80 dark:bg-zinc-950/80 px-2.5 py-1 text-[10px] font-mono text-slate-900 dark:text-zinc-100 rounded backdrop-blur-xs font-bold uppercase tracking-wider">
@@ -405,7 +466,7 @@ export default function App() {
 
       {/* 10. Accreditations Badges */}
       <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.7 }} className="py-12 bg-slate-100/40 dark:bg-zinc-900/40 border-t border-slate-300/60 dark:border-zinc-700/60 px-4 select-none">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row flex-wrap justify-center items-center gap-5 md:gap-10">
+        <div className="w-full max-w-full mx-auto px-4 md:px-8 flex flex-col md:flex-row flex-wrap justify-center items-center gap-5 md:gap-10">
           <p className="text-zinc-505 font-mono text-[10px] uppercase tracking-widest font-bold text-center md:text-left">
             {t("verifiedPartner", currentLanguage)}
           </p>
@@ -413,7 +474,7 @@ export default function App() {
             {accreditationsList.map((acc: any) => (
               <span
                 key={acc.id}
-                className="bg-white dark:bg-zinc-950 border border-zinc-805/85 px-2 py-2 md:px-4 md:py-2.5 rounded-lg flex items-center justify-center md:justify-start gap-1.5 md:gap-2 hover:border-sky-505/20 transition duration-300 shadow-md whitespace-nowrap overflow-hidden text-ellipsis"
+                className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 px-2 py-2 md:px-4 md:py-2.5 rounded-lg flex items-center justify-center md:justify-start gap-1.5 md:gap-2 hover:border-sky-500/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-sky-500/20 transition-all duration-300 shadow-md whitespace-nowrap overflow-hidden text-ellipsis cursor-default"
                 title={acc.detail}
               >
                 <Trophy className="h-3 w-3 md:h-4 md:w-4 text-sky-500 shrink-0" />

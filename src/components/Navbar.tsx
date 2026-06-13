@@ -99,7 +99,8 @@ export default function Navbar({
     twitter: "https://twitter.com"
   };
 
-  const allPackages = siteData?.packages || YATRA_PACKAGES;
+  const sitePackagesNav = siteData?.packages || [];
+  const allPackages = [...sitePackagesNav, ...YATRA_PACKAGES.filter(p => !sitePackagesNav.find((sp: any) => sp.id === p.id))];
   const allBlogs = siteData?.blogs || BLOGS;
 
   const filteredPackages = searchQuery.trim()
@@ -131,7 +132,7 @@ export default function Navbar({
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md shadow-lg border-b border-sky-500/10">
       {/* Top Contact Utility Bar */}
       <div className="bg-[#2563eb] px-1 py-1 md:px-4 md:py-2 text-[10px] md:text-[13px] font-medium text-white">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between md:justify-start gap-y-2 md:gap-0 w-full px-1">
+        <div className="w-full max-w-full mx-auto flex flex-wrap items-center justify-between md:justify-start gap-y-2 md:gap-0 px-1 md:px-8">
           {/* Phones (Hidden on mobile) */}
           <div className="hidden md:flex items-center gap-2 md:gap-4 order-3 md:order-1">
             {phones.map((phone: string, idx: number) => (
@@ -393,7 +394,7 @@ export default function Navbar({
       </div>
 
       {/* Main Core Navbar */}
-      <div className="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
+      <div className="w-full max-w-full mx-auto px-4 md:px-8 py-3.5 flex justify-between items-center">
         {/* Dynamic Image Logo */}
         <div className="flex items-center gap-3">
           <div className="relative group cursor-pointer flex items-center gap-3" onClick={() => {

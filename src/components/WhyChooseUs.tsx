@@ -594,7 +594,7 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
 
   return (
     <section className="bg-white dark:bg-zinc-950 py-12 md:py-20 px-4 animate-fade-in text-slate-900 dark:text-zinc-100">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full max-w-full mx-auto px-4 lg:px-12">
         
         {/* Header Block Section */}
         <div className="text-center flex flex-col items-center gap-2 mb-12 select-none">

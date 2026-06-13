@@ -51,4 +51,49 @@ body {
   scrollbar-width: none;
 }
 
+@keyframes goldenSlide {
+  0% {
+    transform: translateX(-150%) skewX(30deg);
+  }
+  100% {
+    transform: translateX(150%) skewX(30deg);
+  }
+}
+
+.animate-golden-slide {
+  animation: goldenSlide 3s linear infinite;
+}
+
+button {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+}
+
+button:hover {
+  transform: scale(1.05) translateY(-2px);
+}
+
+button:active {
+  transform: scale(0.98) translateY(1px);
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: overlay;
+  background: linear-gradient(90deg, transparent, rgba(253, 224, 71, 0.6), transparent);
+  transform: translateX(-150%) skewX(30deg);
+  transition: opacity 0.5s ease;
+}
+
+button:hover::after {
+  opacity: 0.9;
+  animation: goldenSlide 2s linear infinite;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));

@@ -21,24 +21,6 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [createdRequest, setCreatedRequest] = useState<PlannerRequest | null>(null);
-  const [existingRequests, setExistingRequests] = useState<PlannerRequest[]>([]);
-
-  // Fetch submitted planners from backend to render real yatra lists
-  const fetchPlanners = async () => {
-    try {
-      const res = await fetch("/api/planners");
-      if (res.ok) {
-        const data = await res.json();
-        setExistingRequests(data);
-      }
-    } catch (err) {
-      console.error("Failed to load requests", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchPlanners();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,8 +40,6 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
         const result = await res.json();
         setCreatedRequest(result.planner);
         setSuccess(true);
-        // Refresh requests list
-        fetchPlanners();
         // Clear form
         setFormData({
           name: "",
@@ -122,7 +102,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
       transition={{ duration: 0.6 }}
       className="py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full max-w-full mx-auto px-4 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Design elements sidebar */}
@@ -166,27 +146,6 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                 <div>
                   <h4 className="text-slate-900 dark:text-slate-900 font-serif font-bold text-sm">NATIVE EXPERT TOUR OVERVIEWERS</h4>
                   <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1">Travel with native guides who speak your local language and provide personalized care.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Live dynamic preview widget */}
-            <div className="bg-sky-600/5 p-4 rounded-xl border border-sky-500/15 mt-3">
-              <p className="text-[10px] font-mono tracking-wider text-sky-400 font-bold uppercase mb-1">
-                {t("advisoryHeader", currentLanguage)}:
-              </p>
-              <div className="grid grid-cols-2 gap-3 text-[11px] mt-2">
-                <div>
-                  <span className="text-slate-900 dark:text-zinc-100 block">{t("advMaximumAltitude", currentLanguage)}</span>
-                  <span className="text-slate-900 dark:text-zinc-100 font-mono font-bold">{advisory.altitude}</span>
-                </div>
-                <div>
-                  <span className="text-slate-900 dark:text-zinc-100 block">{t("advAcclimatization", currentLanguage)}</span>
-                  <span className="text-slate-900 dark:text-zinc-100 font-serif font-semibold">{advisory.acclimatize}</span>
-                </div>
-                <div className="col-span-2">
-                  <span className="text-slate-900 dark:text-zinc-100 block">{t("advEssentialGear", currentLanguage)}</span>
-                  <span className="text-blue-200 font-serif">{advisory.pack}</span>
                 </div>
               </div>
             </div>
@@ -326,46 +285,6 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
             )}
           </div>
         </div>
-
-        {/* Existing sacred trip requests table - demonstrating functioning database API */}
-        {existingRequests.length > 0 && (
-          <div className="mt-16 bg-slate-100/40 dark:bg-zinc-900/40 p-6 rounded-2xl border border-slate-300/90 dark:border-zinc-700/90 text-left animate-in fade-in duration-700">
-            <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100 mb-4 flex items-center gap-1.5">
-              <span className="text-sky-500">●</span> 
-              {t("registrationsStream", currentLanguage)}
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs text-slate-900 dark:text-zinc-100">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 font-mono uppercase tracking-wider">
-                    <th className="px-4 py-3">REF CODE</th>
-                    <th className="px-4 py-3">PILGRIM NAME</th>
-                    <th className="px-4 py-3">DESTINATION</th>
-                    <th className="px-4 py-3">YATRIS</th>
-                    <th className="px-4 py-3">STATUS</th>
-                    <th className="px-4 py-3">DATE REQUESTED</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-800/60 font-mono">
-                  {existingRequests.map((req) => (
-                    <tr key={req.id} className="hover:bg-slate-100/50 dark:hover:bg-zinc-800/50 dark:bg-zinc-900/50 transition">
-                      <td className="px-4 py-3 text-sky-450 font-bold">{req.reference}</td>
-                      <td className="px-4 py-3 font-serif font-medium text-slate-900 dark:text-zinc-100">{req.name}</td>
-                      <td className="px-4 py-3 text-slate-900 dark:text-zinc-100">{req.destination}</td>
-                      <td className="px-4 py-3">{req.travelers}</td>
-                      <td className="px-4 py-3">
-                        <span className="px-2 py-0.5 rounded-full text-[10px] uppercase font-bold bg-blue-500/10 text-blue-550 border border-blue-500/20 animate-pulse">
-                          {req.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-slate-900 dark:text-zinc-100">{req.date}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
       </div>
     </motion.section>
   );

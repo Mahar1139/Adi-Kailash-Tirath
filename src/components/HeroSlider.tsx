@@ -254,20 +254,20 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
             idx === current ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
-          {/* Cover Image with Deep Vignette */}
+          {/* Cover Image */}
           <img
             src={slide.img}
             alt={slide.subtitle}
-            className="w-full h-full object-cover object-center scale-102 filter brightness-[0.45] contrast-[1.05]"
+            className="w-full h-full object-cover object-center scale-105"
             referrerPolicy="no-referrer"
           />
-          {/* Abstract Orange Background Light Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-slate-50/60" />
-          <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-transparent to-transparent hidden md:block" />
+          {/* Gradients for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
           {/* Slide Content Overlay */}
           <div className="absolute inset-0 flex items-center">
-            <div className="max-w-7xl mx-auto w-full px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="w-full max-w-full mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Text content block */}
               <div className="lg:col-span-7 flex flex-col items-start gap-4 text-left animate-in fade-in-50 slide-in-from-bottom-6 duration-700">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-sky-100 border border-sky-500/30 text-sky-600 font-mono text-[11px] font-semibold uppercase tracking-widest leading-none">
@@ -275,28 +275,28 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
                   {slide.pill}
                 </span>
 
-                <div className="flex flex-col gap-1">
-                  <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-zinc-100 leading-[1.1] tracking-tight">
+                <div className="flex flex-col gap-1 drop-shadow-md">
+                  <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight">
                     {slide.title}
                   </h1>
-                  <h2 className="font-serif text-2xl md:text-4xl text-sky-500 font-bold mt-1">
+                  <h2 className="font-serif text-2xl md:text-4xl text-sky-400 font-bold mt-1">
                     {slide.subtitle}
                   </h2>
                 </div>
 
-                <p className="text-slate-900 dark:text-zinc-100 text-sm md:text-base leading-relaxed max-w-xl">
+                <p className="text-white/90 text-sm md:text-base leading-relaxed max-w-xl drop-shadow">
                   {slide.desc}
                 </p>
 
                 {/* Badges/Stats */}
-                <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-900 dark:text-zinc-100 mt-2 bg-slate-50/35 dark:bg-zinc-950/35 p-2 rounded backdrop-blur-xs border border-slate-300 dark:border-zinc-700">
+                <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-white mt-2 bg-black/30 p-2 rounded backdrop-blur-md border border-white/20">
                   <span className="flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5 text-sky-500" />
+                    <MapPin className="h-3.5 w-3.5 text-sky-400" />
                     {slide.stat}
                   </span>
-                  <span className="text-slate-900 dark:text-zinc-100">|</span>
+                  <span className="text-white/50">|</span>
                   <span className="flex items-center gap-1">
-                    <ShieldCheck className="h-3.5 w-3.5 text-green-500" />
+                    <ShieldCheck className="h-3.5 w-3.5 text-green-400" />
                     {sliderLabels.authOperator}
                   </span>
                 </div>
@@ -310,7 +310,7 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
                   </button>
                   <button
                     onClick={onOpenConsultant}
-                    className="group bg-slate-100/95 dark:bg-zinc-900/95 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 text-slate-900 dark:text-slate-900 hover:text-slate-900 dark:text-zinc-100 font-mono text-xs font-bold tracking-wider px-5 py-3.5 rounded-md border border-slate-300 dark:border-zinc-700 hover:border-sky-500/50 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer inline-flex items-center gap-1.5 uppercase shadow-lg hover:shadow-sky-500/10 hover:ring-2 hover:ring-sky-500/35 hover:ring-offset-2 hover:ring-offset-white"
+                    className="group bg-white hover:bg-slate-100 text-slate-900 hover:text-sky-700 font-mono text-xs font-bold tracking-wider px-5 py-3.5 rounded-md border border-slate-200 hover:border-sky-500 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer inline-flex items-center gap-1.5 uppercase shadow-lg shadow-black/20"
                   >
                     <HelpCircle className="h-4 w-4 text-blue-500 group-hover:text-blue-500 group-hover:scale-110 group-hover:animate-bounce transition-all duration-300" />
                     <span>{t("askAiBtn", currentLanguage)}</span>
@@ -320,28 +320,33 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
 
               {/* Package cards preview block */}
               <div className="hidden lg:col-span-5 lg:flex flex-col gap-4 animate-in fade-in-50 slide-in-from-right-6 duration-1000">
-                <div className="bg-slate-100/80 dark:bg-zinc-900/80 p-5 rounded-xl border border-sky-500/20 backdrop-blur-md shadow-xl">
-                  <p className="text-[10px] font-mono tracking-widest text-sky-500 font-bold uppercase mb-2">
+                <div className="relative group bg-black/40 p-5 rounded-xl border border-white/20 hover:border-yellow-500/50 backdrop-blur-md shadow-2xl overflow-hidden cursor-default transition-colors duration-500">
+                  {/* Golden slide effect overlay */}
+                  <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent animate-golden-slide" />
+                  </div>
+                  
+                  <p className="text-[10px] font-mono tracking-widest text-sky-400 font-bold uppercase mb-2 relative z-10">
                     {t("gurupadVerified", currentLanguage)}
                   </p>
-                  <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100 mb-2">
-                    NAGARJUNA TRAVELS
+                  <h3 className="font-serif text-lg font-bold text-white mb-2">
+                    Adi Kailash Tirath
                   </h3>
-                  <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed mb-4">
+                  <p className="text-white/80 text-xs leading-relaxed mb-4 drop-shadow">
                     {t("securingPermits", currentLanguage)}
                   </p>
-                  <div className="space-y-2.5 text-xs">
-                    <div className="flex justify-between items-center py-1.5 border-b border-slate-200 dark:border-zinc-800">
-                      <span className="text-slate-900 dark:text-zinc-100">{sliderLabels.serviceCategory}</span>
-                      <span className="text-slate-900 dark:text-zinc-100 font-semibold font-mono">{sliderLabels.govApproved}</span>
+                  <div className="space-y-2.5 text-xs text-white/90">
+                    <div className="flex justify-between items-center py-1.5 border-b border-white/20">
+                      <span>{sliderLabels.serviceCategory}</span>
+                      <span className="text-white font-semibold font-mono drop-shadow">{sliderLabels.govApproved}</span>
                     </div>
-                    <div className="flex justify-between items-center py-1.5 border-b border-slate-200 dark:border-zinc-800">
-                      <span className="text-slate-900 dark:text-zinc-100">{sliderLabels.minAge}</span>
-                      <span className="text-slate-900 dark:text-zinc-100 font-semibold font-mono">{sliderLabels.ageValue}</span>
+                    <div className="flex justify-between items-center py-1.5 border-b border-white/20">
+                      <span>{sliderLabels.minAge}</span>
+                      <span className="text-white font-semibold font-mono drop-shadow">{sliderLabels.ageValue}</span>
                     </div>
                     <div className="flex justify-between items-center py-1.5">
-                      <span className="text-slate-900 dark:text-zinc-100">{sliderLabels.oxygenBackups}</span>
-                      <span className="text-green-400 font-semibold font-mono">{sliderLabels.includedFree}</span>
+                      <span>{sliderLabels.oxygenBackups}</span>
+                      <span className="text-green-400 font-semibold font-mono drop-shadow">{sliderLabels.includedFree}</span>
                     </div>
                   </div>
                 </div>
@@ -350,22 +355,6 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
           </div>
         </div>
       ))}
-
-      {/* Manual Control Arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 dark:bg-zinc-950/80 hover:bg-sky-600 text-slate-900 dark:text-slate-900 hover:text-white shadow-md p-2 rounded-full border border-slate-200 dark:border-zinc-800 hover:border-sky-500/40 transition cursor-pointer"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/80 dark:bg-zinc-950/80 hover:bg-sky-600 text-slate-900 dark:text-slate-900 hover:text-white shadow-md p-2 rounded-full border border-slate-200 dark:border-zinc-800 hover:border-sky-500/40 transition cursor-pointer"
-        aria-label="Next slide"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
 
       {/* Bullet indicators */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">

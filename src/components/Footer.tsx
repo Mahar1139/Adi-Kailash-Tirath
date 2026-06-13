@@ -17,7 +17,7 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
     { key: "amarnath", label: t("amarnathRef", currentLanguage) }
   ];
 
-  const companyName = siteData?.companyName || "NAGARJUNA TRAVELS";
+  const companyName = siteData?.companyName || "Adi Kailash Tirath";
   const regNumber = siteData?.regNumber || "UT-NT-2026-904";
   const nocNumber = siteData?.nocNumber || "UT-NOC-SHIVA-9092";
 
@@ -27,7 +27,7 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
       {/* Top Accent Spiritual Line */}
       <div className="bg-gradient-to-r from-sky-600 via-blue-500 to-red-600 h-1 w-full" />
 
-      <div className="max-w-7xl mx-auto px-4 py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+      <div className="w-full max-w-full mx-auto px-4 md:px-8 xl:px-12 py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
         
         {/* Brand & Introduction */}
         <div className="lg:col-span-4 text-left flex flex-col gap-4">
@@ -141,7 +141,7 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
 
       {/* Extreme bottom copyright and disclaimer */}
       <div className="bg-[#0b162a] border-t border-sky-900/40">
-        <div className="py-6 text-center text-slate-400 max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="py-6 text-center text-slate-400 w-full max-w-full mx-auto px-4 md:px-8 xl:px-12 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="font-serif text-[11px]">
             © {new Date().getFullYear()} {companyName}. All Rights Reserved. Spiritual parikrama guides.
           </p>

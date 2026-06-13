@@ -90,7 +90,7 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
 
   return (
     <div className="fixed inset-0 z-50 bg-white dark:bg-zinc-950 overflow-y-auto select-none">
-      <div className="w-full min-h-screen max-w-7xl mx-auto flex flex-col bg-white dark:bg-zinc-950 animate-in slide-in-from-bottom duration-300">
+      <div className="w-full min-h-screen max-w-full mx-auto flex flex-col bg-white dark:bg-zinc-950 animate-in slide-in-from-bottom duration-300">
         
         {/* Banner with Close button */}
         <div className="relative h-64 md:h-[400px] bg-slate-100 dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 shrink-0">
@@ -235,7 +235,9 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
               <div className="flex justify-between items-end mb-2">
                 <div>
                   <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 block uppercase">{labels.estimatedTotal}</span>
-                  <span className="text-2xl font-mono text-sky-400 font-bold leading-none">{pkg.price}</span>
+                  <span className="text-2xl font-mono text-sky-400 font-bold leading-none">
+                    {pkg.price.replace(/\/?\s*(per person|per pax|\/person|\/pax|व्यક્તિ|व्यक्ति)/i, '').trim()} <span className="text-sm">/person</span>
+                  </span>
                 </div>
                 <span className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-[10px] text-slate-900 dark:text-zinc-100 font-mono px-2 py-1 rounded">
                   {labels.maxPilgrims}

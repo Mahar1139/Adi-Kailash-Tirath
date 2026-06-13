@@ -73,7 +73,7 @@ export default function DestinationsCarousel({
 
   return (
     <div 
-      className="relative max-w-6xl mx-auto px-1 group"
+      className="relative w-full group overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       id="destinations-carousel-wrapper"
@@ -81,7 +81,7 @@ export default function DestinationsCarousel({
       {/* Left Navigation Arrow */}
       <button
         onClick={() => scroll("left")}
-        className="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
+        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
         aria-label="Scroll Left"
       >
         <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
@@ -90,7 +90,7 @@ export default function DestinationsCarousel({
       {/* Slider Container on Single Line (Flex Row) */}
       <div
         ref={containerRef}
-        className="flex flex-row items-center gap-6 overflow-x-auto scroll-smooth py-4 px-2 scrollbar-none"
+        className="flex flex-row items-center gap-6 overflow-x-auto scroll-smooth py-4 px-0 scrollbar-none w-full"
         style={{
           scrollbarWidth: "none", // Firefox
           msOverflowStyle: "none"  // IE 10+
@@ -113,18 +113,23 @@ export default function DestinationsCarousel({
                 if (gridEl) gridEl.scrollIntoView({ behavior: "smooth" });
               }, 200);
             }}
-            className="flex-shrink-0 w-[140px] md:w-[160px] flex flex-col items-center gap-3.5 group/card cursor-pointer"
+            className="flex-shrink-0 w-[140px] md:w-[160px] flex flex-col items-center gap-3.5 group/card cursor-pointer hover:-translate-y-2 transition-all duration-500"
           >
             {/* Circular visual wrapper */}
-            <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-b from-slate-100 to-slate-100 group-hover/card:from-sky-500/60 group-hover/card:to-sky-600 shadow-2xl transition duration-500 shrink-0">
-              <img
-                src={dest.img}
-                alt={dest.title}
-                className="w-full h-full object-cover rounded-full filter brightness-90 group-hover/card:brightness-75 transition-all duration-500"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 rounded-full bg-sky-600/10 opacity-0 group-hover/card:opacity-100 transition duration-500 flex items-center justify-center">
-                <Compass className="h-6 w-6 text-slate-900 dark:text-zinc-100 animate-spin-slow" />
+            <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-b from-slate-200 to-slate-200 dark:from-zinc-800 dark:to-zinc-800 group-hover/card:from-sky-500 group-hover/card:to-sky-400 group-hover/card:shadow-xl group-hover/card:shadow-sky-500/30 transition-all duration-500 shrink-0">
+              <div className="w-full h-full rounded-full overflow-hidden relative">
+                <img
+                  src={dest.img}
+                  alt={dest.title}
+                  className="w-full h-full object-cover filter brightness-90 group-hover/card:brightness-105 group-hover/card:scale-110 transition-all duration-700"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent animate-golden-slide" />
+                </div>
+              </div>
+              <div className="absolute inset-1 rounded-full bg-sky-900/30 opacity-0 group-hover/card:opacity-100 transition duration-500 flex items-center justify-center backdrop-blur-[1px]">
+                <Compass className="h-6 w-6 text-white animate-spin-slow drop-shadow-md" />
               </div>
             </div>
             
@@ -158,7 +163,7 @@ export default function DestinationsCarousel({
       {/* Right Navigation Arrow */}
       <button
         onClick={() => scroll("right")}
-        className="absolute -right-4 md:-right-8 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
+        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
         aria-label="Scroll Right"
       >
         <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />

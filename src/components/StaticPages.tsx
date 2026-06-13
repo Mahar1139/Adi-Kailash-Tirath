@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Send, Star, User } from 'lucide-react';
 
 export function ContactUs() {
   return (
-    <div className="py-16 px-4 max-w-7xl mx-auto min-h-[60vh] animate-fade-in">
+    <div className="py-16 px-4 md:px-8 w-full max-w-full mx-auto min-h-[60vh] animate-fade-in">
       <div className="text-center mb-12">
         <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">Get in Touch</span>
         <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-zinc-100 font-extrabold mt-2">Contact Us</h2>
@@ -27,8 +27,8 @@ export function ContactUs() {
             <a href="tel:+919876543210" className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 hover:text-sky-600 transition text-sm">
               <Phone className="h-4 w-4" /> +91 98765 43210
             </a>
-            <a href="mailto:namaste@adikailashtirath.com" className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 hover:text-sky-600 transition text-sm">
-              <Mail className="h-4 w-4" /> namaste@adikailashtirath.com
+            <a href="mailto:info@adikailashtirath.com" className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 hover:text-sky-600 transition text-sm">
+              <Mail className="h-4 w-4" /> info@adikailashtirath.com
             </a>
           </div>
         </div>

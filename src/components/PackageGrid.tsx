@@ -86,20 +86,24 @@ export default function PackageGrid({
     return () => clearInterval(intervalId);
   }, [filterIsHovered]);
 
-  const packagesList = siteData?.packages || YATRA_PACKAGES;
+  const sitePackages = siteData?.packages || [];
+  const mergedPackages = [...sitePackages, ...YATRA_PACKAGES.filter(p => !sitePackages.find((sp: any) => sp.id === p.id))];
+  const packagesList = mergedPackages;
 
-  const filteredPackages = packagesList; // Always show all packages
+  const filteredPackages = packagesList.filter((pkg: YatraPackage) => 
+    activeCategory === "home" || activeCategory === "all" || pkg.category === activeCategory
+  );
 
   const visiblePackages = showAllPackages ? filteredPackages : filteredPackages.slice(0, initialLimit);
 
   return (
-    <section id="yatra-catalog-grid" className="py-16 bg-slate-100/40 dark:bg-zinc-900/40 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none">
-      <div className="max-w-7xl mx-auto">
+    <section id="yatra-catalog-grid" className="py-16 bg-slate-100/40 dark:bg-zinc-900/40 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 md:px-8 lg:px-12 w-full select-none">
+      <div className="w-full max-w-full mx-auto">
         <div className="text-center flex flex-col items-center gap-3 mb-10">
-          <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
+          <span className="text-sky-500 font-mono text-xs md:text-sm lg:text-base font-bold uppercase tracking-[0.25em]">
             {t("catalogTitle", currentLanguage)}
           </span>
-          <h2 className="font-serif text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
             {t("packages", currentLanguage)}
           </h2>
           <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded" />
@@ -124,7 +128,7 @@ export default function PackageGrid({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 animate-fade-in">
             <AnimatePresence mode="popLayout">
             {visiblePackages.map((pkg, i) => (
             <motion.div
@@ -134,15 +138,20 @@ export default function PackageGrid({
               exit={{ opacity: 0, scale: 0.9, y: -30 }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
               key={pkg.id}
-              className="group cursor-pointer bg-white dark:bg-zinc-950 border border-slate-200/80 dark:border-zinc-800/80 hover:border-sky-500/30 rounded-2xl overflow-hidden shadow-xl transition-all duration-300 flex flex-col justify-between"
+              className="relative group cursor-pointer bg-white dark:bg-zinc-950 border border-slate-200/80 dark:border-zinc-800/80 hover:border-yellow-500/50 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between"
               onClick={() => onOpenPackage(pkg)}
             >
+              {/* Golden slide effect overlay */}
+              <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent animate-golden-slide" />
+              </div>
+
               {/* Image with labels */}
               <div className="relative h-56 overflow-hidden">
                 <img
                   src={pkg.imageUrl}
                   alt={pkg.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90"
+                  className="w-full h-full object-cover group-hover:scale-110 group-hover:brightness-105 transition-all duration-700 filter brightness-90"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute top-4 left-4 bg-slate-100/90 dark:bg-zinc-900/90 text-sky-400 border border-sky-500/20 text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded font-bold backdrop-blur-xs">
@@ -197,14 +206,14 @@ export default function PackageGrid({
                     SPECIAL RATE
                   </span>
                   <span className="text-xl font-sans font-medium text-sky-400 mt-1 leading-none">
-                    {pkg.price} <span className="text-sm font-sans">/Person</span>
+                    {pkg.price.replace(/\/?\s*(per person|per pax|\/person|\/pax|व्यક્તિ|व्यक्ति)/i, '').trim()} <span className="text-sm font-sans">/person</span>
                   </span>
                 </div>
                 <div
-                  className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 hover:text-white hover:bg-sky-600 hover:border-sky-500/30 text-xs font-mono font-bold tracking-wider px-4 py-2.5 rounded-lg transition-all duration-300 self-end mt-4 inline-flex items-center gap-1.5"
+                  className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 group-hover:bg-sky-600 group-hover:text-white group-hover:border-sky-500 group-hover:shadow-lg group-hover:shadow-sky-500/20 text-xs font-mono font-bold tracking-wider px-4 py-2.5 rounded-lg transition-all duration-500 self-end mt-4 inline-flex items-center gap-1.5"
                 >
                   VIEW PACKAGE
-                  <ArrowRight className="h-3 w-3" />
+                  <ArrowRight className="h-3 w-3 group-hover:-rotate-45 transition-transform duration-300" />
                 </div>
               </div>
             </motion.div>
@@ -213,19 +222,39 @@ export default function PackageGrid({
           </div>
         )}
 
-        {filteredPackages.length > initialLimit && (
-          <div className="mt-12 text-center animate-fade-in">
-            <button
-              onClick={() => setShowAllPackages((p) => !p)}
-              className="px-8 py-3.5 bg-gradient-to-r from-sky-600 via-sky-500 to-blue-500 hover:from-sky-500 hover:to-blue-400 text-white font-mono font-bold text-xs uppercase tracking-widest rounded-full shadow-lg hover:shadow-sky-500/20 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2 border border-sky-500/20"
-            >
-              <span>
-                {showAllPackages
-                  ? (currentLanguage === "hi" ? "कम पैकेज दिखाएं" : "SHOW FEWER PACKAGES")
-                  : (currentLanguage === "hi" ? "और सभी पैकेज देखें" : "VIEW ALL PACKAGES")}
-              </span>
-              <ArrowRight className={`h-4 w-4 transition-transform duration-300 ${showAllPackages ? "-rotate-90" : ""}`} />
-            </button>
+        {(filteredPackages.length > initialLimit || (activeCategory !== "home" && activeCategory !== "all")) && (
+          <div className="mt-12 text-center flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in">
+            {filteredPackages.length > initialLimit && (
+              <button
+                onClick={() => setShowAllPackages((p) => !p)}
+                className="px-8 py-3.5 bg-gradient-to-r from-sky-600 via-sky-500 to-blue-500 hover:from-sky-500 hover:to-blue-400 text-white font-mono font-bold text-xs uppercase tracking-widest rounded-full shadow-lg hover:shadow-sky-500/20 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2 border border-sky-500/20"
+              >
+                <span>
+                  {showAllPackages
+                    ? (currentLanguage === "hi" ? "कम पैकेज दिखाएं" : "SHOW FEWER PACKAGES")
+                    : (currentLanguage === "hi" ? "और सभी पैकेज देखें" : "VIEW MORE IN CATEGORY")}
+                </span>
+                <ArrowRight className={`h-4 w-4 transition-transform duration-300 ${showAllPackages ? "-rotate-90" : ""}`} />
+              </button>
+            )}
+
+            {(activeCategory !== "home" && activeCategory !== "all") && (
+              <button
+                onClick={() => {
+                  setActiveCategory("all");
+                  setShowAllPackages(true);
+                  setTimeout(() => {
+                    document.getElementById("yatra-catalog-grid")?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }}
+                className={`px-8 py-3.5 ${filteredPackages.length > initialLimit ? 'bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 border border-slate-300 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800' : 'bg-gradient-to-r from-sky-600 via-sky-500 to-blue-500 hover:from-sky-500 hover:to-blue-400 text-white border border-sky-500/20 shadow-lg hover:shadow-sky-500/20'} font-mono font-bold text-xs uppercase tracking-widest rounded-full transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2`}
+              >
+                <span>
+                  {currentLanguage === "hi" ? "अन्य सभी पैकेज देखें" : "VIEW OTHER PACKAGES"}
+                </span>
+                <Compass className="h-4 w-4" />
+              </button>
+            )}
           </div>
         )}
       </div>

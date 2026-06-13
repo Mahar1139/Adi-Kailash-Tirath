@@ -29,7 +29,7 @@ export default function InteractiveDial() {
 
   return (
     <section className="py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-full w-full mx-auto px-4 md:px-8">
         <div className="text-center flex flex-col items-center gap-3 mb-12">
           <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
             TRUSTED COMPANION FOR LIFETIME
@@ -82,21 +82,14 @@ export default function InteractiveDial() {
                 </div>
               </div>
 
-              {/* Inner Circle displaying the sacred OM */}
-              <div className="w-52 h-52 md:w-56 md:h-56 rounded-full bg-white dark:bg-zinc-950 border-2 border-sky-500/30 flex flex-col items-center justify-center p-6 text-center shadow-inner relative z-10">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-sky-600/5 via-transparent to-blue-500/5 animate-pulse" />
+              {/* Inner Circle displaying the logo */}
+              <div className="w-52 h-52 md:w-56 md:h-56 rounded-full border-2 border-sky-500/30 shadow-inner relative z-10 overflow-hidden">
                 <img 
                   src="/logo.jpg" 
                   alt="Logo" 
-                  className="w-24 h-24 rounded-full border-2 border-sky-500/40 object-contain bg-white dark:bg-zinc-950 mt-2 shadow-lg cursor-pointer"
+                  className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                 />
-                <span className="text-[9.5px] font-mono tracking-widest text-blue-500 uppercase font-bold mt-4">
-                  SATYAM SHIVAM
-                </span>
-                <span className="text-[8px] font-serif text-slate-900 dark:text-zinc-100 italic mt-0.5">
-                  "Truth, Auspiciousness, Beauty"
-                </span>
               </div>
             </div>
           </div>
