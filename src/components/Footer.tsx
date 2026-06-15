@@ -22,7 +22,7 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
   const nocNumber = siteData?.nocNumber || "UT-NOC-SHIVA-9092";
 
   return (
-    <footer className="bg-[#112038] border-t-2 border-sky-800/40 text-slate-300 text-xs select-none">
+    <footer className="mt-auto bg-[#112038] border-t-2 border-sky-800/40 text-slate-300 text-xs select-none">
       
       {/* Top Accent Spiritual Line */}
       <div className="bg-gradient-to-r from-sky-600 via-blue-500 to-red-600 h-1 w-full" />
@@ -52,7 +52,7 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
           </div>
           
           <p className="text-slate-300 leading-relaxed text-xs">
-            Adi Kailash Tirath specializes in high-altitude spiritual yatras across the sacred Himalayan rim. Handcrafted plans incorporating gradual acclimatization, legal border clearance, certified oximetric health trackers, and high-clearance 4x4 vehicles for absolute camper safety.
+            {siteData?.footerAbout || "Adi Kailash Tirath specializes in high-altitude spiritual yatras across the sacred Himalayan rim. Handcrafted plans incorporating gradual acclimatization, legal border clearance, certified oximetric health trackers, and high-clearance 4x4 vehicles for absolute camper safety."}
           </p>
 
           <div className="bg-[#193054] border border-sky-900/50 p-4 rounded-xl flex items-center gap-3 mt-1.5">
@@ -65,7 +65,7 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
         </div>
 
         {/* Quick Links Menu */}
-        <div className="lg:col-span-3 text-left">
+        <div className="lg:col-span-2 text-left">
           <h4 className="text-white font-serif font-bold text-sm tracking-wider uppercase pb-2 border-b border-sky-900/50 mb-4 flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
             {t("quickLinks", currentLanguage)}
@@ -90,8 +90,41 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
           </ul>
         </div>
 
+        {/* Important Links Menu */}
+        <div className="lg:col-span-2 text-left">
+          <h4 className="text-white font-serif font-bold text-sm tracking-wider uppercase pb-2 border-b border-sky-900/50 mb-4 flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
+            Important Links
+          </h4>
+          <ul className="space-y-3">
+            {(siteData?.footerImportantLinks || [
+              { label: "Contact Us", url: "contact_us" },
+              { label: "Privacy Policy", url: "privacy_policy" },
+              { label: "Feedback", url: "feedback" }
+            ]).map((link: any, idx: number) => {
+               return (
+                <li key={idx}>
+                  <button
+                    onClick={() => {
+                      if (link.url && link.url.startsWith("http")) {
+                        window.open(link.url, "_blank");
+                      } else {
+                        setActiveCategory(link.url || "home");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }
+                    }}
+                    className="hover:text-sky-300 text-slate-300 border-b border-transparent hover:border-sky-500/25 pb-0.5 text-left transition cursor-pointer"
+                  >
+                    {link.label}
+                  </button>
+                </li>
+               );
+            })}
+          </ul>
+        </div>
+
         {/* Physical Office Hubs */}
-        <div className="lg:col-span-5 text-left flex flex-col gap-6">
+        <div className="lg:col-span-4 text-left flex flex-col gap-6">
           <div>
             <h4 className="text-white font-serif font-bold text-sm tracking-wider uppercase pb-2 border-b border-sky-900/50 mb-4 flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
@@ -102,16 +135,8 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
               <div className="flex gap-2.5">
                 <MapPin className="h-4.5 w-4.5 text-sky-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-serif font-bold text-white">HALDWANI REVENUE OFFICE (HEADQUARTERS)</p>
-                  <p className="mt-0.5 text-slate-300">First Floor, Pithoragarh Chauraha, Near Mansarovar Collection, Haldwani, Uttarakhand, India.</p>
-                </div>
-              </div>
-
-              <div className="flex gap-2.5">
-                <MapPin className="h-4.5 w-4.5 text-sky-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-serif font-bold text-white">PITHORAGARH BASE CAMP LIAISON</p>
-                  <p className="mt-0.5 text-slate-300">Jagannath Complex, Sharif Ghaat Chauraha, Ranikhet Hills Road, Pithoragarh, Uttarakhand.</p>
+                  <p className="font-serif font-bold text-white">OFFICE</p>
+                  <p className="mt-0.5 text-slate-300">{siteData?.footerAddress || "Near Kmou Station Pithoragarh uttarakhand 262501"}</p>
                 </div>
               </div>
             </div>
@@ -143,14 +168,23 @@ export default function Footer({ setActiveCategory, onOpenConsultant, siteData, 
       <div className="bg-[#0b162a] border-t border-sky-900/40">
         <div className="py-6 text-center text-slate-400 w-full max-w-full mx-auto px-4 md:px-8 xl:px-12 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="font-serif text-[11px]">
-            © {new Date().getFullYear()} {companyName}. All Rights Reserved. Spiritual parikrama guides.
+            {siteData?.copyrightText || `© ${new Date().getFullYear()} ${companyName}. All Rights Reserved. Spiritual parikrama guides.`}
           </p>
-          <div className="flex gap-4 justify-center text-[10.5px] font-serif">
+          <div className="flex gap-4 justify-center text-[10.5px] font-serif flex-wrap">
             <a href="#" className="hover:text-sky-300 transition font-mono uppercase text-[9.5px] font-bold text-sky-500/80 tracking-wider" onClick={(e) => { e.preventDefault(); setActiveCategory("admin"); }}>🔑 ADMIN PANEL LOGON</a>
-            <span>•</span>
-            <a href="#" className="hover:text-sky-300 transition mt-0.5">Terms of Pilgrimage</a>
-            <span>•</span>
-            <a href="#" className="hover:text-sky-300 transition mt-0.5">High-Altitude Health Policy</a>
+            {(siteData?.footerBottomLinks || [
+              { label: "Terms of Pilgrimage", url: "privacy_policy" },
+              { label: "High-Altitude Health Policy", url: "privacy_policy" }
+            ]).map((link: any, idx: number) => (
+              <React.Fragment key={idx}>
+                <span>•</span>
+                <a href="#" onClick={(e) => {
+                  e.preventDefault();
+                  if (link.url && link.url.startsWith("http")) window.open(link.url, "_blank");
+                  else { setActiveCategory(link.url || "home"); window.scrollTo({ top: 0, behavior: "smooth" }); }
+                }} className="hover:text-sky-300 transition mt-0.5">{link.label}</a>
+              </React.Fragment>
+            ))}
           </div>
         </div>
       </div>

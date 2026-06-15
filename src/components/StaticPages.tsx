@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, Star, User } from 'lucide-react';
 
-export function ContactUs() {
+export function ContactUs({ siteData }: { siteData?: any }) {
   return (
     <div className="py-16 px-4 md:px-8 w-full max-w-full mx-auto min-h-[60vh] animate-fade-in">
       <div className="text-center mb-12">
         <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">Get in Touch</span>
         <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-zinc-100 font-extrabold mt-2">Contact Us</h2>
-        <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-4" />
+        <div className="h-0.5 w-[80%] md:w-[60%] max-w-2xl bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-4 mb-4" />
+        <p className="text-slate-600 dark:text-zinc-400 text-sm max-w-2xl mx-auto">
+          {siteData?.contactPageDesc || "Reach out to us for spiritual queries, custom group planning, or assistance with your pilgrimage."}
+        </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-12">
@@ -16,38 +19,46 @@ export function ContactUs() {
           <h3 className="text-xl font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
             <MapPin className="h-5 w-5 text-sky-500" /> Our Office
           </h3>
-          <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed">
-            Adi Kailash Tirath Head Office<br />
-            123 Sacred Valley Road,<br />
-            Pithoragarh, Uttarakhand, 262501<br />
-            India
+          <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed whitespace-pre-line">
+            {siteData?.headOffice || `Adi Kailash Tirath Office\nNear Kmou Station Pithoragarh\nuttarakhand, 262501\nIndia`}
           </p>
 
           <div className="space-y-4">
-            <a href="tel:+919876543210" className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 hover:text-sky-600 transition text-sm">
-              <Phone className="h-4 w-4" /> +91 98765 43210
-            </a>
-            <a href="mailto:info@adikailashtirath.com" className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 hover:text-sky-600 transition text-sm">
-              <Mail className="h-4 w-4" /> info@adikailashtirath.com
+            {(siteData?.phones || ["+91 9557092965", "+91 7248737777"]).map((phone: string, idx: number) => (
+              <a key={idx} href={`tel:${phone.replace(/\s/g, '')}`} className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 hover:text-sky-600 transition text-sm">
+                <Phone className="h-4 w-4" /> {phone}
+              </a>
+            ))}
+            <a href={`mailto:${siteData?.email || "info@adikailashtirath.com"}`} className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 hover:text-sky-600 transition text-sm">
+              <Mail className="h-4 w-4" /> {siteData?.email || "info@adikailashtirath.com"}
             </a>
           </div>
         </div>
 
         {/* Contact Form */}
         <form className="bg-slate-50 dark:bg-zinc-900/50 border border-slate-200 dark:border-zinc-800 p-8 rounded-xl shadow-lg space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Message sent successfully!"); }}>
-          <div>
-            <label className="block text-xs font-mono text-slate-500 dark:text-zinc-400 mb-1">YOUR NAME</label>
-            <input type="text" required className="w-full bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 rounded px-4 py-2 text-sm focus:outline-none focus:border-sky-500 text-slate-900 dark:text-zinc-100" />
-          </div>
-          <div>
-            <label className="block text-xs font-mono text-slate-500 dark:text-zinc-400 mb-1">EMAIL ADDRESS</label>
-            <input type="email" required className="w-full bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 rounded px-4 py-2 text-sm focus:outline-none focus:border-sky-500 text-slate-900 dark:text-zinc-100" />
-          </div>
-          <div>
-            <label className="block text-xs font-mono text-slate-500 dark:text-zinc-400 mb-1">MESSAGE</label>
-            <textarea required rows={4} className="w-full bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 rounded px-4 py-2 text-sm focus:outline-none focus:border-sky-500 text-slate-900 dark:text-zinc-100 resize-none"></textarea>
-          </div>
-          <button type="submit" className="w-full py-3 bg-sky-600 hover:bg-sky-500 text-white rounded font-mono text-xs font-bold tracking-widest uppercase transition flex items-center justify-center gap-2 cursor-pointer shadow-md">
+          {(siteData?.contactFormFields || [
+            { label: "YOUR NAME", type: "text", required: true },
+            { label: "EMAIL ADDRESS", type: "email", required: true },
+            { label: "MESSAGE", type: "textarea", required: true }
+          ]).map((field: any, idx: number) => (
+            <div key={idx}>
+              <label className="block text-xs font-mono text-slate-500 dark:text-zinc-400 mb-1">{field.label}</label>
+              {field.type === "textarea" ? (
+                <textarea required={field.required} rows={4} className="w-full bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 rounded px-4 py-2 text-sm focus:outline-none focus:border-sky-500 text-slate-900 dark:text-zinc-100 resize-none"></textarea>
+              ) : field.type === "select" ? (
+                <select required={field.required} className="w-full bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 rounded px-4 py-2 text-sm focus:outline-none focus:border-sky-500 text-slate-900 dark:text-zinc-100">
+                  <option value="">Select an option</option>
+                  {(field.options || []).map((opt: string, i: number) => (
+                    <option key={i} value={opt}>{opt}</option>
+                  ))}
+                </select>
+              ) : (
+                <input type={field.type || "text"} required={field.required} className="w-full bg-white dark:bg-zinc-950 border border-slate-300 dark:border-zinc-700 rounded px-4 py-2 text-sm focus:outline-none focus:border-sky-500 text-slate-900 dark:text-zinc-100" />
+              )}
+            </div>
+          ))}
+          <button type="submit" className="w-full py-3 bg-sky-600 hover:bg-sky-500 text-white rounded font-mono text-xs font-bold tracking-widest uppercase transition flex items-center justify-center gap-2 cursor-pointer shadow-md mt-4">
             <Send className="h-4 w-4" /> Send Message
           </button>
         </form>
@@ -62,7 +73,7 @@ export function PrivacyPolicy() {
       <div className="text-center mb-12">
         <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">Legal Information</span>
         <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-zinc-100 font-extrabold mt-2">Privacy Policy</h2>
-        <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-4" />
+        <div className="h-0.5 w-[80%] md:w-[60%] max-w-2xl bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-4" />
       </div>
 
       <div className="space-y-6 text-sm leading-relaxed">
@@ -89,7 +100,7 @@ export function Feedback({ feedbacks = [] }: { feedbacks?: any[] }) {
        <div className="text-center mb-12">
         <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">Share Your Experience</span>
         <h2 className="font-serif text-3xl md:text-4xl text-slate-900 dark:text-zinc-100 font-extrabold mt-2">Pilgrim Feedback</h2>
-        <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-4" />
+        <div className="h-0.5 w-[80%] md:w-[60%] max-w-2xl bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-4" />
       </div>
 
       {!showForm ? (

@@ -95,12 +95,12 @@ export default function TravelerReels({ siteData, currentLanguage = "en" }: Trav
         
         <div className="text-center flex flex-col items-center gap-2 mb-8 px-4">
           <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
-            {t("yatriFeedbacks", currentLanguage)}
+            {siteData?.text_reelsHeading || t("yatriFeedbacks", currentLanguage)}
           </span>
           <h2 className="font-serif text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
-            {t("yatriSub", currentLanguage)}
+            {siteData?.text_reelsSub || t("yatriSub", currentLanguage)}
           </h2>
-          <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded" />
+          <div className="h-0.5 w-[80%] md:w-[60%] max-w-2xl bg-gradient-to-r from-sky-600 to-blue-500 rounded" />
           <p className="text-slate-900 dark:text-zinc-100 text-sm max-w-xl mt-1 leading-relaxed">
             {activeTab === "reels" 
               ? "Authentic moments, spiritual clips, and video reels captured directly by pilgrims whom we accompanied through high-altitude passages."

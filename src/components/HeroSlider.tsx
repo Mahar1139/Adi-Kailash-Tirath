@@ -318,37 +318,54 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
                 </div>
               </div>
 
-              {/* Package cards preview block */}
+              {/* Quick Contact Form on Hero */}
               <div className="hidden lg:col-span-5 lg:flex flex-col gap-4 animate-in fade-in-50 slide-in-from-right-6 duration-1000">
-                <div className="relative group bg-black/40 p-5 rounded-xl border border-white/20 hover:border-yellow-500/50 backdrop-blur-md shadow-2xl overflow-hidden cursor-default transition-colors duration-500">
-                  {/* Golden slide effect overlay */}
-                  <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent animate-golden-slide" />
-                  </div>
+                <div className="relative bg-black/50 p-6 md:p-8 rounded-2xl border border-white/20 backdrop-blur-md shadow-2xl overflow-hidden pointer-events-auto">
+                  <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-transparent pointer-events-none" />
                   
-                  <p className="text-[10px] font-mono tracking-widest text-sky-400 font-bold uppercase mb-2 relative z-10">
-                    {t("gurupadVerified", currentLanguage)}
-                  </p>
-                  <h3 className="font-serif text-lg font-bold text-white mb-2">
-                    Adi Kailash Tirath
+                  <h3 className="font-serif text-2xl font-bold text-white mb-2 relative z-10">
+                    {currentLanguage === "hi" ? "अपनी यात्रा की योजना बनाएं" : "Plan Your Yatra"}
                   </h3>
-                  <p className="text-white/80 text-xs leading-relaxed mb-4 drop-shadow">
-                    {t("securingPermits", currentLanguage)}
+                  <p className="text-white/80 text-sm mb-6 relative z-10">
+                    {currentLanguage === "hi" ? "आगामी सीजन के लिए अभी पूछताछ करें। हमारी स्थानीय टीम आपको तुरंत जवाब देगी।" : "Enquire now for the upcoming season. Fast responses by our local ground team."}
                   </p>
-                  <div className="space-y-2.5 text-xs text-white/90">
-                    <div className="flex justify-between items-center py-1.5 border-b border-white/20">
-                      <span>{sliderLabels.serviceCategory}</span>
-                      <span className="text-white font-semibold font-mono drop-shadow">{sliderLabels.govApproved}</span>
+                  
+                  <form className="space-y-4 relative z-10" onSubmit={(e) => { e.preventDefault(); alert(currentLanguage === "hi" ? "पूछताछ सफलतापूर्वक सबमिट की गई! हम जल्द ही आपसे संपर्क करेंगे।" : "Enquiry submitted successfully! We will contact you soon."); }}>
+                    <div className="space-y-1">
+                      <label className="text-white/70 text-xs font-mono uppercase tracking-wider">
+                        {currentLanguage === "hi" ? "पूरा नाम" : "Full Name"}
+                      </label>
+                      <input 
+                        type="text" 
+                        required 
+                        placeholder={currentLanguage === "hi" ? "राकेश शर्मा" : "Rakesh Sharma"} 
+                        className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-sky-400 focus:bg-white/20 transition-colors placeholder:text-white/40"
+                      />
                     </div>
-                    <div className="flex justify-between items-center py-1.5 border-b border-white/20">
-                      <span>{sliderLabels.minAge}</span>
-                      <span className="text-white font-semibold font-mono drop-shadow">{sliderLabels.ageValue}</span>
+                    
+                    <div className="space-y-1">
+                      <label className="text-white/70 text-xs font-mono uppercase tracking-wider">
+                        {currentLanguage === "hi" ? "फ़ोन नंबर" : "Phone Number"}
+                      </label>
+                      <input 
+                        type="tel" 
+                        required 
+                        placeholder="+91 99999 99999" 
+                        className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-sky-400 focus:bg-white/20 transition-colors placeholder:text-white/40"
+                      />
                     </div>
-                    <div className="flex justify-between items-center py-1.5">
-                      <span>{sliderLabels.oxygenBackups}</span>
-                      <span className="text-green-400 font-semibold font-mono drop-shadow">{sliderLabels.includedFree}</span>
-                    </div>
-                  </div>
+                    
+                    <button 
+                      type="submit" 
+                      className="w-full mt-2 bg-sky-600 hover:bg-sky-500 text-white font-mono font-bold uppercase tracking-widest text-sm py-3 rounded-lg shadow-[0_0_20px_rgba(2,132,199,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] border border-sky-400/50 cursor-pointer"
+                    >
+                      {currentLanguage === "hi" ? "कॉल बैक का अनुरोध करें" : "Request Call Back"}
+                    </button>
+                    
+                    <p className="text-white/50 text-[10px] text-center mt-3">
+                      {currentLanguage === "hi" ? "आपका विवरण सुरक्षित है। निःशुल्क परामर्श प्रदान किया जाता है।" : "Your details are secure. Free consultation provided."}
+                    </p>
+                  </form>
                 </div>
               </div>
             </div>

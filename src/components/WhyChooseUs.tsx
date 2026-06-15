@@ -22,9 +22,10 @@ interface WhyChooseUsProps {
   currentLanguage: string;
   onOpenConsultant: () => void;
   onNavigateToCatalog: () => void;
+  siteData?: any;
 }
 
-export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavigateToCatalog }: WhyChooseUsProps) {
+export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavigateToCatalog, siteData }: WhyChooseUsProps) {
   const [activeTab, setActiveTab] = useState<number>(0);
 
   // Dictionary for page titles & UI headings across 6 languages
@@ -599,10 +600,10 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
         {/* Header Block Section */}
         <div className="text-center flex flex-col items-center gap-2 mb-12 select-none">
           <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em] block animate-pulse">
-            {labels.tagline}
+            {siteData?.text_whyChooseUsHeading || labels.tagline}
           </span>
           <h2 className="font-serif text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-zinc-100 mt-1 max-w-3xl leading-tight">
-            {labels.title}
+            {siteData?.text_whyChooseUsSub || labels.title}
           </h2>
           <div className="h-0.5 w-20 bg-gradient-to-r from-sky-600 to-blue-500 rounded mt-3 mb-1" />
           <p className="text-slate-900 dark:text-zinc-100 text-sm md:text-base max-w-2xl leading-relaxed mt-2">

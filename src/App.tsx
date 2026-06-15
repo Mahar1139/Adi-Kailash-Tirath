@@ -25,8 +25,26 @@ const DEFAULT_SITE_DATA = {
   companyName: "ADI KAILASH TIRATH",
   tagline: "The Spiritual Yatra Pioneer",
   activeSeason: "Yatra Season 2026 Active",
-  phones: ["+91 7017535116", "+91 9760651947"],
-  whatsapp: "https://wa.me/917017535116",
+  headOffice: "Kmou station pithoragarh uttarakhand 262501 india",
+  footerAddress: "Kmou station pithoragarh uttarakhand 262501 india",
+  footerAbout: "Adi Kailash Tirath specializes in high-altitude spiritual yatras across the sacred Himalayan rim. Handcrafted plans incorporating gradual acclimatization, legal border clearance, certified oximetric health trackers, and high-clearance 4x4 vehicles for absolute camper safety.",
+  copyrightText: `© 2026 Adi Kailash Tirath. All Rights Reserved. Spiritual parikrama guides.`,
+  footerImportantLinks: [
+    { label: "Contact Us", url: "contact_us" },
+    { label: "Privacy Policy", url: "privacy_policy" },
+    { label: "Feedback", url: "feedback" }
+  ],
+  footerBottomLinks: [
+    { label: "Terms of Pilgrimage", url: "privacy_policy" },
+    { label: "High-Altitude Health Policy", url: "privacy_policy" }
+  ],
+  contactFormFields: [
+    { label: "YOUR NAME", type: "text", required: true },
+    { label: "EMAIL ADDRESS", type: "email", required: true },
+    { label: "MESSAGE", type: "textarea", required: true }
+  ],
+  phones: ["+91 9557092965", "+91 7248737777"],
+  whatsapp: "https://wa.me/919557092965",
   email: "info@adikailashtirath.com",
   regNumber: "UT-NT-2026-904",
   nocNumber: "UT-NOC-SHIVA-9092",
@@ -41,7 +59,7 @@ const DEFAULT_SITE_DATA = {
   },
   bannerTickerText: [
     "🕉️ Experience the Divine Adi Kailash & Om Parvat Yatra 2026 - Bookings Open!",
-    "📞 Contact our High Altitude Specialists at +91 7017535116 or +91 9760651947",
+    "📞 Contact our High Altitude Specialists at +91 9557092965 or +91 7248737777",
     "💼 Registered with Uttarakhand Tourism Board (Reg ID: NT-2026)",
     "✈️ Mount Kailash Aerial Darshan Flight (Lucknow Base) - No Chinese Visa/Passport Required!",
     "🏔️ Outer Line Permits & medical forms handled seamlessly by Adi Kailash Tirath team."
@@ -146,6 +164,42 @@ const DEFAULT_SITE_DATA = {
       description: "A tranquil spiritual retreat established by Narayan Swami."
     },
     {
+      title: "Badrinath Temple",
+      categoryRef: "chardham",
+      img: "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=200",
+      description: "The magnificent temple dedicated to Lord Vishnu in the Himalayas."
+    },
+    {
+      title: "Kedarnath Jyotirlinga",
+      categoryRef: "chardham",
+      img: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=200",
+      description: "One of the twelve jyotirlingas, revered deeply by millions of devotees."
+    },
+    {
+      title: "Gangotri",
+      categoryRef: "chardham",
+      img: "https://images.unsplash.com/photo-1626621341517-bbf3d926b12d?q=80&w=200",
+      description: "The sacred origin point of the holy river Ganges."
+    },
+    {
+      title: "Yamunotri",
+      categoryRef: "chardham",
+      img: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=200",
+      description: "The revered source of the Yamuna River and seat of Goddess Yamuna."
+    },
+    {
+      title: "Jageshwar Dham",
+      categoryRef: "panchachuli",
+      img: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
+      description: "A cluster of over 100 ancient stone temples dedicated to Shiva."
+    },
+    {
+      title: "Tungnath & Chopta",
+      categoryRef: "chardham",
+      img: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=200",
+      description: "The highest Shiva temple in the world with breathtaking meadows."
+    },
+    {
       title: "Amarnath Helicopter",
       categoryRef: "amarnath",
       img: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=200",
@@ -180,14 +234,14 @@ export default function App() {
   const [siteData, setSiteData] = useState<any>(DEFAULT_SITE_DATA);
   const [currentLanguage, setCurrentLanguage] = useState<string>("en");
 
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
   const fetchSiteData = async () => {
     try {
       const res = await fetch("/api/site-data");
       if (res.ok) {
-        const data = await res.json();
+        let data = await res.json();
         if (data && Object.keys(data).length > 0) {
+          const mergedPackages = [...(data.packages || []), ...YATRA_PACKAGES.filter(p => !(data.packages || []).find((sp: any) => sp.id === p.id || sp.title === p.title))];
+          data.packages = mergedPackages;
           setSiteData(data);
         }
       }
@@ -198,23 +252,13 @@ export default function App() {
 
   useEffect(() => {
     fetchSiteData();
-
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Localize site data properties dynamically for the selected language
   const localizedSiteData = {
     ...siteData,
     bannerTickerText: getLocalizedTickerText(siteData?.bannerTickerText || DEFAULT_SITE_DATA.bannerTickerText, currentLanguage),
-    packages: getLocalizedPackages([...(siteData?.packages || []), ...YATRA_PACKAGES.filter(p => !(siteData?.packages || []).find((sp: any) => sp.id === p.id))], currentLanguage),
+    packages: getLocalizedPackages([...(siteData?.packages || []), ...YATRA_PACKAGES.filter(p => !(siteData?.packages || []).find((sp: any) => sp.id === p.id || sp.title === p.title))], currentLanguage),
     blogs: getLocalizedBlogs(siteData?.blogs || DEFAULT_SITE_DATA.blogs, currentLanguage),
     travelStories: getLocalizedStories(siteData?.travelStories || DEFAULT_SITE_DATA.travelStories, currentLanguage),
     yatriFeedbacks: getLocalizedFeedback(siteData?.yatriFeedbacks || DEFAULT_SITE_DATA.yatriFeedbacks, currentLanguage),
@@ -247,14 +291,37 @@ export default function App() {
     );
   }
 
+  // Generate Google font import URL dynamically based on selections
+  const generateGoogleFontsUrl = () => {
+    if (!siteData) return "";
+    const uniqueFonts = Array.from(new Set([
+      siteData.font_headings || "Geist",
+      siteData.font_body || "Inter",
+      siteData.font_accent || "JetBrains Mono"
+    ])).map(font => font.replace(/\s+/g, "+"));
+    
+    if (uniqueFonts.length === 0) return "";
+    return `https://fonts.googleapis.com/css2?${uniqueFonts.map(f => `family=${f}:wght@400;500;600;700;800`).join("&")}&display=swap`;
+  };
+
   return (
-    <div className="min-h-screen bg-[#fafaf9] dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-sky-600 selection:text-white relative overflow-x-hidden">
+    <div 
+      className="min-h-screen bg-[#fafaf9] dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-sky-600 selection:text-white relative overflow-x-hidden"
+      style={{
+        "--font-sans": `"${siteData?.font_body || "Inter"}", ui-sans-serif, system-ui, sans-serif`,
+        "--font-serif": `"${siteData?.font_headings || "Geist"}", ui-serif, Georgia, serif`,
+        "--font-mono": `"${siteData?.font_accent || "JetBrains Mono"}", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`
+      } as React.CSSProperties}
+    >
+      <style>
+        {`@import url('${generateGoogleFontsUrl()}');`}
+      </style>
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] max-w-[600px] max-h-[600px] rounded-full bg-sky-500/10 blur-[100px]" />
         <div className="absolute bottom-[-10%] left-[-5%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full bg-blue-500/10 blur-[120px]" />
         <div className="absolute top-[40%] left-[20%] w-[30vw] h-[30vw] max-w-[500px] max-h-[500px] rounded-full bg-rose-500/5 blur-[120px]" />
       </div>
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10 flex flex-col min-h-screen flex-1 w-full">
       {/* 1. Header Ticker */}
       <Ticker 
         siteData={localizedSiteData} 
@@ -343,15 +410,15 @@ export default function App() {
 
       {/* 4. Journey Destinations Circular Grid */}
       {activeCategory === "home" && (
-        <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className="py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 select-none text-center">
+        <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className="pt-10 pb-8 bg-gradient-to-b from-sky-50/30 via-white/50 to-sky-50/40 dark:from-sky-900/10 dark:via-zinc-950/50 dark:to-sky-900/10 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 select-none text-center">
           <div className="w-full max-w-full mx-auto px-4 md:px-8">
             <span className="text-sky-500 font-mono text-xs md:text-sm lg:text-base font-bold uppercase tracking-[0.25em] block mb-2">
-              {t("shrineHeading", currentLanguage)}
+              {siteData?.text_shrineHeading || t("shrineHeading", currentLanguage)}
             </span>
             <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl xl:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
-              {t("shrineSub", currentLanguage)}
+              {siteData?.text_shrineSub || t("shrineSub", currentLanguage)}
             </h2>
-            <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-2 mb-10" />
+            <div className="h-0.5 w-[80%] md:w-[60%] max-w-2xl bg-gradient-to-r from-sky-600 to-blue-500 rounded mx-auto mt-2 mb-4" />
           </div>
 
           <div className="w-full">
@@ -368,7 +435,7 @@ export default function App() {
       {/* 5. Active Packages Grid System */}
       {activeCategory !== "why_choose_us" && activeCategory !== "contact_us" && activeCategory !== "privacy_policy" && activeCategory !== "feedback" && activeCategory !== "blogs" && (
         <PackageGrid
-          activeCategory={activeCategory === "home" || activeCategory === "packages" ? "all" : activeCategory}
+          activeCategory={activeCategory}
           setActiveCategory={setActiveCategory}
           onOpenPackage={(pkg) => setOpenedPackage(pkg)}
           siteData={localizedSiteData}
@@ -379,6 +446,7 @@ export default function App() {
       {activeCategory === "why_choose_us" && (
         <WhyChooseUs
           currentLanguage={currentLanguage}
+          siteData={siteData}
           onOpenConsultant={() => setIsConsultantOpen(true)}
           onNavigateToCatalog={() => {
             setActiveCategory("home");
@@ -390,7 +458,7 @@ export default function App() {
         />
       )}
 
-      {activeCategory === "contact_us" && <ContactUs />}
+      {activeCategory === "contact_us" && <ContactUs siteData={siteData} />}
       {activeCategory === "privacy_policy" && <PrivacyPolicy />}
       {activeCategory === "feedback" && <Feedback feedbacks={localizedSiteData.yatriFeedbacks} />}
 
@@ -405,18 +473,18 @@ export default function App() {
 
       {/* 9. Blogs and Spiritual Vlogs section */}
       {(activeCategory === "home" || activeCategory === "blogs") && (
-        <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className={`py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none ${activeCategory === "blogs" ? "pt-24 min-h-screen" : ""}`}>
+        <motion.section initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }} className={`py-16 bg-gradient-to-b from-sky-50/50 via-white/40 to-sky-100/50 dark:from-sky-900/10 dark:via-zinc-950/40 dark:to-sky-900/20 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none ${activeCategory === "blogs" ? "pt-24 min-h-screen" : ""}`}>
           <div className="w-full max-w-full mx-auto px-4 md:px-8">
             <div className="text-center flex flex-col items-center gap-2 mb-10">
               <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em]">
-                {t("blog", currentLanguage)}
+                {siteData?.text_blogTitle ? "BLOGS" : t("blog", currentLanguage)}
               </span>
               <h2 className="font-serif text-2xl md:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
-                {t("blogTitle", currentLanguage)}
+                {siteData?.text_blogTitle || t("blogTitle", currentLanguage)}
               </h2>
-              <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded mt-1.5" />
+              <div className="h-0.5 w-[80%] md:w-[60%] max-w-2xl bg-gradient-to-r from-sky-600 to-blue-500 rounded mt-1.5" />
               <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1.5">
-                {t("blogSub", currentLanguage)}
+                {siteData?.text_blogSub || t("blogSub", currentLanguage)}
               </p>
             </div>
 
@@ -465,7 +533,7 @@ export default function App() {
       )}
 
       {/* 10. Accreditations Badges */}
-      <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.7 }} className="py-12 bg-slate-100/40 dark:bg-zinc-900/40 border-t border-slate-300/60 dark:border-zinc-700/60 px-4 select-none">
+      <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.7 }} className="py-12 bg-gradient-to-b from-sky-50/30 to-sky-100/40 dark:from-sky-900/10 dark:to-sky-900/20 border-t border-slate-300/60 dark:border-zinc-700/60 px-4 select-none">
         <div className="w-full max-w-full mx-auto px-4 md:px-8 flex flex-col md:flex-row flex-wrap justify-center items-center gap-5 md:gap-10">
           <p className="text-zinc-505 font-mono text-[10px] uppercase tracking-widest font-bold text-center md:text-left">
             {t("verifiedPartner", currentLanguage)}
@@ -582,7 +650,7 @@ export default function App() {
 
       {/* Persistent Floating Arc/Quadrant Menu Group */}
       {!isConsultantOpen && (
-        <div className="fixed bottom-6 right-6 z-40 select-none">
+        <div className="fixed bottom-8 right-6 z-40 select-none">
           {/* Subtle Backdrop Darkening for Expanded Floating Menu */}
           {isMenuExpanded && (
             <div 
@@ -595,7 +663,7 @@ export default function App() {
           <div className="relative z-40 flex items-center justify-center">
             {/* WhatsApp Item (fans out Left: -x) */}
             <a
-              href={siteData?.whatsapp || "https://wa.me/917017535116"}
+              href={siteData?.whatsapp || "https://wa.me/919557092965"}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsMenuExpanded(false)}
@@ -616,7 +684,7 @@ export default function App() {
 
             {/* Direct Phone Call Item (fans out Diagonal: -x, -y) */}
             <a
-              href={`tel:${siteData?.phones?.[0] || "+917017535116"}`}
+              href={`tel:${siteData?.phones?.[0] || "+919557092965"}`}
               onClick={() => setIsMenuExpanded(false)}
               className={`absolute h-12 w-12 rounded-full bg-[#34C759] hover:bg-[#28a745] active:bg-[#1e7e34] border border-white/10 text-white flex items-center justify-center shadow-xl transition-all duration-500 hover:scale-110 active:scale-95 ${
                 isMenuExpanded 
@@ -636,7 +704,7 @@ export default function App() {
               }}
               className={`absolute h-12 w-12 rounded-full bg-gradient-to-r from-sky-600 to-blue-500 hover:from-sky-550 hover:to-blue-450 border border-white/10 text-white flex items-center justify-center shadow-xl transition-all duration-500 hover:scale-110 active:scale-95 cursor-pointer ${
                 isMenuExpanded 
-                  ? "opacity-100 translate-x-0 translate-y-[-72px] scale-100 pointer-events-auto" 
+                  ? "opacity-100 translate-x-[35px] translate-y-[-63px] scale-100 pointer-events-auto" 
                   : "opacity-0 translate-x-0 translate-y-0 scale-50 pointer-events-none"
               }`}
               title="Ask Spiritual AI Assistant"
@@ -665,27 +733,6 @@ export default function App() {
         </div>
       )}
 
-      {/* Elegant Scroll To Top Button */}
-      {showScrollTop && !isMenuExpanded && (
-        <button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className={`fixed z-40 bg-white/95 dark:bg-zinc-950/95 border border-sky-200 hover:border-sky-500 text-sky-600 hover:text-white hover:bg-sky-600 h-11 w-11 rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer select-none group focus:outline-none ${
-            isConsultantOpen ? "bottom-6 right-6" : "bottom-24 right-7.5"
-          }`}
-          title={currentLanguage === "hi" ? "ऊपर जाएं" : "Scroll to Top"}
-        >
-          <svg
-            className="h-5 w-5 stroke-[2.5] group-hover:-translate-y-0.5 transition-transform duration-300"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="18 15 12 9 6 15" />
-          </svg>
-        </button>
-      )}
       </div>
 
     </div>

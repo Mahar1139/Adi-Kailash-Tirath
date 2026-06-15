@@ -1,0 +1,62 @@
+const fs = require('fs');
+const path = require('path');
+
+const langFile = path.join(__dirname, 'src/utils/lang.ts');
+const langDataFile = path.join(__dirname, 'src/utils/lang_data.ts');
+
+let langCode = fs.readFileSync(langFile, 'utf8');
+let langDataCode = fs.readFileSync(langDataFile, 'utf8');
+
+// Updating DESTINATION_TRANSLATIONS in lang.ts
+const destAdditions = {
+  hi: {
+    "Badrinath Temple": { title: "बद्रीनाथ मंदिर", desc: "हिमालय में भगवान विष्णु को समर्पित भव्य मंदिर।" },
+    "Kedarnath Jyotirlinga": { title: "केदारनाथ ज्योतिर्लिंग", desc: "बारह ज्योतिर्लिंगों में से एक, लाखों भक्तों द्वारा पूजनीय।" },
+    "Gangotri": { title: "गंगोत्री", desc: "पवित्र नदी गंगा का उद्गम स्थल।" },
+    "Yamunotri": { title: "यमुनोत्री", desc: "यमुना नदी का पवित्र स्रोत और देवी यमुना का आसन।" },
+    "Jageshwar Dham": { title: "जागेश्वर धाम", desc: "भगवान शिव को समर्पित 100 से अधिक प्राचीन प्रस्तर मंदिरों का समूह।" },
+    "Tungnath & Chopta": { title: "तुंगनाथ और चोपता", desc: "दुनिया का सबसे ऊंचा शिव मंदिर और सांसें रोक देने वाले घास के मैदान।" }
+  },
+  ta: {
+    "Badrinath Temple": { title: "பத்ரிநாத் கோவில்", desc: "இமயமலையில் உள்ள பகவான் விஷ்ணுவின் பிரம்மாண்டமான கோவில்." },
+    "Kedarnath Jyotirlinga": { title: "கேதார்நாத் ஜோதிர்லிங்கம்", desc: "பன்னிரண்டு ஜோதிர்லிங்கங்களில் ஒன்று, மில்லியன் கணக்கான பக்தர்களால் வணங்கப்படுகிறது." },
+    "Gangotri": { title: "கங்கோத்ரி", desc: "புனித கங்கை நதியின் தோற்ற இடம்." },
+    "Yamunotri": { title: "யமுனோத்ரி", desc: "யமுனை நதியின் புனித மூலமும், யமுனை தேவியின் இருப்பிடமும்." },
+    "Jageshwar Dham": { title: "ஜாகேஷ்வர் தாம்", desc: "சிவபெருமானுக்கு அர்ப்பணிக்கப்பட்ட 100க்கும் மேற்பட்ட பழமையான கல் கோவில்களின் தொகுப்பு." },
+    "Tungnath & Chopta": { title: "துங்நாத் & சோப்தா", desc: "உலகின் மிக உயரமான சிவன் கோவில் மற்றும் மூச்சடைக்கச் செய்யும் புல்வெளிகள்." }
+  },
+  te: {
+    "Badrinath Temple": { title: "బద్రీనాథ్ ఆలయం", desc: "హిమాలయాలలో శ్రీ మహావిష్ణువుకు అంకితం చేయబడిన అద్భుతమైన ఆలయం." },
+    "Kedarnath Jyotirlinga": { title: "కేదార్‌నాథ్ జ్యోతిర్లింగం", desc: "పన్నెండు జ్యోతిర్లింగాలలో ఒకటి, లక్షలాది మంది భక్తులచే పూజించబడుతుంది." },
+    "Gangotri": { title: "గంగోత్రి", desc: "పవిత్ర గంగా నది పుట్టిన ప్రదేశం." },
+    "Yamunotri": { title: "యమునోత్రి", desc: "యమునా నది జన్మస్థానం మరియు యమునా దేవి కొలువై ఉన్న ప్రదేశం." },
+    "Jageshwar Dham": { title: "జాగేశ్వర్ ధామ్", desc: "శివునికి అంకితం చేయబడిన 100 కి పైగా పురాతన రాతి ఆలయాల సమూహం." },
+    "Tungnath & Chopta": { title: "తుంగనాథ్ & చోప్టా", desc: "ప్రపంచంలో ఎత్తైన శివాలయం మరియు అద్భుతమైన పచ్చదనం." }
+  },
+  gu: {
+    "Badrinath Temple": { title: "બદ્રીનાથ મંદિર", desc: "હિમાલયમાં ભગવાન વિષ્ણુને સમર્પિત ભવ્ય મંદિર." },
+    "Kedarnath Jyotirlinga": { title: "કેદારનાથ જ્યોતિર્લિંગ", desc: "બાર જ્યોતિર્લિંગોમાંનું એક, લાખો ભક્તો દ્વારા પૂજનીય." },
+    "Gangotri": { title: "ગંગોત્રી", desc: "પવિત્ર ગંગા નદીનું ઉદ્ગમ સ્થાન." },
+    "Yamunotri": { title: "યમુનોત્રી", desc: "યમુના નદીનું પવિત્ર ઉદ્ગમ અને દેવી યમુનાનું સ્થાન." },
+    "Jageshwar Dham": { title: "જાગેશ્વર ધામ", desc: "ભગવાન શિવને સમર્પિત 100 થી વધુ પ્રાચીન પથ્થર મંદિરોનો સમૂહ." },
+    "Tungnath & Chopta": { title: "તુંગનાથ અને ચોપતા", desc: "વિશ્વનું સૌથી ઊંચું શિવ મંદિર અને શ્વાસ રોકી દે તેવા ઘાસનાં મેદાનો." }
+  },
+  pa: {
+    "Badrinath Temple": { title: "ਬਦਰੀਨਾਥ ਮੰਦਰ", desc: "ਹਿਮਾਲਿਆ ਵਿੱਚ ਭਗਵਾਨ ਵਿਸ਼ਨੂੰ ਨੂੰ ਸਮਰਪਿਤ ਸ਼ਾਨਦਾਰ ਮੰਦਰ।" },
+    "Kedarnath Jyotirlinga": { title: "ਕੇਦਾਰਨਾਥ ਜੋਤਿਰਲਿੰਗ", desc: "ਬਾਰਾਂ ਜੋਤਿਰਲਿੰਗਾਂ ਵਿੱਚੋਂ ਇੱਕ, ਲੱਖਾਂ ਸ਼ਰਧਾਲੂਆਂ ਦੁਆਰਾ ਪੂਜਿਆ ਜਾਂਦਾ ਹੈ।" },
+    "Gangotri": { title: "ਗੰਗੋਤਰੀ", desc: "ਪਵਿੱਤਰ ਗੰਗਾ ਨਦੀ ਦਾ ਜਨਮ ਸਥਾਨ।" },
+    "Yamunotri": { title: "ਯਮੁਨੋਤਰੀ", desc: "ਯਮੁਨਾ ਨਦੀ ਦਾ ਪਵਿੱਤਰ ਸਰੋਤ ਅਤੇ ਦੇਵੀ ਯਮੁਨਾ ਦਾ ਅਸਥਾਨ।" },
+    "Jageshwar Dham": { title: "ਜਾਗੇਸ਼ਵਰ ਧਾਮ", desc: "ਭਗਵਾਨ ਸ਼ਿਵ ਨੂੰ ਸਮਰਪਿਤ 100 ਤੋਂ ਵੱਧ ਪ੍ਰਾਚੀਨ ਪੱਥਰ ਦੇ ਮੰਦਰਾਂ ਦਾ ਸਮੂਹ।" },
+    "Tungnath & Chopta": { title: "ਤੁੰਗਨਾਥ ਅਤੇ ਚੋਪਤਾ", desc: "ਦੁਨੀਆ ਦਾ ਸਭ ਤੋਂ ਉੱਚਾ ਸ਼ਿਵ ਮੰਦਰ ਅਤੇ ਸਾਹ ਰੋਕ ਦੇਣ ਵਾਲੇ ਘਾਹ ਦੇ ਮੈਦਾਨ।" }
+  }
+};
+
+for (const lang of Object.keys(destAdditions)) {
+  const insertStr = '    "Amarnath Helicopter": {\n      title: "' + (lang === 'hi' ? "अमरनाथ हेलीकॉप्टर" : lang === 'ta' ? "அமர்நாத் ஹெலிகாப்டர்" : lang === 'te' ? "అమర్‌నాథ్ హెలికాప్టర్" : lang === 'gu' ? "અમરનાથ હેલિકોપ્ટર" : "ਅਮਰਨਾਥ ਹੈਲੀਕਾਪਟਰ") + '",\n      desc: "' + (lang === "hi" ? "बालटाल से पवित्र बर्फ गुफा मंदिर के लिए आसान 1-दिवसीय हेलीकॉप्टर यात्रा।" : lang === "ta" ? "பால்டால் முதல் புனித பனி குகை கோவில் வரை எளிதான 1 நாள் ஹெலிகாப்டர் பயணம்." : lang === "te" ? "బాల్టాల్ నుండి పవిత్ర మంచు గుహ ఆలయానికి సులభమైన 1-రోజు హెలికాప్టర్ ప్రయాణం." : lang === "gu" ? "બાલટાલથી પવિત્ર બરફ ગુફા મંદિર સુધી સરળ 1-દિવસીય હેલિકોપ્ટર યાત્રા." : "ਬਾਲਟਾਲ ਤੋਂ ਪਵਿੱਤਰ ਬਰਫ ਗੁਫਾ ਮੰਦਰ ਲਈ ਆਸਾਨ 1-ਰੋਜ਼ਾ ਹੈਲੀਕਾਪਟਰ ਯਾਤਰਾ।") + '"\n    },\n' + Object.keys(destAdditions[lang]).map(k => `    "${k}": {\n      title: "${destAdditions[lang][k].title}",\n      desc: "${destAdditions[lang][k].desc}"\n    }`).join(',\n') + '\n';
+  
+  const searchStrRegex = new RegExp(`    "Amarnath Helicopter": {\\s+title: "[^"]+",\\s+desc: "[^"]+"\\s+}`);
+  langCode = langCode.replace(searchStrRegex, insertStr);
+}
+
+fs.writeFileSync(langFile, langCode);
+console.log("Updated lang.ts");

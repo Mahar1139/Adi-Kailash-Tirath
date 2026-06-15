@@ -139,6 +139,45 @@ export const YATRA_PACKAGES: YatraPackage[] = [
     ],
     imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
   },
+  {
+    id: "kedarnath-heli-yatra",
+    category: "chardham",
+    title: "Kedarnath Helicopter Darshan Package",
+    badge: "VIP Helicopter",
+    duration: "2 Nights / 3 Days",
+    price: "From ₹14,500",
+    fromRoute: "Pickup: Phata/Sirsi",
+    overview: "Avoid the arduous trek with this quick, scenic, and spiritually uplifting helicopter ride directly to the Kedarnath holy shrine.",
+    difficulty: "Easy",
+    highlights: ["Round-trip Helicopter tickets", "VIP Darshan pass assistance", "Breathtaking aerial views of the Mandakini valley", "Overnight stay near the temple"],
+    inclusion: ["Helicopter tickets (Phata/Sirsi to Kedarnath and return)", "Accommodation in Kedarnath", "Breakfast & Dinner", "Shuttle service to helipad"],
+    exclusion: ["Travel to Phata/Sirsi", "Pony/Palki rides", "Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Arrival at Guptkashi/Phata", details: "Arrive at Phata. Check-in at the hotel. Evening at leisure. Briefing for the helicopter ride tomorrow." },
+      { day: 2, title: "Kedarnath Darshan", details: "Morning flight to Kedarnath. Perform pooja and VIP darshan at the ancient temple. Explore the surroundings. Overnight stay at Kedarnath." },
+      { day: 3, title: "Return to Phata & Departure", details: "Morning flight back to Phata/Sirsi. Collect luggage and proceed for your onward journey." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=800"
+  },
+  {
+    id: "badrinath-exclusive",
+    category: "chardham",
+    title: "1-Day Exclusive Badrinath Darshan Safari",
+    badge: "Fast-Track Darshan",
+    duration: "1 Night / 2 Days",
+    price: "₹8,000",
+    fromRoute: "Pickup & Drop: Joshimath",
+    overview: "A focused, comfortable round-trip to the seat of Lord Vishnu. Experience Tapt Kund and secure hassle-free darshan.",
+    difficulty: "Easy",
+    highlights: ["VIP Darshan at Badrinath Temple", "Tapt Kund holy bath", "Visit to Mana Village & Vyas Gufa"],
+    inclusion: ["Transportation in SUV", "Accommodation at Joshimath", "Meals (Breakfast and Dinner)"],
+    exclusion: ["Special pooja charges", "Personal expenses"],
+    itinerary: [
+      { day: 1, title: "Joshimath to Badrinath", details: "Drive from Joshimath to Badrinath. Participate in evening Aarti. Overnight stay near the temple." },
+      { day: 2, title: "Darshan and Return", details: "Early morning bath in Tapt Kund followed by Badrinath Darshan. Optional visit to Mana Village. Return to Joshimath." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=800"
+  },
   // --- Dummy Packages for other destinations ---
   {
     id: "kailash-mansarovar-dummy",
@@ -591,6 +630,30 @@ export const YATRA_PACKAGES: YatraPackage[] = [
       { day: 2, title: "Yoga", details: "Do yoga." }
     ],
     imageUrl: "https://images.unsplash.com/photo-1609137144814-7d5ca83050fb?q=80&w=800"
+  },
+  {
+    id: "panchachuli-trek-adventure",
+    category: "panchachuli",
+    title: "Panchachuli Base Camp Trek & Darma Valley",
+    badge: "Trekking Adventure",
+    duration: "6 Nights / 7 Days",
+    price: "₹21,000",
+    fromRoute: "Pickup & Drop: Kathgodam",
+    overview: "Explore the striking five peaks of Panchachuli through a well-paced trek navigating the remote and picturesque Darma Valley.",
+    difficulty: "Hard",
+    highlights: ["Trek to Panchachuli Base Camp", "Immerse in Darma Valley's untouched beauty", "Pass through dense cedar forests", "Experience nomadic tribal hospitality"],
+    inclusion: ["Transport from Kathgodam to Dharchula/Dantu", "Trekking guide and permits", "Meals during the trek", "Tents and sleeping bags"],
+    exclusion: ["Porter/mule for personal luggage", "Travel insurance", "Personal trekking gear"],
+    itinerary: [
+      { day: 1, title: "Kathgodam to Dharchula", details: "Long drive into the Kumaon hills. Rest at Dharchula." },
+      { day: 2, title: "Dharchula to Dantu", details: "Drive into Darma Valley, reaching Dantu village. Briefing for the trek." },
+      { day: 3, title: "Dantu to Base Camp", details: "Trek through the beautiful bugyals (meadows) to the Panchachuli base camp. Camp under the stars." },
+      { day: 4, title: "Explore Glacier", details: "Spend the day exploring the glacier and taking in the panoramic 5 peaks. Return to Base Camp." },
+      { day: 5, title: "Base Camp to Duk", details: "Descend slowly exploring neighboring tribal hamlets." },
+      { day: 6, title: "Duk to Dharchula", details: "Trek back to the road head and drive down to Dharchula." },
+      { day: 7, title: "Return to Kathgodam", details: "Concluding journey back to Kathgodam railway station." }
+    ],
+    imageUrl: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=800"
   }
 ];
 
@@ -687,6 +750,16 @@ export const BLOGS: Blog[] = [
     readTime: "8 Min Read",
     imageUrl: "https://images.unsplash.com/photo-1548543604-a87c9909abec?q=80&w=500",
     content: "High Altitude sickness is completely preventable if rules are followed. Rule 1: Never ascend more than 1,000 meters in a single day once you cross 8,000 feet. That is why our itineraries feature 2 rest nights in Pithoragarh & Dharchula standard. Rule 2: Force hydrate! Drink 4-5 liters of lukewarm water daily. Rule 3: Avoid caffeine, alcohol, and heavy sleep medicines, which slow breathing rates. Listen to your guide, and check oxygen levels on oximeters twice daily."
+  },
+  {
+    id: "blog-4",
+    title: "Chardham Yatra 2026: Opening Dates, Helicopters, and VIP Protocols",
+    excerpt: "Get ahead of the summer rush by understanding the newly released opening dates for Kedarnath, Badrinath, Yamunotri, and Gangotri.",
+    date: "10 April 2026",
+    author: "Shri Ajay Basera",
+    readTime: "7 Min Read",
+    imageUrl: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=500",
+    content: "Every year on Akshaya Tritiya, the holy portals of Yamunotri and Gangotri are opened, marking the start of the Chardham Yatra. Kedarnath opens a few days later following the Bhairavnath rituals. In 2026, helicopter quotas have been restricted strictly to early-bird bookings to prevent stampede delays at Phata and Sirsi. Make sure your local operators confirm your biometric registrations locally first—otherwise even an e-pass won't let you bypass the long queues."
   }
 ];
 

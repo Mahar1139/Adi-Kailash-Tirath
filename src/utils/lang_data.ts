@@ -2,7 +2,100 @@
 export const DATA_LOCALIZATION_ADDITIONAL: { [lang: string]: { [key: string]: any } } = {
   ta: {
     // Packages
-    "adi-kailash-standard": {
+        "kedarnath-heli-yatra": {
+      "title": "கேதார்நாத் ஹெலிகாப்டர் தரிசனம்",
+      "badge": "VIP Helicopter",
+      "duration": "2 Days",
+      "fromRoute": "Phata / Sirsi",
+      "overview": "Avoid the arduous trek with this quick, scenic helicopter ride.",
+      "difficulty": "Easy",
+      "highlights": [
+            "Helicopter ride",
+            "VIP Darshan"
+      ],
+      "inclusion": [
+            "Tickets",
+            "Stay"
+      ],
+      "exclusion": [
+            "Personal trips"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Arrival",
+                  "details": "Arrive and rest."
+            },
+            {
+                  "day": 2,
+                  "title": "Darshan",
+                  "details": "Fly and pray."
+            }
+      ]
+    },
+    "badrinath-exclusive": {
+      "title": "பத்ரிநாத் 1-நாள் சிறப்பு பயணம்",
+      "badge": "Fast-Track",
+      "duration": "1 Day",
+      "fromRoute": "Joshimath",
+      "overview": "A focused round trip to the seat of Lord Vishnu.",
+      "difficulty": "Easy",
+      "highlights": [
+            "Badrinath Darshan",
+            "Mana Village"
+      ],
+      "inclusion": [
+            "Transport",
+            "Stay"
+      ],
+      "exclusion": [
+            "Pooja charges"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Drive to Badrinath",
+                  "details": " इवनिंग आरती."
+            },
+            {
+                  "day": 2,
+                  "title": "Darshan & Return",
+                  "details": "सुबह दर्शन और वापसी."
+            }
+      ]
+    },
+    "panchachuli-trek-adventure": {
+      "title": "பஞ்சசுலி பேஸ் கேம்ப் மலையேற்றம்",
+      "badge": "Adventure",
+      "duration": "7 Days",
+      "fromRoute": "Kathgodam",
+      "overview": "Trek through the striking five peaks in Darma Valley.",
+      "difficulty": "Hard",
+      "highlights": [
+            "Trek",
+            "Base Camp"
+      ],
+      "inclusion": [
+            "Guide",
+            "Tents"
+      ],
+      "exclusion": [
+            "Personal Gear"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Kathgodam to Dharchula",
+                  "details": "Drive"
+            },
+            {
+                  "day": 3,
+                  "title": "Trek to Base",
+                  "details": "Trek"
+            }
+      ]
+    },
+"adi-kailash-standard": {
       title: "ஆதி கைலாசம், ஓம் பர்வதம் & பாபாஜி குகை தனிப்பட்ட யாத்திரை",
       badge: "பிரபலமான யாத்திரை",
       duration: "7 இரவுகள் / 8 நாட்கள்",
@@ -219,7 +312,12 @@ export const DATA_LOCALIZATION_ADDITIONAL: { [lang: string]: { [key: string]: an
     },
 
     // Blogs
-    "blog-1": {
+        "blog-4": {
+      "title": "சார்தாம் யாத்திரை 2026: திறப்பு தேதிகள் மற்றும் முக்கிய தகவல்கள்",
+      "excerpt": "Get ahead of the summer rush by understanding the newly released opening dates.",
+      "content": "Every year on Akshaya Tritiya, the portals open..."
+    },
+"blog-1": {
       title: "ஆதி கைலாசம் மற்றும் ஓம் பர்வத யாத்திரைக்கான முழுமையான வழிகாட்டி",
       excerpt: "12,000 அடிக்கு மேல் உயரத்தில் உடலைத் தயார் செய்தல் மற்றும் கொண்டு செல்ல வேண்டிய பொருட்கள்.",
       content: "ஆதி கைலாச யாத்திரை ஆன்மீக பக்தர்களின் கனவுப் பயணம். 12,000 அடிக்கு மேல் செல்வதால், யாத்திரைக்கு 30 நாட்களுக்கு முன்பே தினமும் 5 கி.மீ நடப்பதும், மூச்சுப் பயிற்சியும் செய்ய வேண்டியது அவசியம். இரவு நேரத்தில் வெப்பநிலை 0°C வரை குறைவதால் கம்பளி ஆடைகளை மறக்காமல் எடுத்துச் செல்லுங்கள்."
@@ -309,7 +407,100 @@ export const DATA_LOCALIZATION_ADDITIONAL: { [lang: string]: { [key: string]: an
 
   te: {
     // Packages
-    "adi-kailash-standard": {
+        "kedarnath-heli-yatra": {
+      "title": "కేదార్‌నాథ్ హెలికాప్టర్ దర్శనం",
+      "badge": "VIP Helicopter",
+      "duration": "2 Days",
+      "fromRoute": "Phata / Sirsi",
+      "overview": "Avoid the arduous trek with this quick, scenic helicopter ride.",
+      "difficulty": "Easy",
+      "highlights": [
+            "Helicopter ride",
+            "VIP Darshan"
+      ],
+      "inclusion": [
+            "Tickets",
+            "Stay"
+      ],
+      "exclusion": [
+            "Personal trips"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Arrival",
+                  "details": "Arrive and rest."
+            },
+            {
+                  "day": 2,
+                  "title": "Darshan",
+                  "details": "Fly and pray."
+            }
+      ]
+    },
+    "badrinath-exclusive": {
+      "title": "బద్రీనాథ్ 1-రోజు ప్రత్యేక యాత్ర",
+      "badge": "Fast-Track",
+      "duration": "1 Day",
+      "fromRoute": "Joshimath",
+      "overview": "A focused round trip to the seat of Lord Vishnu.",
+      "difficulty": "Easy",
+      "highlights": [
+            "Badrinath Darshan",
+            "Mana Village"
+      ],
+      "inclusion": [
+            "Transport",
+            "Stay"
+      ],
+      "exclusion": [
+            "Pooja charges"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Drive to Badrinath",
+                  "details": " इवनिंग आरती."
+            },
+            {
+                  "day": 2,
+                  "title": "Darshan & Return",
+                  "details": "सुबह दर्शन और वापसी."
+            }
+      ]
+    },
+    "panchachuli-trek-adventure": {
+      "title": "పంచాచులి బేస్ క్యాంప్ ట్రెక్కింగ్",
+      "badge": "Adventure",
+      "duration": "7 Days",
+      "fromRoute": "Kathgodam",
+      "overview": "Trek through the striking five peaks in Darma Valley.",
+      "difficulty": "Hard",
+      "highlights": [
+            "Trek",
+            "Base Camp"
+      ],
+      "inclusion": [
+            "Guide",
+            "Tents"
+      ],
+      "exclusion": [
+            "Personal Gear"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Kathgodam to Dharchula",
+                  "details": "Drive"
+            },
+            {
+                  "day": 3,
+                  "title": "Trek to Base",
+                  "details": "Trek"
+            }
+      ]
+    },
+"adi-kailash-standard": {
       title: "ఆది కైలాష్, ఓం పర్వతం & బాబాజీ గుహ వ్యక్తిగత యాత్ర",
       badge: "ప్రసిద్ధ యాత్ర",
       duration: "7 రాత్రులు / 8 రోజులు",
@@ -526,7 +717,12 @@ export const DATA_LOCALIZATION_ADDITIONAL: { [lang: string]: { [key: string]: an
     },
 
     // Blogs
-    "blog-1": {
+        "blog-4": {
+      "title": "చార్‌ధామ్ యాత్ర 2026: ప్రారంభ తేదీలు మరియు ముఖ్య సమాచారం",
+      "excerpt": "Get ahead of the summer rush by understanding the newly released opening dates.",
+      "content": "Every year on Akshaya Tritiya, the portals open..."
+    },
+"blog-1": {
       title: "ఆది కైలాష్ మరియు ఓం పర్వత యాత్రకు పూర్తి సన్నద్ధత గైడ్",
       excerpt: "12,000 అడుగుల పైన శరీర ఉష్ణోగ్రత మరియు శ్వాస నియంత్రణ కొరకు వైద్య చిట్కాలు.",
       content: "ఆది కైలాష్ యాత్ర అత్యంత ఆధ్యాత్మికమైన ప్రయాణం. 12,000 అడుగుల పైన శ్వాస సజావుగా ఉండడానికి యాత్రకు 30 రోజుల ముందు నుండే శ్వాస వ్యాయామాలు మరియు రోజుకు 5 కి.మీ నడక అలవాటు చేసుకోండి. రాత్రి వేళల్లో చలి ఎక్కువగా ఉండడం వల్ల థర్మల్ ఉన్ని దుస్తులను తప్పక వెంట ఉంచుకోండి."
@@ -616,7 +812,100 @@ export const DATA_LOCALIZATION_ADDITIONAL: { [lang: string]: { [key: string]: an
 
   gu: {
     // Packages
-    "adi-kailash-standard": {
+        "kedarnath-heli-yatra": {
+      "title": "કેદારનાથ હેલિકોપ્ટર દર્શન",
+      "badge": "VIP Helicopter",
+      "duration": "2 Days",
+      "fromRoute": "Phata / Sirsi",
+      "overview": "Avoid the arduous trek with this quick, scenic helicopter ride.",
+      "difficulty": "Easy",
+      "highlights": [
+            "Helicopter ride",
+            "VIP Darshan"
+      ],
+      "inclusion": [
+            "Tickets",
+            "Stay"
+      ],
+      "exclusion": [
+            "Personal trips"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Arrival",
+                  "details": "Arrive and rest."
+            },
+            {
+                  "day": 2,
+                  "title": "Darshan",
+                  "details": "Fly and pray."
+            }
+      ]
+    },
+    "badrinath-exclusive": {
+      "title": "બદ્રીનાથ ૧-દિવસીય વિશેષ યાત્રા",
+      "badge": "Fast-Track",
+      "duration": "1 Day",
+      "fromRoute": "Joshimath",
+      "overview": "A focused round trip to the seat of Lord Vishnu.",
+      "difficulty": "Easy",
+      "highlights": [
+            "Badrinath Darshan",
+            "Mana Village"
+      ],
+      "inclusion": [
+            "Transport",
+            "Stay"
+      ],
+      "exclusion": [
+            "Pooja charges"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Drive to Badrinath",
+                  "details": " इवनिंग आरती."
+            },
+            {
+                  "day": 2,
+                  "title": "Darshan & Return",
+                  "details": "सुबह दर्शन और वापसी."
+            }
+      ]
+    },
+    "panchachuli-trek-adventure": {
+      "title": "પંચાચૂલી બેઝ કેમ્પ ટ્રેક",
+      "badge": "Adventure",
+      "duration": "7 Days",
+      "fromRoute": "Kathgodam",
+      "overview": "Trek through the striking five peaks in Darma Valley.",
+      "difficulty": "Hard",
+      "highlights": [
+            "Trek",
+            "Base Camp"
+      ],
+      "inclusion": [
+            "Guide",
+            "Tents"
+      ],
+      "exclusion": [
+            "Personal Gear"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Kathgodam to Dharchula",
+                  "details": "Drive"
+            },
+            {
+                  "day": 3,
+                  "title": "Trek to Base",
+                  "details": "Trek"
+            }
+      ]
+    },
+"adi-kailash-standard": {
       title: "આદિ કૈલાશ, ઓમ પર્વત અને મહાવતાર બાબાજી ગુફા વ્યક્તિગત યાત્રા",
       badge: "લોકપ્રિય યાત્રા",
       duration: "7 રાત / 8 દિવસ",
@@ -833,7 +1122,12 @@ export const DATA_LOCALIZATION_ADDITIONAL: { [lang: string]: { [key: string]: an
     },
 
     // Blogs
-    "blog-1": {
+        "blog-4": {
+      "title": "ચારધામ યાત્રા ૨૦૨૬: ખુલવાની તારીખો અને મુખ્ય માહિતી",
+      "excerpt": "Get ahead of the summer rush by understanding the newly released opening dates.",
+      "content": "Every year on Akshaya Tritiya, the portals open..."
+    },
+"blog-1": {
       title: "આદિ કૈલાશ અને ઓમ પર્વત યાત્રા માટે સંપૂર્ણ તૈયારી માર્ગદર્શિકા",
       excerpt: "૧૨,૦૦૦ ફૂટથી વધુની ઊંચાઈ પર શરીરનું અનુકૂલન અને મુસાફરી માર્ગદર્શન.",
       content: "આદિ કૈલાશ યાત્રા દરેક સાધકનું સુવર્ણ સ્વપ્ન છે. શ્વાસ નિયંત્રણ જાળવવા માટે યાત્રાના ૩૦ દિવસ પહેલા ઊંડા શ્વાસ લેવાની કસરતો અને દરરોજ ચાલવાની પ્રેક્ટિસ કરો. પહાડોમાં ઠંડી વધુ હોવાથી ઉનના કપડાં સાથે રાખવા જરૂરી છે."
@@ -923,7 +1217,100 @@ export const DATA_LOCALIZATION_ADDITIONAL: { [lang: string]: { [key: string]: an
 
   pa: {
     // Packages
-    "adi-kailash-standard": {
+        "kedarnath-heli-yatra": {
+      "title": "ਕੇਦਾਰਨਾਥ ਹੈਲੀਕਾਪਟਰ ਦਰਸ਼ਨ",
+      "badge": "VIP Helicopter",
+      "duration": "2 Days",
+      "fromRoute": "Phata / Sirsi",
+      "overview": "Avoid the arduous trek with this quick, scenic helicopter ride.",
+      "difficulty": "Easy",
+      "highlights": [
+            "Helicopter ride",
+            "VIP Darshan"
+      ],
+      "inclusion": [
+            "Tickets",
+            "Stay"
+      ],
+      "exclusion": [
+            "Personal trips"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Arrival",
+                  "details": "Arrive and rest."
+            },
+            {
+                  "day": 2,
+                  "title": "Darshan",
+                  "details": "Fly and pray."
+            }
+      ]
+    },
+    "badrinath-exclusive": {
+      "title": "ਬਦਰੀਨਾਥ 1-ਰੋਜ਼ਾ ਵਿਸ਼ੇਸ਼ ਯਾਤਰਾ",
+      "badge": "Fast-Track",
+      "duration": "1 Day",
+      "fromRoute": "Joshimath",
+      "overview": "A focused round trip to the seat of Lord Vishnu.",
+      "difficulty": "Easy",
+      "highlights": [
+            "Badrinath Darshan",
+            "Mana Village"
+      ],
+      "inclusion": [
+            "Transport",
+            "Stay"
+      ],
+      "exclusion": [
+            "Pooja charges"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Drive to Badrinath",
+                  "details": " इवनिंग आरती."
+            },
+            {
+                  "day": 2,
+                  "title": "Darshan & Return",
+                  "details": "सुबह दर्शन और वापसी."
+            }
+      ]
+    },
+    "panchachuli-trek-adventure": {
+      "title": "ਪੰਚਚੂਲੀ ਬੇਸ ਕੈਂਪ ਟ੍ਰੈਕ",
+      "badge": "Adventure",
+      "duration": "7 Days",
+      "fromRoute": "Kathgodam",
+      "overview": "Trek through the striking five peaks in Darma Valley.",
+      "difficulty": "Hard",
+      "highlights": [
+            "Trek",
+            "Base Camp"
+      ],
+      "inclusion": [
+            "Guide",
+            "Tents"
+      ],
+      "exclusion": [
+            "Personal Gear"
+      ],
+      "itinerary": [
+            {
+                  "day": 1,
+                  "title": "Kathgodam to Dharchula",
+                  "details": "Drive"
+            },
+            {
+                  "day": 3,
+                  "title": "Trek to Base",
+                  "details": "Trek"
+            }
+      ]
+    },
+"adi-kailash-standard": {
       title: "ਆਦਿ ਕੈਲਾਸ਼, ਓਮ ਪਰਵਤ ਅਤੇ ਮਹਾਵਤਾਰ ਬਾਬਾਜੀ ਗੁਫਾ ਨਿੱਜੀ ਯਾਤਰਾ",
       badge: "ਲੋਕਪ੍ਰਿਯ ਯਾਤਰਾ",
       duration: "7 ਰਾਤਾਂ / 8 ਦਿਨ",
@@ -1140,7 +1527,12 @@ export const DATA_LOCALIZATION_ADDITIONAL: { [lang: string]: { [key: string]: an
     },
 
     // Blogs
-    "blog-1": {
+        "blog-4": {
+      "title": "ਚਾਰਧਾਮ ਯਾਤਰਾ 2026: ਸ਼ੁਰੂਆਤੀ ਮਿਤੀਆਂ ਅਤੇ ਜ਼ਰੂਰੀ ਜਾਣਕਾਰੀ",
+      "excerpt": "Get ahead of the summer rush by understanding the newly released opening dates.",
+      "content": "Every year on Akshaya Tritiya, the portals open..."
+    },
+"blog-1": {
       title: "ਆਦਿ ਕੈਲਾਸ਼ ਅਤੇ ਓਮ ਪਰਵਤ ਯਾਤਰਾ ਲਈ ਸੰਪੂਰਨ ਤਿਆਰੀ ਗਾਈਡ",
       excerpt: "12,000 ਫੁੱਟ ਤੋਂ ਉੱਪਰ ਸਿਹਤ ਅਤੇ ਆਕਸੀਜਨ ਦੀ ਸੰਭਾਲ ਲਈ ਮੈਡੀਕਲ ਨੁਸਖੇ।",
       content: "ਆਦਿ ਕੈਲਾਸ਼ ਯਾਤਰਾ ਹਰ ਇੱਕ ਸ਼ਰਧਾਲੂ ਦਾ ਸੁਪਨਾ ਹੈ। ਉੱਚਾਈ 'ਤੇ ਸਿਹਤ ਦੀ ਸੰਭਾਲ ਲਈ 30 ਦਿਨ ਪਹਿਲਾਂ ਸਾਹ ਦੀਆਂ ਕਸਰਤਾਂ ਅਤੇ ਸੈਰ ਸ਼ੁਰੂ ਕਰੋ। ਰਾਤ ਵੇਲੇ ਠੰਡ ਵਧਣ ਕਾਰਨ ਗਰਮ ਥਰਮਲ ਕੱਪੜੇ ਨਾਲ ਰੱਖਣੇ ਜ਼ਰੂਰੀ ਹਨ।"

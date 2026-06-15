@@ -12,7 +12,7 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
 
   const defaultNotices = [
     "🕉️ Experience the Divine Adi Kailash & Om Parvat Yatra 2026 - Bookings Open!",
-    "📞 Contact our High Altitude Specialists at +91 7017535116 or +91 9760651947",
+    "📞 Contact our High Altitude Specialists at +91 9557092965",
     "💼 Registered with Uttarakhand Tourism Board (Reg ID: NT-2026)",
     "✈️ Mount Kailash Aerial Darshan Flight (Lucknow Base) - No Chinese Visa/Passport Required!",
     "🏔️ Outer Line Permits & medical forms handled seamlessly by Adi Kailash Tirath team."
@@ -66,7 +66,7 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
       while ((match = phoneRegex.exec(notice)) !== null) {
         const textBefore = notice.substring(lastIndex, match.index);
         if (textBefore) {
-          parts.push(<span key={`text-${lastIndex}`}>{textBefore}</span>);
+          parts.push(<span key={`text-${lastIndex}`} className="flex items-center">{textBefore}</span>);
         }
         
         const rawPhone = match[0];
@@ -78,7 +78,7 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
             onClick={(e) => {
               e.stopPropagation(); // Stop parent bubble onClick handler triggering
             }}
-            className="inline text-amber-900 hover:text-amber-800 underline font-extrabold font-mono mx-1 transition duration-200"
+            className="inline-flex items-center text-amber-900 hover:text-amber-800 underline font-extrabold font-mono mx-1 transition duration-200"
           >
             {rawPhone}
           </a>
@@ -88,24 +88,24 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
       
       const textAfter = notice.substring(lastIndex);
       if (textAfter) {
-        parts.push(<span key={`text-after`}>{textAfter}</span>);
+        parts.push(<span key={`text-after`} className="flex items-center">{textAfter}</span>);
       }
       
-      return <span className="inline">{parts}</span>;
+      return <span className="inline-flex items-center gap-1">{parts}</span>;
     }
 
     return (
-      <span className="flex items-center gap-1 hover:text-amber-700 transition duration-200">
+      <span className="inline-flex items-center gap-1 hover:text-amber-700 transition duration-200">
         <span>{notice}</span>
-        <ArrowUpRight className="h-2.5 w-2.5 opacity-70 text-amber-800 inline" />
+        <ArrowUpRight className="h-3 w-3 opacity-70 text-amber-800" />
       </span>
     );
   };
 
   return (
-    <div className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-900 overflow-hidden py-1.5 border-b border-amber-600/30 text-xs font-serif tracking-wider select-none relative flex shadow-inner">
+    <div className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-900 overflow-hidden py-2.5 md:py-3 border-b border-amber-600/30 text-xs sm:text-sm font-serif tracking-wider select-none relative flex items-center justify-center shadow-inner">
       <div 
-        className="flex whitespace-nowrap items-center flex-shrink-0 animate-[marquee_90s_linear_infinite] gap-20 pr-20"
+        className="flex whitespace-nowrap items-center justify-center flex-shrink-0 animate-[marquee_90s_linear_infinite] gap-20 pr-20"
         style={{ animationPlayState: isPaused ? "paused" : "running" }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
@@ -116,10 +116,10 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
             onClick={() => handleNoticeClick(notice)}
             className="inline-flex items-center cursor-pointer"
           >
-            <Sparkles className="h-3 w-3 text-amber-800 mr-2 animate-pulse flex-shrink-0" />
-            <span className="text-slate-900 font-semibold">{renderNoticeContent(notice)}</span>
-            <span className="mx-4 text-amber-700">|</span>
-            <span className="inline-flex items-center text-slate-800 font-medium flex-shrink-0">
+            <Sparkles className="h-3.5 w-3.5 text-amber-800 mr-2 animate-pulse shrink-0" />
+            <span className="text-slate-900 font-semibold inline-flex items-center">{renderNoticeContent(notice)}</span>
+            <span className="mx-4 text-amber-700 inline-flex items-center">|</span>
+            <span className="inline-flex items-center text-slate-800 font-medium shrink-0">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-700 mr-1" />
               Gurupad Verified
             </span>
@@ -127,7 +127,7 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
         ))}
       </div>
       <div 
-        className="flex whitespace-nowrap items-center flex-shrink-0 animate-[marquee_90s_linear_infinite] gap-20 pr-20"
+        className="flex whitespace-nowrap items-center justify-center flex-shrink-0 animate-[marquee_90s_linear_infinite] gap-20 pr-20"
         style={{ animationPlayState: isPaused ? "paused" : "running" }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
@@ -137,12 +137,12 @@ export default function Ticker({ siteData, setActiveCategory, onOpenConsultant }
           <span 
             key={`dup-${idx}`} 
             onClick={() => handleNoticeClick(notice)}
-            className="inline-flex items-center cursor-pointer"
+            className="inline-flex items-center justify-center cursor-pointer"
           >
-            <Sparkles className="h-3 w-3 text-amber-800 mr-2 animate-pulse flex-shrink-0" />
-            <span className="text-slate-900 font-semibold">{renderNoticeContent(notice)}</span>
-            <span className="mx-4 text-amber-700">|</span>
-            <span className="inline-flex items-center text-slate-800 font-medium flex-shrink-0">
+            <Sparkles className="h-3.5 w-3.5 text-amber-800 mr-2 animate-pulse shrink-0" />
+            <span className="text-slate-900 font-semibold inline-flex items-center">{renderNoticeContent(notice)}</span>
+            <span className="mx-4 text-amber-700 inline-flex items-center">|</span>
+            <span className="inline-flex items-center text-slate-800 font-medium shrink-0">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-700 mr-1" />
               Gurupad Verified
             </span>

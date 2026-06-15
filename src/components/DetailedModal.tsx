@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { YatraPackage } from "../types";
-import { X, Calendar, MapPin, Activity, CheckCircle, AlertCircle, ArrowRight, Sparkles } from "lucide-react";
+import { X, Calendar, MapPin, Activity, CheckCircle, AlertCircle, ArrowRight, Sparkles, ArrowLeft } from "lucide-react";
 
 interface DetailedModalProps {
   pkg: YatraPackage;
@@ -85,14 +85,32 @@ const LOCALIZED_LABELS: { [lang: string]: { [key: string]: string } } = {
 };
 
 export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentLanguage = "en" }: DetailedModalProps) {
-  const [activeDay, setActiveDay] = useState<number>(1);
   const labels = LOCALIZED_LABELS[currentLanguage] || LOCALIZED_LABELS["en"];
 
   return (
     <div className="fixed inset-0 z-50 bg-white dark:bg-zinc-950 overflow-y-auto select-none">
       <div className="w-full min-h-screen max-w-full mx-auto flex flex-col bg-white dark:bg-zinc-950 animate-in slide-in-from-bottom duration-300">
         
-        {/* Banner with Close button */}
+        {/* Sticky Header with Back Button */}
+        <div className="sticky top-0 z-20 flex items-center justify-between p-3 md:p-4 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md border-b border-slate-200 dark:border-zinc-800">
+          <button
+            onClick={onClose}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-900 dark:text-zinc-100 text-sm font-semibold tracking-wide hover:bg-slate-100 dark:hover:bg-zinc-900 rounded-lg transition cursor-pointer select-none"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {currentLanguage === "hi" ? "वापस जाएँ" : "Back"}
+          </button>
+
+          {/* Close Trigger (Right) */}
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-full text-slate-900 dark:text-zinc-100 hover:bg-slate-100 dark:hover:bg-zinc-900 hover:text-rose-600 transition cursor-pointer hidden md:flex"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Banner */}
         <div className="relative h-64 md:h-[400px] bg-slate-100 dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 shrink-0">
           <img
             src={pkg.imageUrl}
@@ -102,14 +120,6 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
           />
           <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent" />
           
-          {/* Close Trigger */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-2 bg-slate-50/60 dark:bg-zinc-950/60 rounded-full text-slate-900 dark:text-zinc-100 hover:text-white hover:bg-sky-655 transition cursor-pointer border border-slate-200 dark:border-zinc-800"
-          >
-            <X className="h-4.5 w-4.5" />
-          </button>
-
           {/* Sub titles overlays */}
           <div className="absolute bottom-6 left-6 right-6 text-left">
             <span className="bg-sky-600 text-white font-mono text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded mb-2.5 inline-block">
@@ -151,29 +161,10 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
               </p>
             </div>
 
-            {/* Itinerary Selector path */}
-            <div className="flex gap-2 border-b border-slate-300 dark:border-zinc-700 overflow-x-auto pb-2 mb-2 scrollbar-none">
+            {/* Itinerary List */}
+            <div className="flex flex-col gap-4 mt-4">
               {pkg.itinerary.map((it) => (
-                <button
-                  key={it.day}
-                  type="button"
-                  onClick={() => setActiveDay(it.day)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition shrink-0 cursor-pointer ${
-                    activeDay === it.day
-                      ? "bg-sky-600 text-white"
-                      : "bg-slate-100 dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-slate-900"
-                  }`}
-                >
-                  {labels.day} {it.day}
-                </button>
-              ))}
-            </div>
-
-            {/* Active Day Content */}
-            {pkg.itinerary.map((it) => {
-              if (it.day !== activeDay) return null;
-              return (
-                <div key={it.day} className="bg-slate-100/40 dark:bg-zinc-900/40 p-4 rounded-xl border border-slate-200/60 dark:border-zinc-800/60 animate-in fade-in-50 duration-300 text-left">
+                <div key={it.day} className="bg-slate-100/40 dark:bg-zinc-900/40 p-4 rounded-xl border border-slate-200/60 dark:border-zinc-800/60 text-left">
                   <h4 className="font-serif text-sm font-bold text-sky-450 flex items-center gap-1.5 leading-tight">
                     <span className="font-mono text-xs bg-sky-600/20 px-2 py-0.5 rounded text-sky-400">{labels.day.toUpperCase()} {it.day}</span>
                     {it.title}
@@ -182,8 +173,8 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
                     {it.details}
                   </p>
                 </div>
-              );
-            })}
+              ))}
+            </div>
 
             {/* Quick health/altitude checks */}
             <div className="bg-blue-600/5 p-4 rounded-xl border border-blue-500/20 text-left">

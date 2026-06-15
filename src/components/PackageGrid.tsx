@@ -87,26 +87,28 @@ export default function PackageGrid({
   }, [filterIsHovered]);
 
   const sitePackages = siteData?.packages || [];
-  const mergedPackages = [...sitePackages, ...YATRA_PACKAGES.filter(p => !sitePackages.find((sp: any) => sp.id === p.id))];
+  const mergedPackages = [...sitePackages, ...YATRA_PACKAGES.filter(p => !sitePackages.find((sp: any) => sp.id === p.id || sp.title === p.title))];
   const packagesList = mergedPackages;
 
   const filteredPackages = packagesList.filter((pkg: YatraPackage) => 
-    activeCategory === "home" || activeCategory === "all" || pkg.category === activeCategory
+    activeCategory === "home" || activeCategory === "packages" || activeCategory === "all" || pkg.category === activeCategory
   );
 
-  const visiblePackages = showAllPackages ? filteredPackages : filteredPackages.slice(0, initialLimit);
+  const isHome = activeCategory === "home";
+  const limit = isHome ? initialLimit : 10000;
+  const visiblePackages = showAllPackages ? filteredPackages : filteredPackages.slice(0, limit);
 
   return (
-    <section id="yatra-catalog-grid" className="py-16 bg-slate-100/40 dark:bg-zinc-900/40 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 md:px-8 lg:px-12 w-full select-none">
+    <section id="yatra-catalog-grid" className="pt-8 pb-16 bg-gradient-to-b from-sky-50 via-sky-100/40 to-white dark:from-sky-900/10 dark:via-zinc-900 dark:to-zinc-950 border-t border-slate-200/50 dark:border-zinc-800/50 px-4 md:px-8 lg:px-12 w-full select-none">
       <div className="w-full max-w-full mx-auto">
         <div className="text-center flex flex-col items-center gap-3 mb-10">
           <span className="text-sky-500 font-mono text-xs md:text-sm lg:text-base font-bold uppercase tracking-[0.25em]">
-            {t("catalogTitle", currentLanguage)}
+            {siteData?.text_catalogTitle || t("catalogTitle", currentLanguage)}
           </span>
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
-            {t("packages", currentLanguage)}
+            {siteData?.text_packagesSub || t("packages", currentLanguage)}
           </h2>
-          <div className="h-0.5 w-16 bg-gradient-to-r from-sky-600 to-blue-500 rounded" />
+          <div className="h-0.5 w-[80%] md:w-[60%] max-w-2xl bg-gradient-to-r from-sky-600 to-blue-500 rounded" />
           <p className="text-slate-900 dark:text-zinc-100 text-sm max-w-2xl mt-1 leading-relaxed">
             {t("catalogSub", currentLanguage)}
           </p>
@@ -200,8 +202,8 @@ export default function PackageGrid({
               </div>
 
               {/* Price and CTA */}
-              <div className="p-5 pt-0 border-t border-slate-300 dark:border-zinc-700 text-left flex justify-between items-center bg-white dark:bg-zinc-950">
-                <div className="flex flex-col pt-4">
+              <div className="p-5 border-t border-slate-300 dark:border-zinc-700 text-left flex flex-col gap-4 bg-white dark:bg-zinc-950">
+                <div className="flex flex-col">
                   <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 uppercase tracking-wider leading-none">
                     SPECIAL RATE
                   </span>
@@ -210,7 +212,7 @@ export default function PackageGrid({
                   </span>
                 </div>
                 <div
-                  className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 group-hover:bg-sky-600 group-hover:text-white group-hover:border-sky-500 group-hover:shadow-lg group-hover:shadow-sky-500/20 text-xs font-mono font-bold tracking-wider px-4 py-2.5 rounded-lg transition-all duration-500 self-end mt-4 inline-flex items-center gap-1.5"
+                  className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 group-hover:bg-sky-600 group-hover:text-white group-hover:border-sky-500 group-hover:shadow-lg group-hover:shadow-sky-500/20 text-xs font-mono font-bold tracking-wider px-4 py-3 rounded-lg transition-all duration-500 w-full justify-center inline-flex items-center gap-1.5"
                 >
                   VIEW PACKAGE
                   <ArrowRight className="h-3 w-3 group-hover:-rotate-45 transition-transform duration-300" />
@@ -224,30 +226,30 @@ export default function PackageGrid({
 
         {(filteredPackages.length > initialLimit || (activeCategory !== "home" && activeCategory !== "all")) && (
           <div className="mt-12 text-center flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in">
-            {filteredPackages.length > initialLimit && (
+            {activeCategory === "home" && filteredPackages.length > initialLimit && (
               <button
-                onClick={() => setShowAllPackages((p) => !p)}
-                className="px-8 py-3.5 bg-gradient-to-r from-sky-600 via-sky-500 to-blue-500 hover:from-sky-500 hover:to-blue-400 text-white font-mono font-bold text-xs uppercase tracking-widest rounded-full shadow-lg hover:shadow-sky-500/20 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2 border border-sky-500/20"
+                onClick={() => {
+                  setActiveCategory("packages");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="px-8 py-3.5 bg-gradient-to-r from-sky-600 via-sky-500 to-blue-500 hover:from-sky-500 hover:to-blue-400 text-white font-sans font-semibold text-sm tracking-wide rounded-full shadow-lg hover:shadow-sky-500/20 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2 border border-sky-500/20"
               >
                 <span>
-                  {showAllPackages
-                    ? (currentLanguage === "hi" ? "कम पैकेज दिखाएं" : "SHOW FEWER PACKAGES")
-                    : (currentLanguage === "hi" ? "और सभी पैकेज देखें" : "VIEW MORE IN CATEGORY")}
+                  {currentLanguage === "hi" ? "सभी पैकेज देखें" : "VIEW ALL PACKAGES"}
                 </span>
-                <ArrowRight className={`h-4 w-4 transition-transform duration-300 ${showAllPackages ? "-rotate-90" : ""}`} />
+                <ArrowRight className="h-4 w-4 transition-transform duration-300" />
               </button>
             )}
 
-            {(activeCategory !== "home" && activeCategory !== "all") && (
+            {(activeCategory !== "home" && activeCategory !== "packages" && activeCategory !== "all") && (
               <button
                 onClick={() => {
-                  setActiveCategory("all");
-                  setShowAllPackages(true);
+                  setActiveCategory("packages");
                   setTimeout(() => {
                     document.getElementById("yatra-catalog-grid")?.scrollIntoView({ behavior: 'smooth' });
                   }, 100);
                 }}
-                className={`px-8 py-3.5 ${filteredPackages.length > initialLimit ? 'bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 border border-slate-300 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800' : 'bg-gradient-to-r from-sky-600 via-sky-500 to-blue-500 hover:from-sky-500 hover:to-blue-400 text-white border border-sky-500/20 shadow-lg hover:shadow-sky-500/20'} font-mono font-bold text-xs uppercase tracking-widest rounded-full transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2`}
+                className={`px-8 py-3.5 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 border border-slate-300 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 font-sans font-semibold text-sm tracking-wide rounded-full transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2`}
               >
                 <span>
                   {currentLanguage === "hi" ? "अन्य सभी पैकेज देखें" : "VIEW OTHER PACKAGES"}

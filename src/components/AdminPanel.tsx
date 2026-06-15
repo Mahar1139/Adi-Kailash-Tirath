@@ -99,7 +99,7 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [authError, setAuthError] = useState("");
   
-  const [activeTab, setActiveTab] = useState<"bookings" | "global" | "slides" | "packages" | "gallery" | "reviews" | "blogs" | "accreditations" | "reels">("bookings");
+  const [activeTab, setActiveTab] = useState<"bookings" | "global" | "slides" | "destinations" | "packages" | "gallery" | "reviews" | "blogs" | "accreditations" | "reels" | "footer" | "contact" | "typography">("bookings");
   const [siteData, setSiteData] = useState<any>(null);
   const [confirmDialog, setConfirmDialog] = useState<{ message: string, action: () => void } | null>(null);
   
@@ -380,6 +380,15 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
             </button>
 
             <button
+              onClick={() => { setActiveTab("destinations"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "destinations" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <MapPin className="h-4 w-4" /> Destinations Circle
+            </button>
+
+            <button
               onClick={() => { setActiveTab("packages"); setEditingIndex(null); }}
               className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
                 activeTab === "packages" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
@@ -431,6 +440,33 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
               }`}
             >
               <Award className="h-4 w-4" /> Accreditations
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("footer"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "footer" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <FileText className="h-4 w-4" /> Footer Manager
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("contact"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "contact" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Phone className="h-4 w-4" /> Contact Form
+            </button>
+
+            <button
+              onClick={() => { setActiveTab("typography"); setEditingIndex(null); }}
+              className={`w-full flex items-center gap-2 px-3 py-2 rounded text-xs font-mono transition ${
+                activeTab === "typography" ? "bg-sky-500/10 text-sky-400 font-semibold" : "text-slate-900 dark:text-zinc-100 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 hover:text-white"
+              }`}
+            >
+              <Star className="h-4 w-4" /> Fonts & Typography
             </button>
           </nav>
         </div>
@@ -763,6 +799,68 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                     </div>
                   </div>
 
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider font-bold">Contact Page Full Address (मल्टीलाइन पता)</label>
+                      <textarea
+                        defaultValue={siteData.headOffice || `Adi Kailash Tirath Head Office\nNear Kmou Station Pithoragarh\nuttarakhand, 262501\nIndia`}
+                        onBlur={(e) => handleSaveGlobalField("headOffice", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none min-h-[100px]"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider font-bold">Footer Address Line (फूटर का पता)</label>
+                      <textarea
+                        defaultValue={siteData.footerAddress || `Near Kmou Station Pithoragarh uttarakhand 262501`}
+                        onBlur={(e) => handleSaveGlobalField("footerAddress", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2.5 focus:border-sky-500/50 outline-none min-h-[100px]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Section Headings Customization */}
+                  <div className="flex flex-col gap-4 pt-4 border-t border-slate-200 dark:border-zinc-800">
+                    <span className="text-sky-500 font-mono text-[11px] uppercase tracking-wider font-bold block">Page Section Titles (सभी सेक्शन्स के टाइटल बदलें)</span>
+                    <p className="text-[11px] text-slate-900 dark:text-zinc-100">Leave blank to use default titles. (खाली छोड़ने पर डिफ़ॉल्ट नाम दिखेंगे)</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-6 gap-y-4">
+                      {/* Destinations */}
+                      <div className="flex flex-col gap-1.5 border border-slate-200 dark:border-zinc-800 p-3 rounded bg-white dark:bg-zinc-950">
+                        <label className="text-sky-400 text-[10px] font-mono uppercase font-bold">Destinations Section Heading</label>
+                        <input type="text" placeholder="e.g. Breathtaking Holy Shrines" defaultValue={siteData.text_shrineHeading || ""} onBlur={(e) => handleSaveGlobalField("text_shrineHeading", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 focus:border-sky-500/50 outline-none w-full" />
+                        <input type="text" placeholder="e.g. Explore Destinations" defaultValue={siteData.text_shrineSub || ""} onBlur={(e) => handleSaveGlobalField("text_shrineSub", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 mt-1 focus:border-sky-500/50 outline-none w-full" />
+                      </div>
+
+                      {/* Packages */}
+                      <div className="flex flex-col gap-1.5 border border-slate-200 dark:border-zinc-800 p-3 rounded bg-white dark:bg-zinc-950">
+                        <label className="text-sky-400 text-[10px] font-mono uppercase font-bold">Packages Section Heading</label>
+                        <input type="text" placeholder="e.g. Yatra Catalog" defaultValue={siteData.text_catalogTitle || ""} onBlur={(e) => handleSaveGlobalField("text_catalogTitle", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 focus:border-sky-500/50 outline-none w-full" />
+                        <input type="text" placeholder="e.g. Sacred High Altitude Expeditions" defaultValue={siteData.text_packagesSub || ""} onBlur={(e) => handleSaveGlobalField("text_packagesSub", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 mt-1 focus:border-sky-500/50 outline-none w-full" />
+                      </div>
+
+                      {/* Why Choose Us */}
+                      <div className="flex flex-col gap-1.5 border border-slate-200 dark:border-zinc-800 p-3 rounded bg-white dark:bg-zinc-950">
+                        <label className="text-sky-400 text-[10px] font-mono uppercase font-bold">Why Choose Us Heading</label>
+                        <input type="text" placeholder="e.g. Authentic Pilgrimage" defaultValue={siteData.text_whyChooseUsHeading || ""} onBlur={(e) => handleSaveGlobalField("text_whyChooseUsHeading", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 focus:border-sky-500/50 outline-none w-full" />
+                        <input type="text" placeholder="e.g. Safety & Experience First" defaultValue={siteData.text_whyChooseUsSub || ""} onBlur={(e) => handleSaveGlobalField("text_whyChooseUsSub", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 mt-1 focus:border-sky-500/50 outline-none w-full" />
+                      </div>
+
+                      {/* Reels & Feedbacks */}
+                      <div className="flex flex-col gap-1.5 border border-slate-200 dark:border-zinc-800 p-3 rounded bg-white dark:bg-zinc-950">
+                        <label className="text-sky-400 text-[10px] font-mono uppercase font-bold">Yatri Reels Heading</label>
+                        <input type="text" placeholder="e.g. Yatri Feedbacks" defaultValue={siteData.text_reelsHeading || ""} onBlur={(e) => handleSaveGlobalField("text_reelsHeading", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 focus:border-sky-500/50 outline-none w-full" />
+                        <input type="text" placeholder="e.g. Live Pilgrim Encounters" defaultValue={siteData.text_reelsSub || ""} onBlur={(e) => handleSaveGlobalField("text_reelsSub", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 mt-1 focus:border-sky-500/50 outline-none w-full" />
+                      </div>
+
+                      {/* Blogs */}
+                      <div className="flex flex-col gap-1.5 border border-slate-200 dark:border-zinc-800 p-3 rounded bg-white dark:bg-zinc-950">
+                        <label className="text-sky-400 text-[10px] font-mono uppercase font-bold">Blogs Heading</label>
+                        <input type="text" placeholder="e.g. Devotional Blogs" defaultValue={siteData.text_blogTitle || ""} onBlur={(e) => handleSaveGlobalField("text_blogTitle", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 focus:border-sky-500/50 outline-none w-full" />
+                        <input type="text" placeholder="e.g. Essential Guidelines" defaultValue={siteData.text_blogSub || ""} onBlur={(e) => handleSaveGlobalField("text_blogSub", e.target.value)} className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-xs rounded px-2 py-1.5 mt-1 focus:border-sky-500/50 outline-none w-full" />
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Configurable Divine Social Media Links */}
                   <div className="flex flex-col gap-4 pt-4 border-t border-slate-200 dark:border-zinc-800">
                     <span className="text-slate-900 dark:text-zinc-100 text-[10px] font-mono uppercase tracking-wider block">Social Media Platform Redirection Links</span>
@@ -1071,6 +1169,184 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                           className="bg-white dark:bg-zinc-950 hover:bg-slate-100 dark:hover:bg-zinc-800 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 font-mono text-xs px-4 py-3 rounded cursor-pointer"
                         >
                           Disregard (बंद करें)
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: DESTINATIONS */}
+            {activeTab === "destinations" && (
+              <div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                  <div>
+                    <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-2">
+                      <MapPin className="text-sky-500 h-6 w-6" /> Journey Destinations List
+                    </h2>
+                    <p className="text-slate-900 dark:text-zinc-100 text-xs">
+                      Manage the Shrine Headings and Circular Destinations Grid block.
+                    </p>
+                  </div>
+                </div>
+
+                {editingIndex === null ? (
+                  <div className="flex flex-col gap-6">
+                    {/* Header Editing */}
+                    <div className="bg-slate-50 dark:bg-zinc-900/50 rounded border border-slate-200 dark:border-zinc-800 p-5">
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100 mb-4 border-b border-slate-200 dark:border-zinc-800 pb-2">Destinations Banner Section </h3>
+                      <div className="grid grid-cols-1 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Top Shrine Heading</label>
+                          <input
+                            type="text"
+                            defaultValue={siteData.text_shrineHeading || "CHOOSE YOUR NEXT PILGRIMAGE"}
+                            onBlur={(e) => handleSaveGlobalField("text_shrineHeading", e.target.value)}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 w-full"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Main Shrine Banner Subtitle</label>
+                          <input
+                            type="text"
+                            defaultValue={siteData.text_shrineSub || "Major Shrine Regions"}
+                            onBlur={(e) => handleSaveGlobalField("text_shrineSub", e.target.value)}
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 w-full"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Circular Destinations Editing */}
+                    <div className="bg-slate-50 dark:bg-zinc-900/50 rounded border border-slate-200 dark:border-zinc-800 p-5">
+                      <div className="flex justify-between items-center mb-4 border-b border-slate-200 dark:border-zinc-800 pb-2">
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">Destinations List</h3>
+                        <button
+                          onClick={() => {
+                            setFormMode("create");
+                            setEditingIndex(-1);
+                            setDestDraft({
+                              title: "New Destination",
+                              categoryRef: "home",
+                              img: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=200",
+                              description: "Spiritual connection to the divine."
+                            });
+                          }}
+                          className="bg-sky-600 hover:bg-sky-500 text-white px-3 py-1 text-[10px] font-mono rounded"
+                        >
+                          + ADD DESTINATION
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {(siteData.circularDestinations || []).map((item: any, idx: number) => (
+                          <div key={idx} className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded p-4 relative group">
+                            <div className="flex items-center gap-4">
+                              {item.img && (
+                                <img src={item.img} alt={item.title} className="w-12 h-12 rounded-full object-cover shrink-0 border border-slate-200 dark:border-zinc-800" />
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-sm font-bold text-slate-900 dark:text-zinc-100 truncate">{item.title}</h4>
+                                <span className="text-[10px] font-mono text-slate-500 bg-slate-100 dark:bg-zinc-900 px-1 py-0.5 rounded mt-1 inline-block truncate max-w-full">
+                                  Ref: {item.categoryRef}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="absolute top-2 right-2 flex opacity-0 group-hover:opacity-100 transition">
+                              <button
+                                onClick={() => {
+                                  setFormMode("edit");
+                                  setEditingIndex(idx);
+                                  setDestDraft({ ...item });
+                                }}
+                                className="p-1 text-slate-500 hover:text-sky-500 hover:bg-sky-50 dark:hover:bg-sky-900/20 rounded"
+                              >
+                                <Edit2 className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setConfirmDialog({
+                                    message: `Delete destination '${item.title}' permanently?`,
+                                    action: () => {
+                                      const arr = [...(siteData.circularDestinations || [])];
+                                      arr.splice(idx, 1);
+                                      handleSaveGlobalField("circularDestinations", arr);
+                                      setConfirmDialog(null);
+                                    }
+                                  });
+                                }}
+                                className="p-1 text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-slate-50 dark:bg-zinc-900/50 p-6 rounded-xl border border-slate-200 dark:border-zinc-800 relative shadow-lg">
+                    <button onClick={() => setEditingIndex(null)} className="absolute top-4 right-4 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100 flex items-center gap-1 text-xs font-mono font-bold uppercase">
+                      <ArrowLeft className="h-3 w-3" /> Back
+                    </button>
+                    <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-zinc-100 mb-6 border-b border-slate-200 dark:border-zinc-800 pb-3">
+                      {formMode === "create" ? "Add New Destination" : "Edit Destination"}
+                    </h3>
+
+                    <div className="space-y-5">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] uppercase font-mono font-bold text-slate-900 dark:text-zinc-100">Destination Title</label>
+                          <input 
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 w-full"
+                            value={destDraft?.title || ""}
+                            onChange={(e) => setDestDraft((p: any) => ({ ...p, title: e.target.value }))}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] uppercase font-mono font-bold text-slate-900 dark:text-zinc-100">Category Reference ID</label>
+                          <input 
+                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 w-full"
+                            value={destDraft?.categoryRef || ""}
+                            onChange={(e) => setDestDraft((p: any) => ({ ...p, categoryRef: e.target.value }))}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase font-mono font-bold text-slate-900 dark:text-zinc-100">Image URL</label>
+                        <ImageUploader 
+                          value={destDraft?.img || ""} 
+                          onChange={(url) => setDestDraft((p: any) => ({ ...p, img: url }))}
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] uppercase font-mono font-bold text-slate-900 dark:text-zinc-100">Short Description</label>
+                        <textarea 
+                          className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 min-h-[60px]"
+                          value={destDraft?.description || ""}
+                          onChange={(e) => setDestDraft((p: any) => ({ ...p, description: e.target.value }))}
+                        />
+                      </div>
+
+                      <div className="pt-4 flex justify-end">
+                        <button
+                          onClick={() => {
+                            const arr = [...(siteData.circularDestinations || [])];
+                            if (formMode === "create") {
+                              arr.push(destDraft);
+                            } else if (editingIndex !== -1) {
+                              arr[editingIndex] = destDraft;
+                            }
+                            handleSaveGlobalField("circularDestinations", arr);
+                            setEditingIndex(null);
+                          }}
+                          className="bg-sky-600 hover:bg-sky-500 text-white font-mono font-bold text-xs px-6 py-2 rounded transition shadow flex items-center gap-2"
+                        >
+                          <Save className="h-4 w-4" /> Save Destination
                         </button>
                       </div>
                     </div>
@@ -2247,6 +2523,328 @@ export default function AdminPanel({ onClose, initialSiteData, onRefreshSiteData
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* TAB CONTENT: FOOTER */}
+            {activeTab === "footer" && (
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider">Footer Manager</h2>
+                <p className="text-slate-900 dark:text-zinc-100 text-xs mb-6">Manage footer descriptions, links, and copyright text.</p>
+
+                <div className="bg-slate-50 dark:bg-zinc-900/50 rounded-xl border border-slate-200 dark:border-zinc-800 p-5 mt-4 flex flex-col gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Footer About Text</label>
+                      <textarea
+                        defaultValue={siteData.footerAbout || ""}
+                        onBlur={(e) => handleSaveGlobalField("footerAbout", e.target.value)}
+                        placeholder="Specialized high-altitude pilgrimage operators..."
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-full min-h-[100px]"
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Footer Address Text</label>
+                      <textarea
+                        defaultValue={siteData.footerAddress || ""}
+                        onBlur={(e) => handleSaveGlobalField("footerAddress", e.target.value)}
+                        placeholder="Near Kmou Station Pithoragarh uttarakhand 262501"
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-full min-h-[100px]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Copyright Text</label>
+                    <input
+                      type="text"
+                      defaultValue={siteData.copyrightText || ""}
+                      onBlur={(e) => handleSaveGlobalField("copyrightText", e.target.value)}
+                      placeholder="e.g. 2026 Adi Kailash Tirath. All Rights Reserved."
+                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-full"
+                    />
+                  </div>
+                  
+                  <div className="border-t border-slate-200 dark:border-zinc-800 pt-5">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100 mb-3">Important Links (Middle Column)</h3>
+                    <div className="grid grid-cols-1 gap-3">
+                      {[0, 1, 2, 3].map((idx) => {
+                        const links = siteData.footerImportantLinks || [
+                          { label: "Contact Us", url: "contact_us" },
+                          { label: "Privacy Policy", url: "privacy_policy" },
+                          { label: "Feedback", url: "feedback" }
+                        ];
+                        const link = links[idx] || { label: "", url: "" };
+                        return (
+                          <div key={idx} className="flex gap-3">
+                            <input
+                              type="text"
+                              defaultValue={link.label}
+                              placeholder={`Link ${idx + 1} Label`}
+                              onBlur={(e) => {
+                                const newLinks = [...links];
+                                if (!newLinks[idx]) newLinks[idx] = { label: "", url: "" };
+                                newLinks[idx].label = e.target.value;
+                                handleSaveGlobalField("footerImportantLinks", newLinks);
+                              }}
+                              className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-1/2"
+                            />
+                            <input
+                              type="text"
+                              defaultValue={link.url}
+                              placeholder={`Link ${idx + 1} URL or ID`}
+                              onBlur={(e) => {
+                                const newLinks = [...links];
+                                if (!newLinks[idx]) newLinks[idx] = { label: "", url: "" };
+                                newLinks[idx].url = e.target.value;
+                                handleSaveGlobalField("footerImportantLinks", newLinks);
+                              }}
+                              className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-1/2"
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-200 dark:border-zinc-800 pt-5">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100 mb-3">Bottom Links (Next to Copyright)</h3>
+                    <div className="grid grid-cols-1 gap-3">
+                      {[0, 1].map((idx) => {
+                        const links = siteData.footerBottomLinks || [
+                          { label: "Terms of Pilgrimage", url: "privacy_policy" },
+                          { label: "High-Altitude Health Policy", url: "privacy_policy" }
+                        ];
+                        const link = links[idx] || { label: "", url: "" };
+                        return (
+                          <div key={idx} className="flex gap-3">
+                            <input
+                              type="text"
+                              defaultValue={link.label}
+                              placeholder={`Bottom Link ${idx + 1} Label`}
+                              onBlur={(e) => {
+                                const newLinks = [...links];
+                                if (!newLinks[idx]) newLinks[idx] = { label: "", url: "" };
+                                newLinks[idx].label = e.target.value;
+                                handleSaveGlobalField("footerBottomLinks", newLinks);
+                              }}
+                              className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-1/2"
+                            />
+                            <input
+                              type="text"
+                              defaultValue={link.url}
+                              placeholder={`URL or Section ID`}
+                              onBlur={(e) => {
+                                const newLinks = [...links];
+                                if (!newLinks[idx]) newLinks[idx] = { label: "", url: "" };
+                                newLinks[idx].url = e.target.value;
+                                handleSaveGlobalField("footerBottomLinks", newLinks);
+                              }}
+                              className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-1/2"
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT: CONTACT */}
+            {activeTab === "contact" && (
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider">Contact Form Config</h2>
+                <p className="text-slate-900 dark:text-zinc-100 text-xs mb-6">Manage the contact us page descriptions, direct contact info, and dynamic form fields.</p>
+
+                <div className="bg-slate-50 dark:bg-zinc-900/50 rounded-xl border border-slate-200 dark:border-zinc-800 p-5 mt-4 flex flex-col gap-5">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Contact Us Page Description</label>
+                    <textarea
+                      defaultValue={siteData.contactPageDesc || ""}
+                      onBlur={(e) => handleSaveGlobalField("contactPageDesc", e.target.value)}
+                      placeholder="Reach out to us for spiritual queries..."
+                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-full min-h-[60px]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-3 border-t border-slate-200 dark:border-zinc-800">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Primary Phone</label>
+                      <input
+                        type="text"
+                        defaultValue={siteData.phones?.[0] || ""}
+                        onBlur={(e) => {
+                          const ph = siteData.phones ? [...siteData.phones] : [];
+                          ph[0] = e.target.value;
+                          handleSaveGlobalField("phones", ph);
+                        }}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 w-full"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Secondary Phone</label>
+                      <input
+                        type="text"
+                        defaultValue={siteData.phones?.[1] || ""}
+                        onBlur={(e) => {
+                          const ph = siteData.phones ? [...siteData.phones] : [""];
+                          ph[1] = e.target.value;
+                          handleSaveGlobalField("phones", ph);
+                        }}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 w-full"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Email Address</label>
+                      <input
+                        type="email"
+                        defaultValue={siteData.email || ""}
+                        onBlur={(e) => handleSaveGlobalField("email", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 w-full"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Head Office Address</label>
+                      <textarea
+                        defaultValue={siteData.headOffice || ""}
+                        onBlur={(e) => handleSaveGlobalField("headOffice", e.target.value)}
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 w-full min-h-[60px]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-200 dark:border-zinc-800">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-zinc-100">Dynamic Form Fields</h3>
+                      <button
+                        onClick={() => {
+                          const currentFields = siteData.contactFormFields || [
+                            { label: "YOUR NAME", type: "text", required: true },
+                            { label: "EMAIL ADDRESS", type: "email", required: true },
+                            { label: "MESSAGE", type: "textarea", required: true }
+                          ];
+                          handleSaveGlobalField("contactFormFields", [...currentFields, { label: "NEW FIELD", type: "text", required: false }]);
+                        }}
+                        className="bg-sky-600 hover:bg-sky-500 text-white px-3 py-1.5 rounded text-xs font-mono font-bold uppercase transition"
+                      >
+                        + Add Field
+                      </button>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      {(siteData.contactFormFields || [
+                        { label: "YOUR NAME", type: "text", required: true },
+                        { label: "EMAIL ADDRESS", type: "email", required: true },
+                        { label: "MESSAGE", type: "textarea", required: true }
+                      ]).map((field: any, idx: number) => (
+                        <div key={idx} className="flex flex-col md:flex-row gap-3 bg-white dark:bg-zinc-950 p-3 rounded border border-slate-200 dark:border-zinc-800">
+                          <input
+                            type="text"
+                            defaultValue={field.label}
+                            placeholder="Field Label"
+                            onBlur={(e) => {
+                              const newFields = [...(siteData.contactFormFields || [])];
+                              if (newFields[idx]) {
+                                newFields[idx].label = e.target.value;
+                                handleSaveGlobalField("contactFormFields", newFields);
+                              }
+                            }}
+                            className="flex-1 bg-transparent border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-2 py-1.5"
+                          />
+                          <select
+                            defaultValue={field.type}
+                            onChange={(e) => {
+                              const newFields = [...(siteData.contactFormFields || [])];
+                              if (newFields[idx]) {
+                                newFields[idx].type = e.target.value;
+                                handleSaveGlobalField("contactFormFields", newFields);
+                              }
+                            }}
+                            className="bg-transparent border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-2 py-1.5"
+                          >
+                            <option value="text">Text Input</option>
+                            <option value="email">Email Input</option>
+                            <option value="number">Number Input</option>
+                            <option value="textarea">Textarea (Long)</option>
+                          </select>
+                          <label className="flex items-center gap-1.5 text-xs text-slate-900 dark:text-zinc-100 whitespace-nowrap cursor-pointer">
+                            <input
+                              type="checkbox"
+                              defaultChecked={field.required}
+                              onChange={(e) => {
+                                const newFields = [...(siteData.contactFormFields || [])];
+                                if (newFields[idx]) {
+                                  newFields[idx].required = e.target.checked;
+                                  handleSaveGlobalField("contactFormFields", newFields);
+                                }
+                              }}
+                              className="accent-sky-500 rounded"
+                            /> Required
+                          </label>
+                          <button
+                            onClick={() => {
+                              const newFields = [...(siteData.contactFormFields || [])];
+                              newFields.splice(idx, 1);
+                              handleSaveGlobalField("contactFormFields", newFields);
+                            }}
+                            className="text-red-500 hover:text-red-600 p-1"
+                            title="Remove Field"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT: TYPOGRAPHY */}
+            {activeTab === "typography" && (
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-1 uppercase tracking-wider">Fonts & Typography Settings</h2>
+                <p className="text-slate-900 dark:text-zinc-100 text-xs mb-6">Assign distinct Google Fonts to different sections and pages globally.</p>
+
+                <div className="bg-slate-50 dark:bg-zinc-900/50 rounded-xl border border-slate-200 dark:border-zinc-800 p-5 mt-4 grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Global Headings Font (Primary)</label>
+                    <input
+                      type="text"
+                      defaultValue={siteData.font_headings || "Geist"}
+                      onBlur={(e) => handleSaveGlobalField("font_headings", e.target.value)}
+                      placeholder="e.g. Inter, Playfair Display, Space Grotesk"
+                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-full"
+                    />
+                  </div>
+                  
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Global Body Text Font</label>
+                    <input
+                      type="text"
+                      defaultValue={siteData.font_body || "Inter"}
+                      onBlur={(e) => handleSaveGlobalField("font_body", e.target.value)}
+                      placeholder="e.g. Inter, Roboto, Arial"
+                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-full"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] uppercase font-mono tracking-wider font-bold text-slate-900 dark:text-zinc-100">Accent / Meta Tags Font</label>
+                    <input
+                      type="text"
+                      defaultValue={siteData.font_accent || "JetBrains Mono"}
+                      onBlur={(e) => handleSaveGlobalField("font_accent", e.target.value)}
+                      placeholder="e.g. JetBrains Mono, Fira Code"
+                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded px-3 py-2 focus:border-sky-500/50 outline-none w-full"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-4 p-4 border border-sky-500/30 bg-sky-500/5 rounded text-sm text-sky-600 dark:text-sky-400">
+                  <strong>Note:</strong> Changes to typography require a full page reload to inject the relevant font families dynamically from Google Fonts. Simply type the exact font family name as seen on fonts.google.com.
+                </div>
               </div>
             )}
 

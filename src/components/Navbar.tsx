@@ -86,7 +86,7 @@ export default function Navbar({
   const logoText = siteData?.logoText || "ADI KAILASH TIRATH";
   const tagline = t("tagline", currentLanguage);
   const activeSeason = t("seasonActive", currentLanguage);
-  const phones = siteData?.phones || ["+91 7017535116", "+91 9760651947"];
+  const phones = siteData?.phones || ["+91 9557092965", "+91 7248737777"];
   const emailVal = siteData?.email || "info@adikailashtirath.com";
 
   const socialLinks = siteData?.socialLinks || {
@@ -293,7 +293,7 @@ export default function Navbar({
             </div>
 
           {/* Active Season */}
-          <div className="flex items-center order-2 md:order-4 shrink-0">
+          <div className="flex items-center order-2 md:order-4 shrink-0 mr-2 md:mr-4">
             <span className="inline-flex items-center gap-1 md:gap-1.5 text-amber-500 text-[10px] md:text-[11.5px] font-medium bg-amber-500/10 border border-amber-500/25 px-1.5 py-0.5 md:px-2 md:py-0.5 rounded-full select-none whitespace-nowrap">
               <Sparkles className="h-2 w-2 md:h-2.5 md:w-2.5 animate-pulse" />
               {activeSeason}
@@ -342,7 +342,7 @@ export default function Navbar({
             </div>
 
             {/* Social Icons inside Header Right Zone */}
-            <div className="flex items-center justify-start md:justify-center gap-1.5 w-full md:w-auto border-t border-white/20 md:border-t-0 md:border-l md:border-slate-300/60 pt-1.5 md:pt-0 mt-1.5 md:mt-0 md:pl-3 pr-24 md:pr-0 -ml-1 md:ml-0.5 order-5 md:order-6 pb-0.5 md:pb-0 relative">
+            <div className="flex items-center justify-start md:justify-center gap-1.5 w-full md:w-auto border-t border-white/20 md:border-t-0 md:border-l md:border-slate-300/60 pt-1.5 md:pt-0 mt-1.5 md:mt-0 md:pl-3 pr-[100px] md:pr-0 -ml-1 md:ml-0.5 order-5 md:order-6 pb-0.5 md:pb-0 relative">
               {socialLinks.facebook && (
                 <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="p-1 rounded-full text-slate-900 dark:text-zinc-100 hover:text-sky-500 hover:bg-slate-200 dark:hover:bg-zinc-700 dark:bg-zinc-800 transition" title="Facebook">
                   <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
@@ -384,7 +384,7 @@ export default function Navbar({
                   setActiveCategory("contact_us");
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="md:hidden absolute right-2 text-[10.5px] font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-widest flex items-center gap-1.5 hover:text-sky-500 transition px-2.5 py-1 rounded-full border border-slate-300 dark:border-zinc-700 dark:hover:border-sky-500 bg-white dark:bg-zinc-900 shadow-sm"
+                className="md:hidden absolute right-2 text-[10.5px] font-bold text-slate-900 dark:text-zinc-100 uppercase tracking-widest flex items-center justify-center gap-1.5 hover:text-sky-500 transition px-4 sm:px-5 py-1.5 rounded-full border border-slate-300 dark:border-zinc-700 dark:hover:border-sky-500 bg-white dark:bg-zinc-900 shadow-sm whitespace-nowrap min-w-max"
               >
                 <Phone className="h-3 w-3 text-sky-500" />
                 Contact
