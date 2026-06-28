@@ -100,7 +100,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6 }}
-      className="py-16 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-zinc-800/50 px-4 select-none"
+      className="py-16 bg-white/60 dark:bg-[#0b1120]/60 backdrop-blur-sm border-t border-slate-200/50 dark:border-slate-800/60/50 px-4 select-none"
     >
       <div className="w-full max-w-full mx-auto px-4 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -111,57 +111,57 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
               <Sparkles className="h-4 w-4 animate-pulse" />
               {t("tagline", currentLanguage)}
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
+            <h2 className="font-serif text-3xl md:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-slate-300 dark:to-zinc-100 font-extrabold tracking-tight">
               {t("plannerTitle", currentLanguage)}
             </h2>
-            <p className="text-slate-900 dark:text-zinc-100 text-sm leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 text-sm leading-relaxed">
               {t("plannerSub", currentLanguage)}
             </p>
 
             <div className="space-y-4 mt-2">
-              <div className="flex gap-3 bg-slate-100/50 dark:bg-zinc-900/50 p-4 rounded-xl border border-slate-200/60 dark:border-zinc-800/60">
-                <div className="bg-sky-500/10 rounded-lg p-2.5 h-fit text-sky-500 border border-sky-500/15">
+              <div className="group flex gap-3 bg-slate-100/50 dark:bg-[#0f172a]/50 p-4 rounded-xl border border-slate-200/60 dark:border-slate-800/60/60 hover:bg-white dark:hover:bg-[#1e293b]/50 hover:shadow-lg hover:shadow-sky-500/5 hover:-translate-y-1 transition-all duration-300">
+                <div className="bg-sky-500/10 rounded-lg p-2.5 h-fit text-sky-500 border border-sky-500/15 group-hover:bg-sky-500 group-hover:text-white transition-colors duration-300">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-slate-900 font-serif font-bold text-sm">HASSLE-FREE PERMITS</h4>
-                  <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1">We secure border authorizations, biometric enrollments, and NOC releases from administrative sectors.</p>
+                  <h4 className="text-slate-900 dark:text-slate-100 font-sans font-bold text-sm">HASSLE-FREE PERMITS</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-xs mt-1">We secure border authorizations, biometric enrollments, and NOC releases from administrative sectors.</p>
                 </div>
               </div>
 
-              <div className="flex gap-3 bg-slate-100/50 dark:bg-zinc-900/50 p-4 rounded-xl border border-slate-200/60 dark:border-zinc-800/60">
-                <div className="bg-blue-500/10 rounded-lg p-2.5 h-fit text-blue-500 border border-blue-500/15">
+              <div className="group flex gap-3 bg-slate-100/50 dark:bg-[#0f172a]/50 p-4 rounded-xl border border-slate-200/60 dark:border-slate-800/60/60 hover:bg-white dark:hover:bg-[#1e293b]/50 hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300">
+                <div className="bg-blue-500/10 rounded-lg p-2.5 h-fit text-blue-500 border border-blue-500/15 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
                   <Activity className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-slate-900 font-serif font-bold text-sm">MEDICAL CHECKS & OXYGEN</h4>
-                  <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1">Each group vehicle is equipped with oxygen cylinders, pulse oximeters, and trained guides.</p>
+                  <h4 className="text-slate-900 dark:text-slate-100 font-sans font-bold text-sm">MEDICAL CHECKS & OXYGEN</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-xs mt-1">Each group vehicle is equipped with oxygen cylinders, pulse oximeters, and trained guides.</p>
                 </div>
               </div>
 
-              <div className="flex gap-3 bg-slate-100/50 dark:bg-zinc-900/50 p-4 rounded-xl border border-slate-200/60 dark:border-zinc-800/60">
-                <div className="bg-red-500/10 rounded-lg p-2.5 h-fit text-red-500 border border-red-500/15">
+              <div className="group flex gap-3 bg-slate-100/50 dark:bg-[#0f172a]/50 p-4 rounded-xl border border-slate-200/60 dark:border-slate-800/60/60 hover:bg-white dark:hover:bg-[#1e293b]/50 hover:shadow-lg hover:shadow-red-500/5 hover:-translate-y-1 transition-all duration-300">
+                <div className="bg-red-500/10 rounded-lg p-2.5 h-fit text-red-500 border border-red-500/15 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
                   <MapPin className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-slate-900 dark:text-slate-900 font-serif font-bold text-sm">NATIVE EXPERT TOUR OVERVIEWERS</h4>
-                  <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1">Travel with native guides who speak your local language and provide personalized care.</p>
+                  <h4 className="text-slate-900 dark:text-slate-100 font-sans font-bold text-sm">NATIVE EXPERT TOUR OVERVIEWERS</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-xs mt-1">Travel with native guides who speak your local language and provide personalized care.</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Registration form block */}
-          <div className="lg:col-span-7 bg-slate-100 dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800/80 p-6 md:p-8 rounded-2xl shadow-xl">
+          <div className="lg:col-span-7 bg-slate-100 dark:bg-[#0f172a] border border-slate-200/80 dark:border-slate-800/60/80 p-6 md:p-8 rounded-2xl shadow-xl" style={{ fontFamily: 'Arial, sans-serif' }}>
             {success && createdRequest ? (
               <div className="text-left py-6 flex flex-col items-center gap-4 animate-in fade-in-50 duration-500">
                 <div className="h-14 w-14 bg-green-500/10 border border-green-500/35 rounded-full flex items-center justify-center text-green-500 mb-2">
                   <CheckCircle className="h-7 w-7" />
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-slate-900 dark:text-zinc-100 text-center">
+                <h3 className="font-serif text-2xl font-bold text-slate-900 dark:text-slate-100 text-center">
                   {t("successRegistered", currentLanguage)}
                 </h3>
-                <p className="text-slate-900 dark:text-zinc-100 text-xs text-center leading-relaxed max-w-md">
+                <p className="text-slate-900 dark:text-slate-100 text-xs text-center leading-relaxed max-w-md">
                   Namaste, **{createdRequest.name}**. {t("successDetails", currentLanguage)}{" "}
                   <code className="text-sky-500 font-mono font-bold bg-sky-500/15 px-2 py-0.5 rounded border border-sky-500/20">
                     {createdRequest.reference}
@@ -179,7 +179,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
               <form onSubmit={handleSubmit} className="space-y-5 text-left">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-slate-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("yatriName", currentLanguage)} *
                     </label>
                     <input
@@ -188,11 +188,11 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                       placeholder="e.g., Ramesh Kumar"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50"
+                      className="bg-white dark:bg-[#0b1120] border border-slate-200 dark:border-slate-800/60 text-slate-900 dark:text-slate-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-slate-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("emailOptional", currentLanguage)}
                     </label>
                     <input
@@ -200,14 +200,14 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                       placeholder="e.g., ramesh@gmail.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50"
+                      className="bg-white dark:bg-[#0b1120] border border-slate-200 dark:border-slate-800/60 text-slate-900 dark:text-slate-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-slate-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("phNo", currentLanguage)} *
                     </label>
                     <input
@@ -216,17 +216,17 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                       placeholder="e.g., +91 9876543210"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50"
+                      className="bg-white dark:bg-[#0b1120] border border-slate-200 dark:border-slate-800/60 text-slate-900 dark:text-slate-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-slate-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("destToExplore", currentLanguage)}
                     </label>
                     <select
                       value={formData.destination}
                       onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
-                      className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50 cursor-pointer text-slate-900 dark:text-zinc-100"
+                      className="bg-white dark:bg-[#0b1120] border border-slate-200 dark:border-slate-800/60 text-slate-900 dark:text-slate-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50 cursor-pointer text-slate-900 dark:text-slate-100"
                     >
                       <option value="Adi Kailash & Om Parvat">{t("adiKailashRef", currentLanguage)}</option>
                       <option value="Kailash Mansarovar (Overland/Flight)">{t("kailashMansarovarRef", currentLanguage)}</option>
@@ -238,7 +238,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-1.5 col-span-2">
-                    <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
+                    <label className="text-slate-900 dark:text-slate-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                       {t("numberOfYatris", currentLanguage)}
                     </label>
                     <div className="grid grid-cols-2 md:flex md:flex-row gap-2">
@@ -250,7 +250,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                           className={`flex-1 py-1.5 md:py-2 text-[10px] md:text-xs font-mono rounded border transition cursor-pointer ${
                             formData.travelers === num
                               ? "bg-sky-600/20 text-sky-400 border-sky-500"
-                              : "bg-white dark:bg-zinc-950 text-slate-900 dark:text-zinc-100 border-slate-300/80 dark:border-zinc-700/80 hover:border-slate-300 dark:border-zinc-700"
+                              : "bg-white dark:bg-[#0b1120] text-slate-900 dark:text-slate-100 border-slate-300/80 dark:border-slate-700/60/80 hover:border-slate-300 dark:border-slate-700/60"
                           }`}
                         >
                           {num} {num === "1" ? (currentLanguage === "hi" ? "व्यक्ति" : "Person") : (currentLanguage === "hi" ? "लोग" : "People")}
@@ -261,7 +261,7 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-slate-900 dark:text-zinc-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
+                  <label className="text-slate-900 dark:text-slate-100 text-[11px] font-roboto font-medium uppercase tracking-wider">
                     {t("specialRequests", currentLanguage)}
                   </label>
                   <textarea
@@ -269,14 +269,14 @@ export default function QuickPlanner({ currentLanguage = "en" }: QuickPlannerPro
                     placeholder="e.g., Age 65, need ground guides, pony requirement details, or oxygen helper..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50"
+                    className="bg-white dark:bg-[#0b1120] border border-slate-200 dark:border-slate-800/60 text-slate-900 dark:text-slate-100 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-sky-500/50"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-sky-600 hover:bg-sky-550 disabled:bg-white dark:bg-zinc-950 text-white font-mono text-xs font-bold tracking-wider py-4 rounded-lg shadow-lg border border-sky-500/20 transition hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full bg-sky-600 hover:bg-sky-550 disabled:bg-white dark:bg-[#0b1120] text-white font-mono text-xs font-bold tracking-wider py-4 rounded-lg shadow-lg border border-sky-500/20 transition hover:scale-[1.01] flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Send className="h-3.5 w-3.5" />
                   {loading ? (currentLanguage === "hi" ? "दस्तावेज आरक्षण प्रक्रिया में है..." : "PROCESSING DOCUMENT RESERVATION...") : t("calculatePermitBtn", currentLanguage)}

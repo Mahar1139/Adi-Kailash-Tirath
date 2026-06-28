@@ -594,7 +594,7 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
   const ActiveIcon = activePillar.icon;
 
   return (
-    <section className="bg-white dark:bg-zinc-950 py-12 md:py-20 px-4 animate-fade-in text-slate-900 dark:text-zinc-100">
+    <section className="bg-white dark:bg-[#0b1120] py-12 md:py-20 px-4 animate-fade-in text-slate-900 dark:text-slate-100">
       <div className="w-full max-w-full mx-auto px-4 lg:px-12">
         
         {/* Header Block Section */}
@@ -602,11 +602,11 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
           <span className="text-sky-500 font-mono text-xs font-bold uppercase tracking-[0.25em] block animate-pulse">
             {siteData?.text_whyChooseUsHeading || labels.tagline}
           </span>
-          <h2 className="font-serif text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-zinc-100 mt-1 max-w-3xl leading-tight">
+          <h2 className="font-serif text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-slate-100 mt-1 max-w-3xl leading-tight">
             {siteData?.text_whyChooseUsSub || labels.title}
           </h2>
           <div className="h-0.5 w-20 bg-gradient-to-r from-sky-600 to-blue-500 rounded mt-3 mb-1" />
-          <p className="text-slate-900 dark:text-zinc-100 text-sm md:text-base max-w-2xl leading-relaxed mt-2">
+          <p className="text-slate-900 dark:text-slate-100 text-sm md:text-base max-w-2xl leading-relaxed mt-2">
             {labels.subtitle}
           </p>
 
@@ -620,7 +620,7 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
             </button>
             <button
               onClick={onOpenConsultant}
-              className="bg-slate-100 dark:bg-zinc-900 hover:bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-sky-400 hover:text-slate-900 dark:text-zinc-100 font-mono text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-md transition duration-300 active:scale-95 flex items-center gap-1.5 cursor-pointer"
+              className="bg-slate-100 dark:bg-[#0f172a] hover:bg-white dark:bg-[#0b1120] border border-slate-200 dark:border-slate-800/60 text-sky-400 hover:text-slate-900 dark:text-slate-100 font-mono text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-md transition duration-300 active:scale-95 flex items-center gap-1.5 cursor-pointer"
             >
               <Sparkles className="h-4 w-4 text-sky-500" />
               <span>{labels.btnConsult}</span>
@@ -638,7 +638,7 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
           ].map((item, idx) => (
             <div 
               key={idx} 
-              className={`p-6 bg-gradient-to-b ${item.color} to-transparent/30 border border-slate-300/70 dark:border-zinc-700/70 rounded-2xl text-center shadow-lg transition duration-500 hover:border-sky-500/15`}
+              className={`p-6 bg-gradient-to-b ${item.color} to-transparent/30 border border-slate-300/70 dark:border-slate-700/60/70 rounded-2xl text-center shadow-lg transition duration-500 hover:border-sky-500/15`}
             >
               <h3 className="text-2xl md:text-4xl font-serif font-extrabold text-sky-400 tracking-tight">
                 {item.metric}
@@ -646,7 +646,7 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
               <p className="text-xs font-bold text-slate-900 dark:text-slate-900 mt-1 uppercase font-mono tracking-wide leading-tight">
                 {item.label}
               </p>
-              <span className="text-[10px] text-slate-900 dark:text-zinc-100 block mt-1.5 font-mono italic">
+              <span className="text-[10px] text-slate-900 dark:text-slate-100 block mt-1.5 font-mono italic">
                 {item.desc}
               </span>
             </div>
@@ -672,20 +672,20 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
                   onClick={() => setActiveTab(tab.id)}
                   className={`w-full text-left p-4 rounded-xl border transition-all duration-300 flex items-center gap-4 cursor-pointer ${
                     isSelected
-                      ? "bg-slate-100 dark:bg-zinc-900 border-sky-500/50 shadow-xl shadow-sky-500/5 ring-1 ring-sky-500/20"
-                      : "bg-white/40 dark:bg-zinc-950/40 border-slate-300 dark:border-zinc-700 hover:border-slate-300 dark:border-zinc-700 hover:bg-slate-100/40 dark:hover:bg-zinc-800/40 dark:bg-zinc-900/40 text-slate-900 dark:text-zinc-100"
+                      ? "bg-slate-100 dark:bg-[#0f172a] border-sky-500/50 shadow-xl shadow-sky-500/5 ring-1 ring-sky-500/20"
+                      : "bg-white/40 dark:bg-[#0b1120]/40 border-slate-300 dark:border-slate-700/60 hover:border-slate-300 dark:border-slate-700/60 hover:bg-slate-100/40 dark:hover:bg-slate-800/40 dark:bg-[#0f172a]/40 text-slate-900 dark:text-slate-100"
                   }`}
                 >
                   <div className={`p-2.5 rounded-lg shrink-0 ${
-                    isSelected ? "bg-sky-600/10 text-sky-400" : "bg-slate-100/50 dark:bg-zinc-900/50 text-slate-900 dark:text-zinc-100"
+                    isSelected ? "bg-sky-600/10 text-sky-400" : "bg-slate-100/50 dark:bg-[#0f172a]/50 text-slate-900 dark:text-slate-100"
                   }`}>
                     <Icon className="h-5 w-5" />
                   </div>
                   <div className="leading-tight">
-                    <h4 className={`text-sm font-bold tracking-wide ${isSelected ? "text-white" : "text-slate-900 dark:text-zinc-100"}`}>
+                    <h4 className={`text-sm font-bold tracking-wide ${isSelected ? "text-white" : "text-slate-900 dark:text-slate-100"}`}>
                       {tab.title}
                     </h4>
-                    <span className="text-[11px] text-slate-900 dark:text-zinc-100 block mt-0.5">
+                    <span className="text-[11px] text-slate-900 dark:text-slate-100 block mt-0.5">
                       {tab.desc}
                     </span>
                   </div>
@@ -695,7 +695,7 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
           </div>
 
           {/* Right: Tab view detail details panel (width block: 8/12) */}
-          <div className="lg:col-span-8 bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden text-left">
+          <div className="lg:col-span-8 bg-slate-100 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800/60 rounded-2xl p-6 md:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden text-left">
             <div className="absolute top-0 right-0 w-48 h-48 bg-sky-600/5 blur-3xl rounded-full" />
             
             <div className="relative z-10">
@@ -707,13 +707,13 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
                   <span className="text-[10px] font-mono font-bold text-sky-500 uppercase tracking-widest">
                     CORE SECURITY PILLARS
                   </span>
-                  <h3 className="font-serif text-lg md:text-2xl font-extrabold text-slate-900 dark:text-zinc-100 mt-0.5 leading-tight">
+                  <h3 className="font-serif text-lg md:text-2xl font-extrabold text-slate-900 dark:text-slate-100 mt-0.5 leading-tight">
                     {activePillar.headline}
                   </h3>
                 </div>
               </div>
 
-              <p className="text-slate-900 dark:text-zinc-100 text-xs md:text-sm leading-relaxed mb-6 font-medium">
+              <p className="text-slate-900 dark:text-slate-100 text-xs md:text-sm leading-relaxed mb-6 font-medium">
                 {activePillar.description}
               </p>
 
@@ -722,17 +722,17 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
                 {activePillar.bullets.map((bullet, idx) => (
                   <div 
                     key={idx} 
-                    className="p-3.5 bg-white/60 dark:bg-zinc-950/60 border border-slate-200/80 dark:border-zinc-800/80 rounded-xl flex items-start gap-2.5 hover:border-sky-500/10 transition"
+                    className="p-3.5 bg-white/60 dark:bg-[#0b1120]/60 border border-slate-200/80 dark:border-slate-800/60/80 rounded-xl flex items-start gap-2.5 hover:border-sky-500/10 transition"
                   >
                     <ShieldCheck className="h-4.5 w-4.5 text-green-500 shrink-0 mt-0.5" />
-                    <span className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed font-sans">{bullet}</span>
+                    <span className="text-slate-900 dark:text-slate-100 text-xs leading-relaxed font-sans">{bullet}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* micro accreditation confirmation note inside the block footer */}
-            <div className="mt-8 pt-4 border-t border-slate-200/80 dark:border-zinc-800/80 flex items-center gap-2.5 text-slate-900 dark:text-zinc-100 text-[10.5px] font-mono select-none">
+            <div className="mt-8 pt-4 border-t border-slate-200/80 dark:border-slate-800/60/80 flex items-center gap-2.5 text-slate-900 dark:text-slate-100 text-[10.5px] font-mono select-none">
               <Trophy className="h-3.5 w-3.5 text-sky-500 shrink-0" />
               <span>Registered Uttarakhand Tourism and border authorities certified safeguards active.</span>
             </div>
@@ -740,12 +740,12 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
         </div>
 
         {/* Dynamic High Altitude Safeguard FAQ Block */}
-        <div className="bg-slate-100/45 dark:bg-zinc-900/45 border border-slate-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 text-left animate-fade-in mb-12 select-none">
+        <div className="bg-slate-100/45 dark:bg-[#0f172a]/45 border border-slate-200 dark:border-slate-800/60 rounded-2xl p-6 md:p-8 text-left animate-fade-in mb-12 select-none">
           <div className="mb-6">
-            <h3 className="font-serif text-xl md:text-2xl font-extrabold text-slate-900 dark:text-zinc-100">
+            <h3 className="font-serif text-xl md:text-2xl font-extrabold text-slate-900 dark:text-slate-100">
               {labels.securingFaq}
             </h3>
-            <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1">
+            <p className="text-slate-900 dark:text-slate-100 text-xs mt-1">
               {labels.securingFaqSub}
             </p>
           </div>
@@ -754,15 +754,15 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
             {faqs.map((faq, idx) => (
               <div 
                 key={idx} 
-                className="p-4 bg-white dark:bg-zinc-950 border border-slate-200/60 dark:border-zinc-800/60 rounded-xl transition duration-300 hover:border-sky-500/10 flex flex-col gap-2"
+                className="p-4 bg-white dark:bg-[#0b1120] border border-slate-200/60 dark:border-slate-800/60/60 rounded-xl transition duration-300 hover:border-sky-500/10 flex flex-col gap-2"
               >
                 <div className="flex items-start gap-2">
                   <HelpCircle className="h-4.5 w-4.5 text-sky-500 shrink-0 mt-0.5" />
-                  <h4 className="text-xs md:text-sm font-bold text-slate-900 dark:text-zinc-100 tracking-wide">
+                  <h4 className="text-xs md:text-sm font-bold text-slate-900 dark:text-slate-100 tracking-wide">
                     {faq.q}
                   </h4>
                 </div>
-                <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed font-normal pl-7 border-l border-slate-200 dark:border-zinc-800">
+                <p className="text-slate-900 dark:text-slate-100 text-xs leading-relaxed font-normal pl-7 border-l border-slate-200 dark:border-slate-800/60">
                   {faq.a}
                 </p>
               </div>
@@ -771,22 +771,22 @@ export default function WhyChooseUs({ currentLanguage, onOpenConsultant, onNavig
         </div>
 
         {/* Accreditations Trust block banner with golden text */}
-        <div className="bg-white/80 dark:bg-zinc-950/80 border border-sky-500/10 rounded-2xl p-6 text-center select-none relative overflow-hidden">
+        <div className="bg-white/80 dark:bg-[#0b1120]/80 border border-sky-500/10 rounded-2xl p-6 text-center select-none relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-sky-600/5 via-blue-500/5 to-transparent blur-md" />
           <h4 className="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-[0.2em] mb-4">
             {labels.accreditationTitle}
           </h4>
-          <div className="flex flex-wrap justify-center items-center gap-4 text-[11px] font-mono text-slate-900 dark:text-zinc-100">
-            <span className="bg-slate-100/80 dark:bg-zinc-900/80 px-4 py-2 border border-slate-200 dark:border-zinc-800 rounded-lg shadow font-semibold">
+          <div className="flex flex-wrap justify-center items-center gap-4 text-[11px] font-mono text-slate-900 dark:text-slate-100">
+            <span className="bg-slate-100/80 dark:bg-[#0f172a]/80 px-4 py-2 border border-slate-200 dark:border-slate-800/60 rounded-lg shadow font-semibold">
               UT-NT-2026-904
             </span>
-            <span className="bg-slate-100/80 dark:bg-zinc-900/80 px-4 py-2 border border-slate-200 dark:border-zinc-800 rounded-lg shadow font-semibold">
+            <span className="bg-slate-100/80 dark:bg-[#0f172a]/80 px-4 py-2 border border-slate-200 dark:border-slate-800/60 rounded-lg shadow font-semibold">
               UT-NOC-SHIVA-9092
             </span>
-            <span className="bg-slate-100/80 dark:bg-zinc-900/80 px-4 py-2 border border-slate-200 dark:border-zinc-800 rounded-lg shadow font-semibold">
+            <span className="bg-slate-100/80 dark:bg-[#0f172a]/80 px-4 py-2 border border-slate-200 dark:border-slate-800/60 rounded-lg shadow font-semibold">
               GOVT. REGD. MSME IND7409
             </span>
-            <span className="bg-slate-100/80 dark:bg-zinc-900/80 px-4 py-2 border border-sky-500/20 rounded-lg text-sky-400 shadow font-extrabold flex items-center gap-1.5">
+            <span className="bg-slate-100/80 dark:bg-[#0f172a]/80 px-4 py-2 border border-sky-500/20 rounded-lg text-sky-400 shadow font-extrabold flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-sky-600 animate-ping" />
               UTTARAKHAND TOURISM UTB-809
             </span>

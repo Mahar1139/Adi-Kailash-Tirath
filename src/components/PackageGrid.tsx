@@ -1,7 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { YatraPackage } from "../types";
 import { YATRA_PACKAGES } from "../data";
-import { ShieldCheck, Calendar, Navigation, Activity, ArrowRight, Server, Check, ChevronLeft, ChevronRight, Compass } from "lucide-react";
+import {
+  ShieldCheck,
+  Calendar,
+  Navigation,
+  Activity,
+  ArrowRight,
+  Server,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Compass,
+} from "lucide-react";
 import { t } from "../utils/lang";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -18,9 +29,11 @@ export default function PackageGrid({
   setActiveCategory,
   onOpenPackage,
   siteData,
-  currentLanguage = "en"
+  currentLanguage = "en",
 }: PackageGridProps) {
-  const [journeyEdition, setJourneyEdition] = useState<"standard" | "deluxe" | "premium">("standard");
+  const [journeyEdition, setJourneyEdition] = useState<
+    "standard" | "deluxe" | "premium"
+  >("standard");
   const [showAllPackages, setShowAllPackages] = useState(false);
   const [filterIsHovered, setFilterIsHovered] = useState(false);
   const filterContainerRef = useRef<HTMLDivElement>(null);
@@ -29,7 +42,11 @@ export default function PackageGrid({
   // Dynamic columns detection based on screen width
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
+      if (window.innerWidth >= 1536) {
+        setCols(5);
+      } else if (window.innerWidth >= 1280) {
+        setCols(4);
+      } else if (window.innerWidth >= 1024) {
         setCols(3);
       } else if (window.innerWidth >= 768) {
         setCols(2);
@@ -42,7 +59,7 @@ export default function PackageGrid({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const initialLimit = cols * 3; // Exactly 3 rows of packages
+  const initialLimit = cols * 2; // Show exactly 2 rows of packages based on screen size
 
   // Manual scroll for filters
   const scrollFilters = (direction: "left" | "right") => {
@@ -51,7 +68,7 @@ export default function PackageGrid({
     const scrollAmount = 200;
     container.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   };
 
@@ -66,17 +83,17 @@ export default function PackageGrid({
         if (filterIsHovered) return;
         const maxScroll = container.scrollWidth - container.clientWidth;
         if (maxScroll <= 0) return;
-        
+
         // Scroll right, loop back if at the end
         if (container.scrollLeft >= maxScroll - 15) {
           container.scrollTo({
             left: 0,
-            behavior: "smooth"
+            behavior: "smooth",
           });
         } else {
           container.scrollBy({
             left: 130,
-            behavior: "smooth"
+            behavior: "smooth",
           });
         }
       }, 3200);
@@ -87,42 +104,60 @@ export default function PackageGrid({
   }, [filterIsHovered]);
 
   const sitePackages = siteData?.packages || [];
-  const mergedPackages = [...sitePackages, ...YATRA_PACKAGES.filter(p => !sitePackages.find((sp: any) => sp.id === p.id || sp.title === p.title))];
+  const mergedPackages = [
+    ...sitePackages,
+    ...YATRA_PACKAGES.filter(
+      (p) =>
+        !sitePackages.find((sp: any) => sp.id === p.id || sp.title === p.title),
+    ),
+  ];
   const packagesList = mergedPackages;
 
-  const filteredPackages = packagesList.filter((pkg: YatraPackage) => 
-    activeCategory === "home" || activeCategory === "packages" || activeCategory === "all" || pkg.category === activeCategory
+  const filteredPackages = packagesList.filter(
+    (pkg: YatraPackage) =>
+      activeCategory === "home" ||
+      activeCategory === "packages" ||
+      activeCategory === "all" ||
+      pkg.category === activeCategory,
   );
 
   const isHome = activeCategory === "home";
   const limit = isHome ? initialLimit : 10000;
-  const visiblePackages = showAllPackages ? filteredPackages : filteredPackages.slice(0, limit);
+  const visiblePackages = showAllPackages
+    ? filteredPackages
+    : filteredPackages.slice(0, limit);
 
   return (
-    <section id="yatra-catalog-grid" className="pt-8 pb-16 bg-gradient-to-b from-sky-50 via-sky-100/40 to-white dark:from-sky-900/10 dark:via-zinc-900 dark:to-zinc-950 border-t border-slate-200/50 dark:border-zinc-800/50 px-4 md:px-8 lg:px-12 w-full select-none">
+    <section
+      id="yatra-catalog-grid"
+      className="pt-8 pb-16 bg-gradient-to-b from-sky-50 via-white to-sky-100/40 dark:from-sky-900/20 dark:via-slate-900 dark:to-[#0b1120] border-t border-slate-200/50 dark:border-slate-800/60/50 px-4 md:px-8 lg:px-12 w-full select-none"
+    >
       <div className="w-full max-w-full mx-auto">
         <div className="text-center flex flex-col items-center gap-3 mb-10">
-          <span className="text-sky-500 font-mono text-xs md:text-sm lg:text-base font-bold uppercase tracking-[0.25em]">
+          <span className="text-sky-500 font-sans text-xs md:text-sm lg:text-base font-bold uppercase tracking-[0.25em]">
             {siteData?.text_catalogTitle || t("catalogTitle", currentLanguage)}
           </span>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 font-extrabold tracking-tight">
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 dark:from-zinc-100 dark:via-slate-300 dark:to-zinc-100 font-extrabold tracking-tight">
             {siteData?.text_packagesSub || t("packages", currentLanguage)}
           </h2>
           <div className="h-0.5 w-[80%] md:w-[60%] max-w-2xl bg-gradient-to-r from-sky-600 to-blue-500 rounded" />
-          <p className="text-slate-900 dark:text-zinc-100 text-sm max-w-2xl mt-1 leading-relaxed">
+          <p className="text-slate-900 dark:text-slate-100 text-sm max-w-2xl mt-1 leading-relaxed">
             {t("catalogSub", currentLanguage)}
           </p>
         </div>
 
         {/* Packages Grid */}
         {visiblePackages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12 bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-2xl text-center min-h-[400px]">
-            <Compass className="h-12 w-12 text-slate-900 dark:text-zinc-100 mb-4" />
-            <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-slate-900 mb-2">No packages available here</h3>
-            <p className="text-slate-900 dark:text-zinc-100 mb-6 text-sm max-w-md">
-              We are constantly adding new yatras. Please check out our other spiritual journeys.
+          <div className="flex flex-col items-center justify-center p-12 bg-slate-50 dark:bg-[#0b1120] border border-slate-200 dark:border-slate-800/60 rounded-2xl text-center min-h-[400px]">
+            <Compass className="h-12 w-12 text-slate-900 dark:text-slate-100 mb-4" />
+            <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-slate-900 mb-2">
+              No packages available here
+            </h3>
+            <p className="text-slate-900 dark:text-slate-100 mb-6 text-sm max-w-md">
+              We are constantly adding new yatras. Please check out our other
+              spiritual journeys.
             </p>
-            <button 
+            <button
               onClick={() => setActiveCategory("home")}
               className="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 cursor-pointer text-white font-mono text-xs rounded shadow-lg flex items-center gap-2 transition"
             >
@@ -130,133 +165,149 @@ export default function PackageGrid({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 animate-fade-in">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8 animate-fade-in">
             <AnimatePresence mode="popLayout">
-            {visiblePackages.map((pkg, i) => (
-            <motion.div
-              layout
-              initial={{ opacity: 0, scale: 0.9, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: -30 }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              key={pkg.id}
-              className="relative group cursor-pointer bg-white dark:bg-zinc-950 border border-slate-200/80 dark:border-zinc-800/80 hover:border-yellow-500/50 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between"
-              onClick={() => onOpenPackage(pkg)}
-            >
-              {/* Golden slide effect overlay */}
-              <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent animate-golden-slide" />
-              </div>
-
-              {/* Image with labels */}
-              <div className="relative h-56 overflow-hidden">
-                <img
-                  src={pkg.imageUrl}
-                  alt={pkg.title}
-                  className="w-full h-full object-cover group-hover:scale-110 group-hover:brightness-105 transition-all duration-700 filter brightness-90"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute top-4 left-4 bg-slate-100/90 dark:bg-zinc-900/90 text-sky-400 border border-sky-500/20 text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded font-bold backdrop-blur-xs">
-                  {pkg.badge}
-                </div>
-                <div className="absolute top-4 right-4 bg-white/90 dark:bg-zinc-950/90 text-slate-900 dark:text-zinc-100 text-[10px] font-mono px-2 py-1 rounded backdrop-blur-xs">
-                  {pkg.duration}
-                </div>
-                {/* Overlay Vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-90" />
-                <div className="absolute bottom-3 left-4 flex items-center gap-1.5 text-slate-900 dark:text-zinc-100 font-mono text-[11px]">
-                  <Navigation className="h-3 w-3 text-sky-500" />
-                  <span>{pkg.fromRoute}</span>
-                </div>
-              </div>
-
-              {/* Package Details */}
-              <div className="p-5 flex flex-col gap-3 text-left flex-grow">
-                <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 uppercase tracking-widest">
-                    Yatra Category
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-mono text-blue-500 bg-blue-500/5 px-2 py-0.5 rounded border border-blue-500/10">
-                    <Activity className="h-3 w-3" />
-                    {pkg.difficulty}
-                  </span>
-                </div>
-
-                <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-zinc-100 group-hover:text-sky-400 transition-colors duration-300 leading-snug">
-                  {pkg.title}
-                </h3>
-
-                <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed line-clamp-3">
-                  {pkg.overview}
-                </p>
-
-                {/* Highlights preview */}
-                <div className="space-y-1.5 mt-2">
-                  {pkg.highlights.slice(0, 3).map((hl, i) => (
-                    <div key={i} className="flex items-start gap-1 pb-1">
-                      <Check className="h-3.5 w-3.5 text-sky-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-slate-900 dark:text-zinc-100 text-[11px] font-serif leading-none">{hl}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price and CTA */}
-              <div className="p-5 border-t border-slate-300 dark:border-zinc-700 text-left flex flex-col gap-4 bg-white dark:bg-zinc-950">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 uppercase tracking-wider leading-none">
-                    SPECIAL RATE
-                  </span>
-                  <span className="text-xl font-sans font-medium text-sky-400 mt-1 leading-none">
-                    {pkg.price.replace(/\/?\s*(per person|per pax|\/person|\/pax|व्यક્તિ|व्यक्ति)/i, '').trim()} <span className="text-sm font-sans">/person</span>
-                  </span>
-                </div>
-                <div
-                  className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 group-hover:bg-sky-600 group-hover:text-white group-hover:border-sky-500 group-hover:shadow-lg group-hover:shadow-sky-500/20 text-xs font-mono font-bold tracking-wider px-4 py-3 rounded-lg transition-all duration-500 w-full justify-center inline-flex items-center gap-1.5"
+              {visiblePackages.map((pkg, i) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, y: -30 }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  key={pkg.id}
+                  className="relative group cursor-pointer bg-white dark:bg-[#0b1120] border border-slate-200/80 dark:border-slate-800/60/80 hover:border-yellow-500/50 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between"
+                  onClick={() => onOpenPackage(pkg)}
                 >
-                  VIEW PACKAGE
-                  <ArrowRight className="h-3 w-3 group-hover:-rotate-45 transition-transform duration-300" />
-                </div>
-              </div>
-            </motion.div>
-          ))}
-          </AnimatePresence>
+                  {/* Golden slide effect overlay */}
+                  <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent animate-golden-slide" />
+                  </div>
+
+                  {/* Image with labels */}
+                  <div className="relative h-56 overflow-hidden">
+                    <img
+                      src={pkg.imageUrl}
+                      alt={pkg.title}
+                      className="w-full h-full object-cover group-hover:scale-110 group-hover:brightness-105 transition-all duration-700 filter brightness-90"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute top-4 left-4 bg-slate-100/90 dark:bg-[#0f172a]/90 text-sky-400 border border-sky-500/20 text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded font-bold backdrop-blur-xs">
+                      {pkg.badge}
+                    </div>
+                    <div className="absolute top-4 right-4 bg-white/90 dark:bg-[#0b1120]/90 text-slate-900 dark:text-slate-100 text-[10px] font-mono px-2 py-1 rounded backdrop-blur-xs">
+                      {pkg.duration}
+                    </div>
+                    {/* Overlay Vignette */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-90" />
+                    <div className="absolute bottom-3 left-4 flex items-center gap-1.5 text-slate-900 dark:text-slate-100 font-mono text-[11px]">
+                      <Navigation className="h-3 w-3 text-sky-500" />
+                      <span>{pkg.fromRoute}</span>
+                    </div>
+                  </div>
+
+                  {/* Package Details */}
+                  <div className="p-5 flex flex-col gap-3 text-left flex-grow">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-mono text-slate-900 dark:text-slate-100 uppercase tracking-widest">
+                        Yatra Category
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-mono text-blue-500 bg-blue-500/5 px-2 py-0.5 rounded border border-blue-500/10">
+                        <Activity className="h-3 w-3" />
+                        {pkg.difficulty}
+                      </span>
+                    </div>
+
+                    <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-sky-400 transition-colors duration-300 leading-snug">
+                      {pkg.title}
+                    </h3>
+
+                    <p className="text-slate-900 dark:text-slate-100 text-xs leading-relaxed line-clamp-3">
+                      {pkg.overview}
+                    </p>
+
+                    {/* Highlights preview */}
+                    <div className="space-y-1.5 mt-2">
+                      {pkg.highlights.slice(0, 3).map((hl, i) => (
+                        <div key={i} className="flex items-start gap-1 pb-1">
+                          <Check className="h-3.5 w-3.5 text-sky-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-slate-900 dark:text-slate-100 text-[11px] font-serif leading-none">
+                            {hl}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Price and CTA */}
+                  <div className="p-5 border-t border-slate-300 dark:border-slate-700/60 text-left flex flex-col gap-4 bg-white dark:bg-[#0b1120]">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-mono text-slate-900 dark:text-slate-100 uppercase tracking-wider leading-none">
+                        SPECIAL RATE
+                      </span>
+                      <span className="text-xl font-sans font-medium text-sky-400 mt-1 leading-none">
+                        {pkg.price
+                          .replace(
+                            /\/?\s*(per person|per pax|\/person|\/pax|व्यક્તિ|व्यक्ति)/i,
+                            "",
+                          )
+                          .trim()}{" "}
+                        <span className="text-sm font-sans">/person</span>
+                      </span>
+                    </div>
+                    <div className="bg-slate-100 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800/60 text-slate-900 dark:text-slate-100 group-hover:bg-sky-600 group-hover:text-white group-hover:border-sky-500 group-hover:shadow-lg group-hover:shadow-sky-500/20 text-xs font-mono font-bold tracking-wider px-4 py-3 rounded-lg transition-all duration-500 w-full justify-center inline-flex items-center gap-1.5">
+                      VIEW PACKAGE
+                      <ArrowRight className="h-3 w-3 group-hover:-rotate-45 transition-transform duration-300" />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
 
-        {(filteredPackages.length > initialLimit || (activeCategory !== "home" && activeCategory !== "all")) && (
+        {(filteredPackages.length > initialLimit ||
+          (activeCategory !== "home" && activeCategory !== "all")) && (
           <div className="mt-12 text-center flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in">
-            {activeCategory === "home" && filteredPackages.length > initialLimit && (
-              <button
-                onClick={() => {
-                  setActiveCategory("packages");
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                className="px-8 py-3.5 bg-gradient-to-r from-sky-600 via-sky-500 to-blue-500 hover:from-sky-500 hover:to-blue-400 text-white font-sans font-semibold text-sm tracking-wide rounded-full shadow-lg hover:shadow-sky-500/20 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2 border border-sky-500/20"
-              >
-                <span>
-                  {currentLanguage === "hi" ? "सभी पैकेज देखें" : "VIEW ALL PACKAGES"}
-                </span>
-                <ArrowRight className="h-4 w-4 transition-transform duration-300" />
-              </button>
-            )}
+            {activeCategory === "home" &&
+              filteredPackages.length > initialLimit && (
+                <button
+                  onClick={() => {
+                    setActiveCategory("packages");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="px-8 py-3.5 bg-gradient-to-r from-sky-600 via-sky-500 to-blue-500 hover:from-sky-500 hover:to-blue-400 text-white font-sans font-semibold text-sm tracking-wide rounded-full shadow-lg hover:shadow-sky-500/20 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2 border border-sky-500/20"
+                >
+                  <span>
+                    {currentLanguage === "hi"
+                      ? "सभी पैकेज देखें"
+                      : "VIEW ALL PACKAGES"}
+                  </span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300" />
+                </button>
+              )}
 
-            {(activeCategory !== "home" && activeCategory !== "packages" && activeCategory !== "all") && (
-              <button
-                onClick={() => {
-                  setActiveCategory("packages");
-                  setTimeout(() => {
-                    document.getElementById("yatra-catalog-grid")?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                }}
-                className={`px-8 py-3.5 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 border border-slate-300 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 font-sans font-semibold text-sm tracking-wide rounded-full transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2`}
-              >
-                <span>
-                  {currentLanguage === "hi" ? "अन्य सभी पैकेज देखें" : "VIEW OTHER PACKAGES"}
-                </span>
-                <Compass className="h-4 w-4" />
-              </button>
-            )}
+            {activeCategory !== "home" &&
+              activeCategory !== "packages" &&
+              activeCategory !== "all" && (
+                <button
+                  onClick={() => {
+                    setActiveCategory("packages");
+                    setTimeout(() => {
+                      document
+                        .getElementById("yatra-catalog-grid")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }, 100);
+                  }}
+                  className={`px-8 py-3.5 bg-white dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-700/60 hover:bg-slate-50 dark:hover:bg-slate-800 font-sans font-semibold text-sm tracking-wide rounded-full transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-2`}
+                >
+                  <span>
+                    {currentLanguage === "hi"
+                      ? "अन्य सभी पैकेज देखें"
+                      : "VIEW OTHER PACKAGES"}
+                  </span>
+                  <Compass className="h-4 w-4" />
+                </button>
+              )}
           </div>
         )}
       </div>

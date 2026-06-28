@@ -97,7 +97,7 @@ export default function DestinationsCarousel({
       {/* Left Navigation Arrow */}
       <button
         onClick={() => scroll("left")}
-        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
+        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-[#0b1120]/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
         aria-label="Scroll Left"
       >
         <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
@@ -107,7 +107,7 @@ export default function DestinationsCarousel({
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="flex flex-row items-center overflow-x-auto py-4 px-0 scrollbar-none w-full"
+        className="flex flex-row items-center overflow-x-auto pt-8 pb-4 px-0 scrollbar-none w-full"
         style={{
           scrollbarWidth: "none", // Firefox
           msOverflowStyle: "none"  // IE 10+
@@ -140,21 +140,18 @@ export default function DestinationsCarousel({
                     <img
                       src={dest.img}
                       alt={dest.title}
-                      className="w-full h-full object-cover filter brightness-90 group-hover/card:brightness-105 group-hover/card:scale-110 transition-all duration-700"
+                      className="w-full h-full object-cover transition-all duration-700"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute inset-0 z-20 pointer-events-none opacity-80 mix-blend-overlay">
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent animate-golden-slide" />
+                    <div className="absolute inset-0 z-20 pointer-events-none mix-blend-overlay group-hover/card:opacity-0 transition-opacity duration-300">
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/50 to-transparent animate-golden-slide" />
                     </div>
-                  </div>
-                  <div className="absolute inset-1 rounded-full bg-sky-900/30 opacity-0 group-hover/card:opacity-100 transition duration-500 flex items-center justify-center backdrop-blur-[1px]">
-                    <Compass className="h-6 w-6 text-white animate-spin-slow drop-shadow-md" />
                   </div>
                 </div>
                 
                 {/* Labels */}
                 <div className="text-center w-full px-1">
-                  <h4 className="font-serif text-sm md:text-base font-bold text-slate-900 dark:text-zinc-100 group-hover/card:text-sky-400 transition-colors duration-300 leading-snug truncate">
+                  <h4 className="font-serif text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 group-hover/card:text-sky-400 transition-colors duration-300 leading-snug truncate">
                     {(() => {
                       if (dest.categoryRef === "adi_kailash") return t("adiKailashRef", currentLanguage);
                       if (dest.categoryRef === "kailash_mansarovar") return t("kailashMansarovarRef", currentLanguage);
@@ -171,7 +168,7 @@ export default function DestinationsCarousel({
                       return dest.title;
                     })()}
                   </h4>
-                  <p className="text-xs text-slate-900 dark:text-zinc-100 mt-1 line-clamp-2 leading-tight">
+                  <p className="text-xs text-slate-900 dark:text-slate-100 mt-1 line-clamp-2 leading-tight">
                     {dest.description}
                   </p>
                 </div>
@@ -184,7 +181,7 @@ export default function DestinationsCarousel({
       {/* Right Navigation Arrow */}
       <button
         onClick={() => scroll("right")}
-        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-zinc-950/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
+        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/80 dark:bg-[#0b1120]/80 border border-sky-500/30 text-sky-500 hover:text-white hover:bg-sky-600 hover:border-sky-500 flex items-center justify-center shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer select-none"
         aria-label="Scroll Right"
       >
         <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />

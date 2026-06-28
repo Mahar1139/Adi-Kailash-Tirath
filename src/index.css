@@ -1,11 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-roboto: "Roboto", sans-serif;
   --font-sans: var(--font-sans, "Inter", system-ui, sans-serif);
   --font-serif: var(--font-serif, "Geist", ui-serif, Georgia, serif);
-  --font-mono: var(--font-mono, "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+  --font-mono: var(
+    --font-mono,
+    "JetBrains Mono",
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace
+  );
   --color-red-750: #b91c1c;
   --color-zinc-850: #1b1b1f;
   --color-zinc-650: #3f3f46;
@@ -69,7 +78,9 @@ body {
 button {
   position: relative;
   overflow: hidden;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s ease;
 }
 
 button:hover {
@@ -81,14 +92,19 @@ button:active {
 }
 
 button::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   z-index: 20;
   pointer-events: none;
   opacity: 0;
   mix-blend-mode: overlay;
-  background: linear-gradient(90deg, transparent, rgba(253, 224, 71, 0.6), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(253, 224, 71, 0.6),
+    transparent
+  );
   transform: translateX(-150%) skewX(30deg);
   transition: opacity 0.5s ease;
 }
@@ -101,12 +117,28 @@ button:hover::after {
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Global +2px increase for all text elements except headings */
-:not(h1, h2, h3, h4, h5, h6).text-\[10px\] { font-size: 12px !important; }
-:not(h1, h2, h3, h4, h5, h6).text-\[11px\] { font-size: 13px !important; }
-:not(h1, h2, h3, h4, h5, h6).text-xs { font-size: 14px !important; line-height: 1.25rem !important; }
-:not(h1, h2, h3, h4, h5, h6).text-sm { font-size: 16px !important; line-height: 1.5rem !important; }
-:not(h1, h2, h3, h4, h5, h6).text-base { font-size: 18px !important; line-height: 1.75rem !important; }
-:not(h1, h2, h3, h4, h5, h6).text-lg { font-size: 20px !important; line-height: 1.75rem !important; }
+:not(h1, h2, h3, h4, h5, h6).text-\[10px\] {
+  font-size: 12px !important;
+}
+:not(h1, h2, h3, h4, h5, h6).text-\[11px\] {
+  font-size: 13px !important;
+}
+:not(h1, h2, h3, h4, h5, h6).text-xs {
+  font-size: 14px !important;
+  line-height: 1.25rem !important;
+}
+:not(h1, h2, h3, h4, h5, h6).text-sm {
+  font-size: 16px !important;
+  line-height: 1.5rem !important;
+}
+:not(h1, h2, h3, h4, h5, h6).text-base {
+  font-size: 18px !important;
+  line-height: 1.75rem !important;
+}
+:not(h1, h2, h3, h4, h5, h6).text-lg {
+  font-size: 20px !important;
+  line-height: 1.75rem !important;
+}
 
 body:not(h1, h2, h3, h4, h5, h6) {
   font-size: 18px !important;
@@ -117,20 +149,20 @@ body:not(h1, h2, h3, h4, h5, h6) {
   /* Increase scale on elements that normally scale a little */
   .hover\:scale-105:hover,
   .group:hover .group-hover\:scale-105 {
-    transform: scale(1.10) !important;
+    transform: scale(1.1) !important;
     transition-duration: 0.3s !important;
   }
-  
+
   .hover\:scale-\[1\.02\]:hover,
   .group:hover .group-hover\:scale-\[1\.02\] {
     transform: scale(1.07) !important;
     transition-duration: 0.3s !important;
   }
-  
+
   .hover\:scale-110:hover,
   .group:hover .group-hover\:scale-110,
   .group\/card:hover .group-hover\/card\:scale-110 {
-    transform: scale(1.20) !important;
+    transform: scale(1.2) !important;
     transition-duration: 0.4s !important;
   }
 
@@ -144,26 +176,19 @@ body:not(h1, h2, h3, h4, h5, h6) {
   .group:hover .group-hover\:-translate-y-2,
   .group\/card:hover .group-hover\/card\:-translate-y-2 {
     transform: translateY(-0.85rem) !important; /* Was -0.5rem */
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
   }
-  
+
   /* Make all group items that elevate cast a deeper shadow */
-  .group:hover, .group\/card:hover {
+  .group:hover {
     box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3) !important; /* Enhanced shadow */
   }
 
   /* Add extra brightness filter to hover states to pop more */
-  .group:hover, .group\/card:hover, button:hover {
+  .group:hover,
+  button:hover {
     filter: brightness(1.05); /* Slight brightness pop */
   }
-  
-  /* Carousel specific sibling hover effect: Only shrink when a card is ACTUALLY being hovered */
-  #destinations-carousel-wrapper:has(.group\/card:hover) .group\/card:not(:hover) {
-    transform: scale(0.85) !important;
-    opacity: 0.5;
-    filter: grayscale(50%);
-  }
-  
+
   #destinations-carousel-wrapper .group\/card {
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }

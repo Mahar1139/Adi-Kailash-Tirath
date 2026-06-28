@@ -171,7 +171,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-[360px] md:w-[400px] h-[550px] bg-white dark:bg-zinc-950 border border-sky-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 duration-300 font-sans">
+    <div className="fixed bottom-6 right-6 z-50 w-[360px] md:w-[400px] h-[550px] bg-white dark:bg-[#0b1120] border border-sky-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-8 duration-300 font-sans">
       
       {/* Bot Header */}
       <div className="p-4 bg-gradient-to-r from-slate-50 via-slate-100 to-slate-50 border-b border-sky-200 flex justify-between items-center select-none">
@@ -180,7 +180,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
             <Sparkles className="h-4.5 w-4.5 animate-pulse" />
           </div>
           <div>
-            <h4 className="font-serif font-bold text-slate-900 dark:text-zinc-100 text-sm tracking-wide">{labels.title}</h4>
+            <h4 className="font-serif font-bold text-slate-900 dark:text-slate-100 text-sm tracking-wide">{labels.title}</h4>
             <div className="flex items-center gap-1 text-[10px] text-green-600 font-medium">
               <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
               {labels.connected}
@@ -189,14 +189,14 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
         </div>
         <button
           onClick={onClose}
-          className="text-slate-900 dark:text-zinc-100 hover:text-slate-900 dark:text-zinc-100 p-1 rounded-md bg-slate-100/60 dark:bg-zinc-900/60 border border-slate-200 dark:border-zinc-800 transition cursor-pointer"
+          className="text-slate-900 dark:text-slate-100 hover:text-slate-900 dark:text-slate-100 p-1 rounded-md bg-slate-100/60 dark:bg-[#0f172a]/60 border border-slate-200 dark:border-slate-800/60 transition cursor-pointer"
         >
           <X className="h-4.5 w-4.5" />
         </button>
       </div>
 
       {/* Messages Area */}
-      <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-zinc-950 select-text">
+      <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-[#0b1120] select-text">
         {messages.map((m) => {
           const isBot = m.sender === "bot";
           return (
@@ -207,16 +207,16 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
               {/* Profile Orb indicator */}
               <div className={`h-7 w-7 rounded-full flex items-center justify-center flex-shrink-0 border select-none overflow-hidden ${
                 isBot 
-                  ? "bg-white dark:bg-zinc-950 border-sky-500/20" 
+                  ? "bg-white dark:bg-[#0b1120] border-sky-500/20" 
                   : "bg-sky-600 text-white border-sky-500/45 text-xs"
               }`}>
-                {isBot ? <img src="/logo.jpg" alt="Bot" className="w-full h-full object-contain bg-white dark:bg-zinc-950" referrerPolicy="no-referrer" /> : <User className="h-3.5 w-3.5" />}
+                {isBot ? <img src="/logo.jpg" alt="Bot" className="w-full h-full object-contain bg-white dark:bg-[#0b1120]" referrerPolicy="no-referrer" /> : <User className="h-3.5 w-3.5" />}
               </div>
 
               {/* Text Bubble */}
               <div className={`max-w-[80%] rounded-xl px-3.5 py-2.5 text-xs text-left leading-relaxed shadow-sm ${
                 isBot 
-                  ? "bg-white dark:bg-zinc-950 text-slate-900 dark:text-slate-900 border border-slate-200 dark:border-zinc-800" 
+                  ? "bg-white dark:bg-[#0b1120] text-slate-900 dark:text-slate-900 border border-slate-200 dark:border-slate-800/60" 
                   : "bg-sky-600 text-white shadow-sky-500/20"
               }`}>
                 {/* Parse basic bold formatting and bullets to support beautiful markdown returned by Gemini */}
@@ -266,10 +266,10 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
 
         {loading && (
           <div className="flex items-start gap-2.5">
-            <div className="h-7 w-7 rounded-full bg-slate-50 dark:bg-zinc-950 border border-sky-500/20 flex items-center justify-center overflow-hidden animate-pulse">
-               <img src="/logo.jpg" alt="Loading" className="w-full h-full object-contain bg-white dark:bg-zinc-950" referrerPolicy="no-referrer" />
+            <div className="h-7 w-7 rounded-full bg-slate-50 dark:bg-[#0b1120] border border-sky-500/20 flex items-center justify-center overflow-hidden animate-pulse">
+               <img src="/logo.jpg" alt="Loading" className="w-full h-full object-contain bg-white dark:bg-[#0b1120]" referrerPolicy="no-referrer" />
             </div>
-            <div className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-slate-900 dark:text-zinc-100 rounded-xl px-4 py-2.5 text-xs flex gap-1.5 items-center select-none animate-pulse">
+            <div className="bg-slate-100 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800/60 text-slate-900 dark:text-slate-100 rounded-xl px-4 py-2.5 text-xs flex gap-1.5 items-center select-none animate-pulse">
               <span>{labels.waiting}</span>
             </div>
           </div>
@@ -278,12 +278,12 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
       </div>
 
       {/* Quick Prompts Helper */}
-      <div className="px-4 py-2 bg-zinc-90 w-full overflow-x-auto border-t border-slate-300 dark:border-zinc-700 flex gap-2 select-none">
+      <div className="px-4 py-2 bg-zinc-90 w-full overflow-x-auto border-t border-slate-300 dark:border-slate-700/60 flex gap-2 select-none">
         {quickPrompts.map((qp, index) => (
           <button
             key={index}
             onClick={() => handleSend(qp)}
-            className="flex-shrink-0 bg-slate-100 dark:bg-zinc-900 hover:bg-sky-600/10 hover:border-sky-500/30 text-slate-900 dark:text-zinc-100 hover:text-sky-400 border border-slate-200 dark:border-zinc-800 text-[10px] px-2.5 py-1 rounded-full cursor-pointer transition"
+            className="flex-shrink-0 bg-slate-100 dark:bg-[#0f172a] hover:bg-sky-600/10 hover:border-sky-500/30 text-slate-900 dark:text-slate-100 hover:text-sky-400 border border-slate-200 dark:border-slate-800/60 text-[10px] px-2.5 py-1 rounded-full cursor-pointer transition"
           >
             {qp}
           </button>
@@ -291,7 +291,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
       </div>
 
       {/* Bottom Inputs form */}
-      <div className="p-3 bg-slate-100 dark:bg-zinc-900 border-t border-slate-300 dark:border-zinc-700 select-none">
+      <div className="p-3 bg-slate-100 dark:bg-[#0f172a] border-t border-slate-300 dark:border-slate-700/60 select-none">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -304,7 +304,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={labels.placeholder}
-            className="flex-grow bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-zinc-100 focus:outline-none focus:border-sky-500/40"
+            className="flex-grow bg-white dark:bg-[#0b1120] border border-slate-200 dark:border-slate-800/60 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-sky-500/40"
           />
           <button
             type="submit"
@@ -313,7 +313,7 @@ export default function YatraConsultant({ isOpen, onClose, currentLanguage = "en
             <Send className="h-4 w-4" />
           </button>
         </form>
-        <p className="text-[9px] text-slate-900 dark:text-zinc-100 mt-1.5 text-center leading-none">
+        <p className="text-[9px] text-slate-900 dark:text-slate-100 mt-1.5 text-center leading-none">
           {labels.poweredBy}
         </p>
       </div>

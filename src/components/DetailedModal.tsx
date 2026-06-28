@@ -88,75 +88,78 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
   const labels = LOCALIZED_LABELS[currentLanguage] || LOCALIZED_LABELS["en"];
 
   return (
-    <div className="fixed inset-0 z-50 bg-white dark:bg-zinc-950 overflow-y-auto select-none">
-      <div className="w-full min-h-screen max-w-full mx-auto flex flex-col bg-white dark:bg-zinc-950 animate-in slide-in-from-bottom duration-300">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] overflow-hidden select-none p-0 flex items-center justify-center">
+      <div className="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col bg-slate-50 dark:bg-[#0b1120]/95 animate-in slide-in-from-bottom duration-300 shadow-2xl relative">
         
         {/* Sticky Header with Back Button */}
-        <div className="sticky top-0 z-20 flex items-center justify-between p-3 md:p-4 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md border-b border-slate-200 dark:border-zinc-800">
-          <button
-            onClick={onClose}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-slate-900 dark:text-zinc-100 text-sm font-semibold tracking-wide hover:bg-slate-100 dark:hover:bg-zinc-900 rounded-lg transition cursor-pointer select-none"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {currentLanguage === "hi" ? "वापस जाएँ" : "Back"}
-          </button>
+        <div className="sticky top-0 z-30 bg-white/80 dark:bg-[#0b1120]/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/60/80">
+          <div className="w-full max-w-7xl mx-auto flex items-center justify-between p-3 md:p-4">
+            <button
+              onClick={onClose}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-slate-900 dark:text-slate-100 text-sm font-semibold tracking-wide hover:bg-slate-100 dark:hover:bg-zinc-900 rounded-lg transition cursor-pointer select-none"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {currentLanguage === "hi" ? "वापस जाएँ" : "Back"}
+            </button>
 
-          {/* Close Trigger (Right) */}
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-full text-slate-900 dark:text-zinc-100 hover:bg-slate-100 dark:hover:bg-zinc-900 hover:text-rose-600 transition cursor-pointer hidden md:flex"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Banner */}
-        <div className="relative h-64 md:h-[400px] bg-slate-100 dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 shrink-0">
-          <img
-            src={pkg.imageUrl}
-            alt={pkg.title}
-            className="w-full h-full object-cover brightness-[0.55]"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent" />
-          
-          {/* Sub titles overlays */}
-          <div className="absolute bottom-6 left-6 right-6 text-left">
-            <span className="bg-sky-600 text-white font-mono text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded mb-2.5 inline-block">
-              {pkg.badge}
-            </span>
-            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-zinc-100 tracking-tight leading-tighter">
-              {pkg.title}
-            </h2>
-            <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-900 dark:text-zinc-100 mt-3 border-t border-slate-200/60 dark:border-zinc-800/60 pt-3">
-              <span className="flex items-center gap-1">
-                <Calendar className="h-4 w-4 text-sky-500" />
-                {pkg.duration}
-              </span>
-              <span className="w-1 h-1 rounded-full bg-zinc-600 self-center" />
-              <span className="flex items-center gap-1">
-                <MapPin className="h-4 w-4 text-sky-500" />
-                {pkg.fromRoute}
-              </span>
-              <span className="w-1 h-1 rounded-full bg-zinc-600 self-center" />
-              <span className="flex items-center gap-1">
-                <Activity className="h-4 w-4 text-sky-500" />
-                {pkg.difficulty} {labels.category}
-              </span>
-            </div>
+            {/* Close Trigger (Right) */}
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-full text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-zinc-900 hover:text-rose-600 transition cursor-pointer hidden md:flex"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
         </div>
 
+        {/* Banner */}
+        <div className="relative h-72 md:h-[450px] bg-slate-100 dark:bg-[#0f172a] shrink-0 overflow-hidden">
+          <img
+            src={pkg.imageUrl}
+            alt={pkg.title}
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+
+        {/* Title Section Below Banner */}
+        <div className="bg-slate-50 dark:bg-[#0b1120] border-b border-slate-200 dark:border-slate-800/60 pt-6 pb-6 md:pt-8 md:pb-8">
+            <div className="w-full max-w-7xl mx-auto px-6 md:px-8 text-left">
+              <span className="bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest mb-3 inline-block">
+                {pkg.badge}
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                {pkg.title}
+              </h2>
+              <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-600 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-800/60 pt-4">
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-4 w-4 text-sky-600 dark:text-sky-500" />
+                  {pkg.duration}
+                </span>
+                <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700 self-center" />
+                <span className="flex items-center gap-1">
+                  <MapPin className="h-4 w-4 text-sky-600 dark:text-sky-500" />
+                  {pkg.fromRoute}
+                </span>
+                <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700 self-center" />
+                <span className="flex items-center gap-1">
+                  <Activity className="h-4 w-4 text-sky-600 dark:text-sky-500" />
+                  {pkg.difficulty} {labels.category}
+                </span>
+              </div>
+            </div>
+        </div>
+
         {/* Content body split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 flex-grow">
+        <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 flex-grow">
           
           {/* Left Column: Itinerary Details */}
-          <div className="lg:col-span-7 p-6 text-left border-r border-slate-300 dark:border-zinc-700 flex flex-col gap-5">
+          <div className="lg:col-span-7 p-6 text-left border-r border-slate-300 dark:border-slate-700/60 flex flex-col gap-5">
             <div>
-              <h3 className="text-sm font-mono text-sky-500 tracking-wider font-bold uppercase border-b border-slate-300 dark:border-zinc-700 pb-2 mb-3">
+              <h3 className="text-sm font-mono text-sky-500 tracking-wider font-bold uppercase border-b border-slate-300 dark:border-slate-700/60 pb-2 mb-3">
                 {labels.pathway}
               </h3>
-              <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed mb-4">
+              <p className="text-slate-900 dark:text-slate-100 text-xs leading-relaxed mb-4">
                 {pkg.overview}
               </p>
             </div>
@@ -164,12 +167,12 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
             {/* Itinerary List */}
             <div className="flex flex-col gap-4 mt-4">
               {pkg.itinerary.map((it) => (
-                <div key={it.day} className="bg-slate-100/40 dark:bg-zinc-900/40 p-4 rounded-xl border border-slate-200/60 dark:border-zinc-800/60 text-left">
+                <div key={it.day} className="bg-slate-100/40 dark:bg-[#0f172a]/40 p-4 rounded-xl border border-slate-200/60 dark:border-slate-800/60/60 text-left">
                   <h4 className="font-serif text-sm font-bold text-sky-450 flex items-center gap-1.5 leading-tight">
                     <span className="font-mono text-xs bg-sky-600/20 px-2 py-0.5 rounded text-sky-400">{labels.day.toUpperCase()} {it.day}</span>
                     {it.title}
                   </h4>
-                  <p className="text-slate-900 dark:text-zinc-100 text-xs leading-relaxed mt-2.5 bg-white dark:bg-zinc-950 p-3 rounded-lg border border-slate-300/60 dark:border-zinc-700/60 font-sans select-text">
+                  <p className="text-slate-900 dark:text-slate-100 text-xs leading-relaxed mt-2.5 bg-white dark:bg-[#0b1120] p-3 rounded-lg border border-slate-300/60 dark:border-slate-700/60/60 font-sans select-text">
                     {it.details}
                   </p>
                 </div>
@@ -182,23 +185,23 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
                 <AlertCircle className="h-4.5 w-4.5 text-blue-500" />
                 {labels.altitudeNotice}
               </span>
-              <p className="text-slate-900 dark:text-zinc-100 text-xs mt-1.5 leading-relaxed">
+              <p className="text-slate-900 dark:text-slate-100 text-xs mt-1.5 leading-relaxed">
                 {labels.altitudeDesc}
               </p>
             </div>
           </div>
 
           {/* Right Column: Inclusions, Exclusions & Instant Booking action */}
-          <div className="lg:col-span-5 p-6 bg-white/40 dark:bg-zinc-950/40 text-left flex flex-col justify-between gap-6 border-t lg:border-t-0 border-slate-300 dark:border-zinc-700">
+          <div className="lg:col-span-5 p-6 bg-gradient-to-br from-sky-50/50 to-white/80 dark:from-sky-950/20 dark:to-[#0b1120] text-left flex flex-col justify-between gap-6 border-t lg:border-l lg:border-t-0 border-slate-300 dark:border-slate-700/60">
             
             {/* Inclusions */}
             <div>
-              <h4 className="text-xs font-mono text-slate-900 dark:text-zinc-100 tracking-wider font-bold uppercase pb-1.5 border-b border-slate-300 dark:border-zinc-700 mb-3">
+              <h4 className="text-xs font-mono text-slate-900 dark:text-slate-100 tracking-wider font-bold uppercase pb-1.5 border-b border-slate-300 dark:border-slate-700/60 mb-3">
                 {labels.included}
               </h4>
               <ul className="space-y-1.5">
                 {pkg.inclusion.map((inc, i) => (
-                  <li key={i} className="flex items-start gap-1.5 text-xs text-slate-900 dark:text-zinc-100 leading-tight">
+                  <li key={i} className="flex items-start gap-1.5 text-xs text-slate-900 dark:text-slate-100 leading-tight">
                     <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                     <span>{inc}</span>
                   </li>
@@ -208,12 +211,12 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
 
             {/* Exclusions */}
             <div>
-              <h4 className="text-xs font-mono text-slate-900 dark:text-zinc-100 tracking-wider font-bold uppercase pb-1.5 border-b border-slate-300 dark:border-zinc-700 mb-3">
+              <h4 className="text-xs font-mono text-slate-900 dark:text-slate-100 tracking-wider font-bold uppercase pb-1.5 border-b border-slate-300 dark:border-slate-700/60 mb-3">
                 {labels.excluded}
               </h4>
               <ul className="space-y-1.5">
                 {pkg.exclusion.map((ex, i) => (
-                  <li key={i} className="flex items-start gap-1.5 text-xs text-slate-900 dark:text-zinc-100 leading-tight">
+                  <li key={i} className="flex items-start gap-1.5 text-xs text-slate-900 dark:text-slate-100 leading-tight">
                     <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
                     <span>{ex}</span>
                   </li>
@@ -222,15 +225,15 @@ export default function DetailedModal({ pkg, onClose, onConfirmBooking, currentL
             </div>
 
             {/* Direct Booking action */}
-            <div className="pt-4 border-t border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 flex flex-col gap-2">
+            <div className="pt-4 border-t border-slate-300 dark:border-slate-700/60 bg-white dark:bg-[#0b1120] flex flex-col gap-2">
               <div className="flex justify-between items-end mb-2">
                 <div>
-                  <span className="text-[10px] font-mono text-slate-900 dark:text-zinc-100 block uppercase">{labels.estimatedTotal}</span>
+                  <span className="text-[10px] font-mono text-slate-900 dark:text-slate-100 block uppercase">{labels.estimatedTotal}</span>
                   <span className="text-2xl font-mono text-sky-400 font-bold leading-none">
                     {pkg.price.replace(/\/?\s*(per person|per pax|\/person|\/pax|व्यક્તિ|व्यक्ति)/i, '').trim()} <span className="text-sm">/person</span>
                   </span>
                 </div>
-                <span className="bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-[10px] text-slate-900 dark:text-zinc-100 font-mono px-2 py-1 rounded">
+                <span className="bg-slate-100 dark:bg-[#0f172a] border border-slate-200 dark:border-slate-800/60 text-[10px] text-slate-900 dark:text-slate-100 font-mono px-2 py-1 rounded">
                   {labels.maxPilgrims}
                 </span>
               </div>

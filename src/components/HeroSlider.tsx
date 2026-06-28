@@ -11,6 +11,9 @@ interface HeroSliderProps {
 
 export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteData, currentLanguage = "en" }: HeroSliderProps) {
   const [current, setCurrent] = useState(0);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [formName, setFormName] = useState("");
+  const [formPhone, setFormPhone] = useState("");
 
   // Localized Slides fallback to offer pristine translations in selected language script
   const slideTranslations: { [lang: string]: Array<{ title: string; subtitle: string; desc: string; pill: string; stat: string }> } = {
@@ -245,7 +248,7 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
   };
 
   return (
-    <section className="relative h-[550px] md:h-[650px] w-full bg-slate-50 dark:bg-zinc-950 overflow-hidden select-none">
+    <section className="relative min-h-[780px] md:min-h-[650px] lg:min-h-[700px] w-full bg-slate-50 dark:bg-[#0b1120] overflow-hidden select-none">
       {/* Background Slides */}
       {slides.map((slide, idx) => (
         <div
@@ -266,10 +269,10 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
           {/* Slide Content Overlay */}
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full max-w-full mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="absolute inset-0 flex items-center pt-8 md:pt-12 lg:pt-0">
+            <div className="w-full max-w-full mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center lg:items-center">
               {/* Text content block */}
-              <div className="lg:col-span-7 flex flex-col items-start gap-4 text-left animate-in fade-in-50 slide-in-from-bottom-6 duration-700">
+              <div className="lg:col-span-7 flex flex-col items-start gap-3 lg:gap-4 text-left animate-in fade-in-50 slide-in-from-bottom-6 duration-700 -mt-[380px] md:-mt-[400px] lg:mt-0">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-sky-100 border border-sky-500/30 text-sky-600 font-mono text-[11px] font-semibold uppercase tracking-widest leading-none">
                   <Sparkles className="h-3 w-3 text-blue-500 animate-spin-slow" />
                   {slide.pill}
@@ -318,60 +321,106 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
                 </div>
               </div>
 
-              {/* Quick Contact Form on Hero */}
-              <div className="hidden lg:col-span-5 lg:flex flex-col gap-4 animate-in fade-in-50 slide-in-from-right-6 duration-1000">
-                <div className="relative bg-black/50 p-6 md:p-8 rounded-2xl border border-white/20 backdrop-blur-md shadow-2xl overflow-hidden pointer-events-auto">
-                  <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-transparent pointer-events-none" />
-                  
-                  <h3 className="font-serif text-2xl font-bold text-white mb-2 relative z-10">
-                    {currentLanguage === "hi" ? "अपनी यात्रा की योजना बनाएं" : "Plan Your Yatra"}
-                  </h3>
-                  <p className="text-white/80 text-sm mb-6 relative z-10">
-                    {currentLanguage === "hi" ? "आगामी सीजन के लिए अभी पूछताछ करें। हमारी स्थानीय टीम आपको तुरंत जवाब देगी।" : "Enquire now for the upcoming season. Fast responses by our local ground team."}
-                  </p>
-                  
-                  <form className="space-y-4 relative z-10" onSubmit={(e) => { e.preventDefault(); alert(currentLanguage === "hi" ? "पूछताछ सफलतापूर्वक सबमिट की गई! हम जल्द ही आपसे संपर्क करेंगे।" : "Enquiry submitted successfully! We will contact you soon."); }}>
-                    <div className="space-y-1">
-                      <label className="text-white/70 text-xs font-mono uppercase tracking-wider">
-                        {currentLanguage === "hi" ? "पूरा नाम" : "Full Name"}
-                      </label>
-                      <input 
-                        type="text" 
-                        required 
-                        placeholder={currentLanguage === "hi" ? "राकेश शर्मा" : "Rakesh Sharma"} 
-                        className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-sky-400 focus:bg-white/20 transition-colors placeholder:text-white/40"
-                      />
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <label className="text-white/70 text-xs font-mono uppercase tracking-wider">
-                        {currentLanguage === "hi" ? "फ़ोन नंबर" : "Phone Number"}
-                      </label>
-                      <input 
-                        type="tel" 
-                        required 
-                        placeholder="+91 99999 99999" 
-                        className="w-full bg-white/10 border border-white/30 rounded-lg px-4 py-2.5 text-white text-sm focus:outline-none focus:border-sky-400 focus:bg-white/20 transition-colors placeholder:text-white/40"
-                      />
-                    </div>
-                    
-                    <button 
-                      type="submit" 
-                      className="w-full mt-2 bg-sky-600 hover:bg-sky-500 text-white font-mono font-bold uppercase tracking-widest text-sm py-3 rounded-lg shadow-[0_0_20px_rgba(2,132,199,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] border border-sky-400/50 cursor-pointer"
-                    >
-                      {currentLanguage === "hi" ? "कॉल बैक का अनुरोध करें" : "Request Call Back"}
-                    </button>
-                    
-                    <p className="text-white/50 text-[10px] text-center mt-3">
-                      {currentLanguage === "hi" ? "आपका विवरण सुरक्षित है। निःशुल्क परामर्श प्रदान किया जाता है।" : "Your details are secure. Free consultation provided."}
-                    </p>
-                  </form>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
       ))}
+
+      {/* Static Form Layer (Outside Map, Visible on all slides, Responsive) */}
+      <div className="absolute inset-0 flex flex-col justify-center pointer-events-none z-10 pt-8 lg:pt-0">
+        <div className="w-full max-w-full mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center h-full">
+          {/* Empty spacer for the text side on desktop */}
+          <div className="lg:col-span-7 h-[300px] lg:h-auto hidden lg:block" />
+          
+          {/* Quick Contact Form (Visible on all sizes, pushed down on mobile) */}
+          <div className="lg:col-span-5 flex flex-col gap-4 animate-in fade-in-50 slide-in-from-right-6 duration-1000 mt-[360px] md:mt-[380px] lg:mt-0 pointer-events-auto w-full max-w-md mx-auto lg:mr-0 z-20">
+            <div className="relative bg-black/60 lg:bg-black/50 p-5 md:p-6 lg:p-8 rounded-2xl border border-white/20 backdrop-blur-md shadow-2xl overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-transparent pointer-events-none" />
+              
+              <h3 className="font-serif text-xl md:text-2xl font-bold text-white mb-1.5 md:mb-2 relative z-10">
+                {currentLanguage === "hi" ? "अपनी यात्रा की योजना बनाएं" : "Plan Your Yatra"}
+              </h3>
+              <p className="text-white/80 text-xs md:text-sm mb-4 md:mb-6 relative z-10">
+                {currentLanguage === "hi" ? "आगामी सीजन के लिए अभी पूछताछ करें। हमारी स्थानीय टीम आपको तुरंत जवाब देगी।" : "Enquire now for the upcoming season. Fast responses by our local ground team."}
+              </p>
+              
+              <form 
+                className="space-y-3 md:space-y-4 relative z-10" 
+                onSubmit={(e) => { 
+                  e.preventDefault(); 
+                  setShowSuccessPopup(true);
+                  setTimeout(() => setShowSuccessPopup(false), 5000);
+                  setFormName("");
+                  setFormPhone("");
+                }}
+              >
+                <div className="space-y-1">
+                  <label className="text-white/70 text-[10px] md:text-xs font-mono uppercase tracking-wider">
+                    {currentLanguage === "hi" ? "पूरा नाम" : "Full Name"}
+                  </label>
+                  <input 
+                    type="text" 
+                    required 
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
+                    placeholder={currentLanguage === "hi" ? "राकेश शर्मा" : "Rakesh Sharma"} 
+                    className="w-full bg-white/10 border border-white/30 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-white text-sm focus:outline-none focus:border-sky-400 focus:bg-white/20 transition-colors placeholder:text-white/40"
+                  />
+                </div>
+                
+                <div className="space-y-1">
+                  <label className="text-white/70 text-[10px] md:text-xs font-mono uppercase tracking-wider">
+                    {currentLanguage === "hi" ? "फ़ोन नंबर" : "Phone Number"}
+                  </label>
+                  <input 
+                    type="tel" 
+                    required 
+                    value={formPhone}
+                    onChange={(e) => setFormPhone(e.target.value)}
+                    placeholder="+91 99999 99999" 
+                    className="w-full bg-white/10 border border-white/30 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-white text-sm focus:outline-none focus:border-sky-400 focus:bg-white/20 transition-colors placeholder:text-white/40"
+                  />
+                </div>
+                
+                <button 
+                  type="submit" 
+                  className="w-full mt-1 md:mt-2 bg-sky-600 hover:bg-sky-500 text-white font-mono font-bold uppercase tracking-widest text-xs md:text-sm py-2.5 md:py-3 rounded-lg shadow-[0_0_20px_rgba(2,132,199,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] border border-sky-400/50 cursor-pointer"
+                >
+                  {currentLanguage === "hi" ? "कॉल बैक का अनुरोध करें" : "Request Call Back"}
+                </button>
+                
+                <p className="text-white/50 text-[9px] md:text-[10px] text-center mt-2 md:mt-3">
+                  {currentLanguage === "hi" ? "आपका विवरण सुरक्षित है। निःशुल्क परामर्श प्रदान किया जाता है।" : "Your details are secure. Free consultation provided."}
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Success Popup */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 md:p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center relative animate-in zoom-in-95 duration-300">
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-4">
+              <ShieldCheck className="h-8 w-8" />
+            </div>
+            <h4 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 font-serif">
+              {currentLanguage === "hi" ? "सफलतापूर्वक सबमिट किया गया!" : "Successfully Submitted!"}
+            </h4>
+            <p className="text-slate-600 dark:text-slate-400 text-sm mb-6">
+              {currentLanguage === "hi" ? "आपकी पूछताछ प्राप्त हो गई है। हमारी टीम जल्द ही आपसे संपर्क करेगी।" : "Your enquiry has been received. Our team will contact you shortly."}
+            </p>
+            <button 
+              onClick={() => setShowSuccessPopup(false)}
+              className="w-full bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900 font-bold py-3 rounded-lg transition-colors"
+            >
+              {currentLanguage === "hi" ? "ठीक है" : "OK"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Bullet indicators */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
@@ -380,7 +429,7 @@ export default function HeroSlider({ onExplorePackages, onOpenConsultant, siteDa
             key={idx}
             onClick={() => setCurrent(idx)}
             className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-              idx === current ? "w-8 bg-sky-600" : "w-2 bg-slate-400 hover:bg-slate-500 dark:bg-zinc-800"
+              idx === current ? "w-8 bg-sky-600" : "w-2 bg-slate-400 hover:bg-slate-500 dark:bg-[#1e293b]"
             }`}
             aria-label={`Go to slide ${idx + 1}`}
           />
